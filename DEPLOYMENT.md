@@ -16,7 +16,7 @@ Panduan ini menjelaskan langkah demi langkah cara men-deploy project Next.js ini
 ## Prasyarat
 - Akun GitHub dan repo: `mchaer1466zx/dispoinvoice.smart-pae-`
 - Akun Vercel (https://vercel.com) terhubung ke GitHub
-- Database produksi (contoh: Postgres, Planetscale, dsb.) dan `DATABASE_URL`
+- Database produksi (contoh: Turso/LibSQL) dan `DATABASE_URL`
 - Nilai API keys yang diperlukan (lihat bagian `Env vars`)
 
 ---
@@ -35,7 +35,9 @@ Catatan: Anda dapat menambahkan Environment Variables sekarang atau setelah meng
 ## 2. Daftar Environment Variables (harus diisi di Vercel)
 Isi nilai nyata untuk environment production di Vercel Dashboard → Project → Settings → Environment Variables.
 
-- `DATABASE_URL` — URL koneksi database produksi, mis. `postgres://user:pass@host:5432/dbname`
+- `DATABASE_URL` — URL koneksi database produksi (SQLite/LibSQL, mis. Turso).
+  - Contoh LibSQL/Turso: `libsql://<your-url>`
+  - Contoh lokal SQLite: `file:./local.db`
 - `DATABASE_AUTH_TOKEN` — jika DB provider memerlukannya (opsional)
 - `NEXT_PUBLIC_APP_URL` — URL publik aplikasi, mis. `https://your-project.vercel.app`
 - `RESEND_API_KEY` — API key untuk layanan Resend (mengirim email)
@@ -56,7 +58,7 @@ Rekomendasi: jalankan migrasi dari komputer Anda (lokal) ke database produksi se
 npm install
 
 # set DATABASE_URL sementara (bash)
-export DATABASE_URL="postgres://user:pass@host:5432/dbname"
+export DATABASE_URL="libsql://<your-url>"
 
 # jalankan migrasi Drizzle
 npm run db:migrate
