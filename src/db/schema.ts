@@ -139,8 +139,8 @@ export const companies = sqliteTable("companies", {
   id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),
   name: text("name").notNull(),
   address: text("address").notNull(),
-  email: text("email").notNull(),
-  phone: text("phone").notNull(),
+  email: text("email"),
+  phone: text("phone"),
   logoUrl: text("logo_url"),
   createdAt: text("created_at")
     .notNull()

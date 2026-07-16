@@ -36,6 +36,8 @@ const styles = StyleSheet.create({
 export type MemoPdfCompany = {
   name: string;
   address: string;
+  email: string | null;
+  phone: string | null;
   logoSource: string | null;
 };
 

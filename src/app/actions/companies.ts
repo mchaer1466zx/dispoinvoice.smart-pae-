@@ -16,6 +16,8 @@ export type CompanyRecord = {
   id: string;
   name: string;
   address: string;
+  email: string | null;
+  phone: string | null;
   logoUrl: string | null;
 };
 
@@ -23,6 +25,8 @@ const COMPANY_COLUMNS = {
   id: companies.id,
   name: companies.name,
   address: companies.address,
+  email: companies.email,
+  phone: companies.phone,
   logoUrl: companies.logoUrl,
 };
 

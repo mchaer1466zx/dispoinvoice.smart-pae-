@@ -64,6 +64,13 @@
       "when": 1784197782714,
       "tag": "0008_friendly_mastermind",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "6",
+      "when": 1784235351370,
+      "tag": "0009_dizzy_ares",
+      "breakpoints": true
     }
   ]
 }
