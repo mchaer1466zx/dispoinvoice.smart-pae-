@@ -1,5 +1,8 @@
 "use server";
 
+import { db } from "@/db";
+import { invoices, invoiceItems } from "@/db/schema";
+
 export type CreateInvoiceItemInput = {
   description: string;
   quantity: number;
@@ -20,13 +23,7 @@ export type CreateInvoiceResult =
   | { success: true; invoiceId: string }
   | { success: false; error: string };
 
-/**
- * Server Action pertama untuk menyimpan invoice.
- *
- * Ini masih memakai penyimpanan tiruan (belum tersambung ke database).
- * Setelah skema Drizzle ORM & koneksi SQLite dipasang pada fase backend,
- * ganti bagian bertanda TODO dengan query insert ke tabel Invoices/InvoiceItems.
- */
+/** Server Action untuk menyimpan invoice beserta item-itemnya ke database. */
 export async function createInvoiceAction(
   input: CreateInvoiceInput
 ): Promise<CreateInvoiceResult> {
@@ -38,9 +35,34 @@ export async function createInvoiceAction(
     return { success: false, error: "Invoice harus memiliki minimal satu item." };
   }
 
-  // Simulasi latensi penyimpanan (data tiruan, belum ke database).
-  await new Promise((resolve) => setTimeout(resolve, 400));
+  try {
+    const invoiceId = await db.transaction(async (tx) => {
+      const [invoice] = await tx
+        .insert(invoices)
+        .values({
+          invoiceNumber: input.invoiceNumber,
+          issueDate: input.issueDate,
+          dueDate: input.dueDate || null,
+          status: input.status,
+          notes: input.notes || null,
+          customerId: input.customerId,
+        })
+        .returning({ id: invoices.id });
 
-  // TODO: ganti dengan insert Drizzle ke tabel Invoices & InvoiceItems.
-  return { success: true, invoiceId: `mock-${input.invoiceNumber}` };
+      await tx.insert(invoiceItems).values(
+        input.items.map((item) => ({
+          invoiceId: invoice.id,
+          description: item.description,
+          quantity: item.quantity,
+          price: item.price,
+        }))
+      );
+
+      return invoice.id;
+    });
+
+    return { success: true, invoiceId };
+  } catch {
+    return { success: false, error: "Gagal menyimpan invoice ke database." };
+  }
 }

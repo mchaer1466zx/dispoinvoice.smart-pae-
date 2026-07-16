@@ -1,0 +1,54 @@
+import { sql } from "drizzle-orm";
+import { sqliteTable, text, integer, real } from "drizzle-orm/sqlite-core";
+
+export const customers = sqliteTable("customers", {
+  id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),
+  name: text("name").notNull(),
+  email: text("email").notNull(),
+  phone: text("phone").notNull(),
+  address: text("address").notNull(),
+  createdAt: text("created_at")
+    .notNull()
+    .default(sql`(current_timestamp)`),
+});
+
+export const invoices = sqliteTable("invoices", {
+  id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),
+  userId: text("user_id"),
+  customerId: text("customer_id").references(() => customers.id, {
+    onDelete: "set null",
+  }),
+  invoiceNumber: text("invoice_number").notNull(),
+  status: text("status", { enum: ["draft", "terkirim", "lunas"] })
+    .notNull()
+    .default("draft"),
+  issueDate: text("issue_date").notNull(),
+  dueDate: text("due_date"),
+  notes: text("notes"),
+  createdAt: text("created_at")
+    .notNull()
+    .default(sql`(current_timestamp)`),
+});
+
+export const invoiceItems = sqliteTable("invoice_items", {
+  id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),
+  invoiceId: text("invoice_id")
+    .notNull()
+    .references(() => invoices.id, { onDelete: "cascade" }),
+  description: text("description").notNull(),
+  quantity: integer("quantity").notNull(),
+  price: real("price").notNull(),
+});
+
+/** Profil perusahaan bersifat singleton (satu baris) untuk MVP internal ini. */
+export const companyProfile = sqliteTable("company_profile", {
+  id: text("id").primaryKey().default("default"),
+  name: text("name").notNull(),
+  address: text("address").notNull(),
+  email: text("email").notNull(),
+  phone: text("phone").notNull(),
+  logoUrl: text("logo_url"),
+  updatedAt: text("updated_at")
+    .notNull()
+    .default(sql`(current_timestamp)`),
+});
