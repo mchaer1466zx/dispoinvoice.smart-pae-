@@ -67,8 +67,6 @@ const styles = StyleSheet.create({
 export type InvoicePdfCompany = {
   name: string;
   address: string;
-  email: string;
-  phone: string;
   logoSource: string | null;
 };
 

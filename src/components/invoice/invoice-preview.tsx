@@ -1,7 +1,7 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
-import { CompanyLogo } from "@/components/invoice/company-logo";
+import { DocumentHeaderPreview } from "@/components/document-header-preview";
 import { DocumentQrCode } from "@/components/invoice/document-qr-code";
 import type { BillingInfo } from "@/components/invoice/billing-info-form";
 import { STATUS_OPTIONS } from "@/components/invoice/billing-info-form";
@@ -10,7 +10,6 @@ import { calculateItemsTotal } from "@/components/invoice/item-list-form";
 import type { Customer } from "@/lib/mock-data";
 import { formatCurrency, formatDate } from "@/lib/format";
 import type { CompanyRecord } from "@/app/actions/companies";
-import { getCompanyInitials } from "@/lib/company-initials";
 
 function statusLabel(status: BillingInfo["status"]) {
   return STATUS_OPTIONS.find((option) => option.value === status)?.label ?? status;
@@ -45,31 +44,11 @@ export function InvoicePreview({
         style={{ background: "linear-gradient(to right, #3A67AE, #76B843)" }}
       />
       <div className="p-8 sm:p-12">
-        <div className="flex items-start justify-between gap-6 border-b border-gray-200 pb-6 break-inside-avoid">
-          <div className="flex items-center gap-4">
-            <CompanyLogo
-              logoUrl={company?.logoUrl ?? null}
-              initials={company ? getCompanyInitials(company.name) : "?"}
-            />
-            {company ? (
-              <div className="text-sm">
-                <p className="text-base font-semibold">{company.name}</p>
-                <p className="text-gray-500">{company.address}</p>
-                <p className="text-gray-500">
-                  {company.email} &middot; {company.phone}
-                </p>
-              </div>
-            ) : (
-              <p className="text-sm italic text-gray-400">
-                Perusahaan belum diatur.
-              </p>
-            )}
-          </div>
-          <div className="text-right">
-            <h2 className="text-2xl font-bold tracking-tight">INVOICE</h2>
-            <p className="text-sm text-gray-500">{billingInfo.invoiceNumber}</p>
-          </div>
-        </div>
+        <DocumentHeaderPreview
+          company={company}
+          title="INVOICE"
+          subtitle={billingInfo.invoiceNumber}
+        />
 
         <div className="mt-6 grid grid-cols-2 gap-6 text-sm">
           <div>

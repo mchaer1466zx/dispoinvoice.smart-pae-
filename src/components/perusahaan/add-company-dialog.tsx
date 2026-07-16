@@ -21,7 +21,7 @@ import {
 import { createCompanyAction } from "@/app/actions/companies";
 
 function createEmptyForm(): CompanyFormValues {
-  return { name: "", address: "", email: "", phone: "" };
+  return { name: "", address: "" };
 }
 
 export function AddCompanyDialog() {

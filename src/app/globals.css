@@ -149,21 +149,25 @@
   #po-printable,
   #po-printable *,
   #memo-printable,
-  #memo-printable * {
+  #memo-printable *,
+  #document-printable,
+  #document-printable * {
     visibility: visible;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
   }
   #invoice-printable,
   #po-printable,
-  #memo-printable {
+  #memo-printable,
+  #document-printable {
     position: absolute;
     inset: 0;
     width: 210mm;
   }
   #invoice-printable img,
   #po-printable img,
-  #memo-printable img {
+  #memo-printable img,
+  #document-printable img {
     break-inside: avoid;
   }
 }

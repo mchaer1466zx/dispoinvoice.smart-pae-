@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useId, useState } from "react";
-import { Copy, Send, Share2 } from "lucide-react";
+import { Copy, Loader2, Send, Share2 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,43 +15,50 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import type { PoDetail } from "@/components/po/po-detail-form";
-import type { PoItem } from "@/components/po/po-item-list-form";
-import type { Supplier } from "@/lib/mock-data";
-import { buildPoPublicShareUrl } from "@/lib/po-share-link";
+import { getPoPublicLinkAction } from "@/app/actions/po-public";
+import { sendPoEmailAction } from "@/app/actions/share-po";
 
 export function SharePoDialog({
-  poDetail,
-  supplier,
-  items,
+  poId,
+  poNumber,
 }: {
-  poDetail: PoDetail;
-  supplier: Supplier | null;
-  items: PoItem[];
+  poId: string;
+  poNumber: string;
 }) {
   const idPrefix = useId();
   const [open, setOpen] = useState(false);
   const [email, setEmail] = useState("");
+  const [isSending, setIsSending] = useState(false);
   const [shareLink, setShareLink] = useState("");
 
   useEffect(() => {
+    if (!open) return;
     let cancelled = false;
 
-    Promise.resolve(
-      buildPoPublicShareUrl(window.location.origin, { poDetail, supplier, items })
-    ).then((url) => {
-      if (!cancelled) setShareLink(url);
+    getPoPublicLinkAction(poId).then((result) => {
+      if (cancelled) return;
+      if (result.success) setShareLink(result.url);
     });
 
     return () => {
       cancelled = true;
     };
-  }, [poDetail, supplier, items]);
+  }, [open, poId]);
 
-  function handleSendEmail() {
+  async function handleSendEmail() {
     if (!email.trim()) return;
+
+    setIsSending(true);
+    const result = await sendPoEmailAction({ poId, recipientEmail: email });
+    setIsSending(false);
+
+    if (!result.success) {
+      toast.error("Gagal mengirim email", { description: result.error });
+      return;
+    }
+
     toast.success("Purchase order terkirim", {
-      description: `Tautan ${poDetail.poNumber} telah dikirim ke ${email}.`,
+      description: `${poNumber} telah dikirim ke ${email}.`,
     });
     setEmail("");
     setOpen(false);
@@ -75,8 +82,8 @@ export function SharePoDialog({
         <DialogHeader>
           <DialogTitle>Bagikan Purchase Order</DialogTitle>
           <DialogDescription>
-            Kirim {poDetail.poNumber} ke pemasok atau atasan lewat email, atau
-            salin tautannya.
+            Kirim {poNumber} ke pemasok atau atasan lewat email, atau salin
+            tautannya.
           </DialogDescription>
         </DialogHeader>
 
@@ -94,9 +101,10 @@ export function SharePoDialog({
               type="button"
               size="icon"
               onClick={handleSendEmail}
+              disabled={isSending}
               aria-label="Kirim email"
             >
-              <Send />
+              {isSending ? <Loader2 className="animate-spin" /> : <Send />}
             </Button>
           </div>
         </div>
@@ -106,7 +114,12 @@ export function SharePoDialog({
         <div className="grid gap-1.5">
           <Label htmlFor={`${idPrefix}-share-link`}>Tautan Purchase Order</Label>
           <div className="flex gap-2">
-            <Input id={`${idPrefix}-share-link`} readOnly value={shareLink} />
+            <Input
+              id={`${idPrefix}-share-link`}
+              readOnly
+              value={shareLink}
+              placeholder="Memuat tautan..."
+            />
             <Button
               type="button"
               variant="outline"

@@ -36,6 +36,34 @@
       "when": 1784176381618,
       "tag": "0004_spooky_jackal",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1784193757302,
+      "tag": "0005_thin_shen",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1784196063706,
+      "tag": "0006_white_edwin_jarvis",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "6",
+      "when": 1784196296757,
+      "tag": "0007_burly_tarot",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "6",
+      "when": 1784197782714,
+      "tag": "0008_friendly_mastermind",
+      "breakpoints": true
     }
   ]
 }

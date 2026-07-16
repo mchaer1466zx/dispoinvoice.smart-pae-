@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { CompanySwitcher } from "@/components/company-switcher";
+import { UserMenu } from "@/components/user-menu";
 
 export function AppHeader() {
   return (
@@ -18,7 +19,10 @@ export function AppHeader() {
             DispoInvoice
           </span>
         </Link>
-        <CompanySwitcher />
+        <div className="flex items-center gap-3">
+          <CompanySwitcher />
+          <UserMenu />
+        </div>
       </div>
     </header>
   );

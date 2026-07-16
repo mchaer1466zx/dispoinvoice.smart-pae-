@@ -41,25 +41,6 @@ export function CompanyFormFields({
           onChange={(e) => onChange({ ...value, address: e.target.value })}
         />
       </div>
-
-      <div className="grid gap-1.5">
-        <Label htmlFor={`${idPrefix}-email`}>Email</Label>
-        <Input
-          id={`${idPrefix}-email`}
-          type="email"
-          value={value.email}
-          onChange={(e) => onChange({ ...value, email: e.target.value })}
-        />
-      </div>
-
-      <div className="grid gap-1.5">
-        <Label htmlFor={`${idPrefix}-phone`}>Telepon</Label>
-        <Input
-          id={`${idPrefix}-phone`}
-          value={value.phone}
-          onChange={(e) => onChange({ ...value, phone: e.target.value })}
-        />
-      </div>
     </div>
   );
 }

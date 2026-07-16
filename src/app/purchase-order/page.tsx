@@ -21,13 +21,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import type { Supplier } from "@/lib/mock-data";
+import type { SupplierRecord } from "@/app/actions/suppliers";
 import { useCompany } from "@/lib/company-store";
 
 export default function PurchaseOrderPage() {
   const [poDetail, setPoDetail] = useState(createDefaultPoDetail);
   const [items, setItems] = useState(createDefaultPoItems);
-  const [selectedSupplier, setSelectedSupplier] = useState<Supplier | null>(
+  const [selectedSupplier, setSelectedSupplier] = useState<SupplierRecord | null>(
     null
   );
   const { activeCompany } = useCompany();

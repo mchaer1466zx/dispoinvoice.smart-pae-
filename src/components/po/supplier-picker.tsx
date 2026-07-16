@@ -1,7 +1,7 @@
 "use client";
 
-import { useId, useState } from "react";
-import { Check, ChevronsUpDown, Truck } from "lucide-react";
+import { useEffect, useId, useState } from "react";
+import { Check, ChevronsUpDown, Loader2, Truck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -26,21 +26,41 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
-import { MOCK_SUPPLIERS, type Supplier } from "@/lib/mock-data";
+import { listSuppliersAction, type SupplierRecord } from "@/app/actions/suppliers";
 
 type PickerMode = "daftar" | "manual";
+
+/** Prefix penanda pemasok hasil input manual (belum tersimpan di database). */
+export const MANUAL_SUPPLIER_ID_PREFIX = "manual-";
 
 export function SupplierPicker({
   selected,
   onSelectedChange,
 }: {
-  selected: Supplier | null;
-  onSelectedChange: (supplier: Supplier) => void;
+  selected: SupplierRecord | null;
+  onSelectedChange: (supplier: SupplierRecord) => void;
 }) {
   const idPrefix = useId();
   const [mode, setMode] = useState<PickerMode>("daftar");
   const [open, setOpen] = useState(false);
   const [manualForm, setManualForm] = useState({ name: "", contactInfo: "", address: "" });
+  const [suppliers, setSuppliers] = useState<SupplierRecord[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    listSuppliersAction().then((result) => {
+      if (!cancelled) {
+        setSuppliers(result);
+        setIsLoading(false);
+      }
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   function updateManualField<K extends keyof typeof manualForm>(
     field: K,
@@ -49,7 +69,7 @@ export function SupplierPicker({
     const next = { ...manualForm, [field]: value };
     setManualForm(next);
     onSelectedChange({
-      id: `manual-${idPrefix}`,
+      id: `${MANUAL_SUPPLIER_ID_PREFIX}${idPrefix}`,
       name: next.name,
       contactInfo: next.contactInfo,
       address: next.address,
@@ -102,28 +122,36 @@ export function SupplierPicker({
                 <Command>
                   <CommandInput placeholder="Cari nama pemasok..." />
                   <CommandList>
-                    <CommandEmpty>Pemasok tidak ditemukan.</CommandEmpty>
-                    <CommandGroup>
-                      {MOCK_SUPPLIERS.map((supplier) => (
-                        <CommandItem
-                          key={supplier.id}
-                          value={supplier.name}
-                          onSelect={() => {
-                            onSelectedChange(supplier);
-                            setOpen(false);
-                          }}
-                        >
-                          <Check
-                            className={cn(
-                              selected?.id === supplier.id
-                                ? "opacity-100"
-                                : "opacity-0"
-                            )}
-                          />
-                          {supplier.name}
-                        </CommandItem>
-                      ))}
-                    </CommandGroup>
+                    {isLoading ? (
+                      <div className="flex items-center justify-center gap-2 py-6 text-sm text-muted-foreground">
+                        <Loader2 className="size-4 animate-spin" /> Memuat pemasok...
+                      </div>
+                    ) : (
+                      <>
+                        <CommandEmpty>Pemasok tidak ditemukan.</CommandEmpty>
+                        <CommandGroup>
+                          {suppliers.map((supplier) => (
+                            <CommandItem
+                              key={supplier.id}
+                              value={supplier.name}
+                              onSelect={() => {
+                                onSelectedChange(supplier);
+                                setOpen(false);
+                              }}
+                            >
+                              <Check
+                                className={cn(
+                                  selected?.id === supplier.id
+                                    ? "opacity-100"
+                                    : "opacity-0"
+                                )}
+                              />
+                              {supplier.name}
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      </>
+                    )}
                   </CommandList>
                 </Command>
               </PopoverContent>

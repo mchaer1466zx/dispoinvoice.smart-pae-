@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowLeft, Building2, Check, Mail, MapPin, Phone } from "lucide-react";
+import { ArrowLeft, Building2, Check, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -67,18 +67,6 @@ export default function ProfilPerusahaanPage() {
                         <span className="flex items-center gap-1.5">
                           <MapPin className="size-3.5 shrink-0" />
                           {company.address}
-                        </span>
-                      ) : null}
-                      {company.email ? (
-                        <span className="flex items-center gap-1.5">
-                          <Mail className="size-3.5 shrink-0" />
-                          {company.email}
-                        </span>
-                      ) : null}
-                      {company.phone ? (
-                        <span className="flex items-center gap-1.5">
-                          <Phone className="size-3.5 shrink-0" />
-                          {company.phone}
                         </span>
                       ) : null}
                     </CardDescription>

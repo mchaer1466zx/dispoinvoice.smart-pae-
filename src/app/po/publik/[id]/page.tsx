@@ -1,17 +1,17 @@
 import { FileX2 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { PoPreview } from "@/components/po/po-preview";
-import { parsePoShareData } from "@/lib/po-share-link";
+import { getPublicPurchaseOrderAction } from "@/app/actions/po-public";
 
 export default async function PublicPoPreviewPage({
-  searchParams,
+  params,
 }: {
-  searchParams: Promise<{ data?: string }>;
+  params: Promise<{ id: string }>;
 }) {
-  const { data } = await searchParams;
-  const poData = parsePoShareData(data);
+  const { id } = await params;
+  const po = await getPublicPurchaseOrderAction(id);
 
-  if (!poData) {
+  if (!po) {
     return (
       <div className="flex flex-1 justify-center bg-zinc-50 px-4 py-10 dark:bg-black sm:px-8">
         <main className="flex w-full max-w-md flex-col gap-4">
@@ -20,8 +20,8 @@ export default async function PublicPoPreviewPage({
               <FileX2 className="size-8 text-muted-foreground" />
               <p className="font-medium">Tautan tidak valid</p>
               <p className="text-sm text-muted-foreground">
-                Tautan pratinjau purchase order ini tidak valid atau datanya
-                tidak lengkap.
+                Tautan pratinjau purchase order ini tidak valid atau dokumennya
+                sudah tidak tersedia.
               </p>
             </CardContent>
           </Card>
@@ -42,9 +42,15 @@ export default async function PublicPoPreviewPage({
           </p>
         </div>
         <PoPreview
-          poDetail={poData.poDetail}
-          supplier={poData.supplier}
-          items={poData.items}
+          poDetail={{
+            poNumber: po.poNumber,
+            orderDate: po.orderDate,
+            status: po.status,
+            notes: po.notes ?? "",
+          }}
+          supplier={po.supplier}
+          company={po.company}
+          items={po.items}
         />
       </main>
     </div>

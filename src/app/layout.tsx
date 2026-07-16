@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
 import { AppHeader } from "@/components/app-header";
 import { CompanyProvider } from "@/lib/company-store";
+import { AuthProvider } from "@/lib/auth-store";
 import { listCompaniesAction, getActiveCompanyAction } from "@/app/actions/companies";
 import "./globals.css";
 
@@ -37,11 +38,13 @@ export default async function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <CompanyProvider companies={companies} activeCompany={activeCompany}>
-          <AppHeader />
-          {children}
-          <Toaster />
-        </CompanyProvider>
+        <AuthProvider>
+          <CompanyProvider companies={companies} activeCompany={activeCompany}>
+            <AppHeader />
+            {children}
+            <Toaster />
+          </CompanyProvider>
+        </AuthProvider>
       </body>
     </html>
   );

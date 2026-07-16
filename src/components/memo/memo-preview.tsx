@@ -1,10 +1,9 @@
 "use client";
 
-import { CompanyLogo } from "@/components/invoice/company-logo";
+import { DocumentHeaderPreview } from "@/components/document-header-preview";
 import type { MemoDetail } from "@/components/memo/memo-detail-form";
 import { formatDate } from "@/lib/format";
 import type { CompanyRecord } from "@/app/actions/companies";
-import { getCompanyInitials } from "@/lib/company-initials";
 
 export function MemoPreview({
   memoDetail,
@@ -21,31 +20,11 @@ export function MemoPreview({
         style={{ background: "linear-gradient(to right, #3A67AE, #76B843)" }}
       />
       <div className="p-8 sm:p-12">
-        <div className="flex items-start justify-between gap-6 border-b border-gray-200 pb-6 break-inside-avoid">
-          <div className="flex items-center gap-4">
-            <CompanyLogo
-              logoUrl={company?.logoUrl ?? null}
-              initials={company ? getCompanyInitials(company.name) : "?"}
-            />
-            {company ? (
-              <div className="text-sm">
-                <p className="text-base font-semibold">{company.name}</p>
-                <p className="text-gray-500">{company.address}</p>
-                <p className="text-gray-500">
-                  {company.email} &middot; {company.phone}
-                </p>
-              </div>
-            ) : (
-              <p className="text-sm italic text-gray-400">
-                Perusahaan belum diatur.
-              </p>
-            )}
-          </div>
-          <div className="text-right">
-            <h2 className="text-2xl font-bold tracking-tight">MEMO DISPOSISI</h2>
-            <p className="text-sm text-gray-500">{formatDate(memoDetail.memoDate)}</p>
-          </div>
-        </div>
+        <DocumentHeaderPreview
+          company={company}
+          title="MEMO DISPOSISI"
+          subtitle={formatDate(memoDetail.memoDate)}
+        />
 
         <dl className="mt-6 grid grid-cols-[auto_1fr] gap-x-3 gap-y-2 text-sm">
           <dt className="text-gray-500">Kepada</dt>

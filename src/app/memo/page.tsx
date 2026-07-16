@@ -17,11 +17,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { useCompanyProfile } from "@/lib/company-profile-store";
+import { useCompany } from "@/lib/company-store";
 
 export default function MemoPage() {
   const [memoDetail, setMemoDetail] = useState(createDefaultMemoDetail);
-  const { logoUrl } = useCompanyProfile();
+  const { activeCompany } = useCompany();
 
   return (
     <div className="flex flex-1 justify-center bg-zinc-50 px-4 py-10 dark:bg-black sm:px-8">
@@ -51,9 +51,9 @@ export default function MemoPage() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            {logoUrl ? null : <CompanyLogoUploadHint />}
+            {activeCompany?.logoUrl ? null : <CompanyLogoUploadHint />}
             <MemoPreviewActions filename={`Memo-Disposisi-${memoDetail.memoDate}.pdf`}>
-              <MemoPreview memoDetail={memoDetail} />
+              <MemoPreview memoDetail={memoDetail} company={activeCompany} />
             </MemoPreviewActions>
           </CardContent>
         </Card>

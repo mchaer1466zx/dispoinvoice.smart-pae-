@@ -16,8 +16,6 @@ export type CompanyRecord = {
   id: string;
   name: string;
   address: string;
-  email: string;
-  phone: string;
   logoUrl: string | null;
 };
 
@@ -25,16 +23,12 @@ const COMPANY_COLUMNS = {
   id: companies.id,
   name: companies.name,
   address: companies.address,
-  email: companies.email,
-  phone: companies.phone,
   logoUrl: companies.logoUrl,
 };
 
 export type CompanyInput = {
   name: string;
   address: string;
-  email: string;
-  phone: string;
 };
 
 export type CompanyActionResult =
@@ -58,17 +52,13 @@ export async function createCompanyAction(
   if (!name) {
     return { success: false, error: "Nama perusahaan wajib diisi." };
   }
-
   const [created] = await db
     .insert(companies)
     .values({
       name,
       address: input.address.trim(),
-      email: input.email.trim(),
-      phone: input.phone.trim(),
     })
     .returning(COMPANY_COLUMNS);
-
   const cookieStore = await cookies();
   if (!cookieStore.get(ACTIVE_COMPANY_COOKIE)?.value) {
     cookieStore.set(ACTIVE_COMPANY_COOKIE, created.id, ACTIVE_COMPANY_COOKIE_OPTIONS);
@@ -92,8 +82,6 @@ export async function updateCompanyAction(
     .set({
       name,
       address: input.address.trim(),
-      email: input.email.trim(),
-      phone: input.phone.trim(),
       updatedAt: sql`(current_timestamp)`,
     })
     .where(eq(companies.id, id))

@@ -16,7 +16,10 @@ import { PoPreview } from "@/components/po/po-preview";
 import { PoPreviewActions } from "@/components/po/po-preview-actions";
 import { SharePoDialog } from "@/components/po/share-po-dialog";
 import { CompanyLogoUploadHint } from "@/components/invoice/company-logo-upload-hint";
-import { getPurchaseOrder, type SavedPurchaseOrder } from "@/lib/po-store";
+import {
+  getPublicPurchaseOrderAction,
+  type PublicPurchaseOrder,
+} from "@/app/actions/po-public";
 import { formatDate } from "@/lib/format";
 
 function PageShell({ children }: { children: React.ReactNode }) {
@@ -39,14 +42,12 @@ function BackLink() {
 
 export default function PurchaseOrderDetailPage() {
   const params = useParams<{ id: string }>();
-  const [po, setPo] = useState<SavedPurchaseOrder | null | undefined>(
-    undefined
-  );
+  const [po, setPo] = useState<PublicPurchaseOrder | null | undefined>(undefined);
 
   useEffect(() => {
     let cancelled = false;
 
-    Promise.resolve(getPurchaseOrder(params.id)).then((result) => {
+    getPublicPurchaseOrderAction(params.id).then((result) => {
       if (!cancelled) setPo(result);
     });
 
@@ -76,24 +77,24 @@ export default function PurchaseOrderDetailPage() {
     );
   }
 
+  const poDetail = {
+    poNumber: po.poNumber,
+    orderDate: po.orderDate,
+    status: po.status,
+    notes: po.notes ?? "",
+  };
+
   return (
     <PageShell>
       <div className="flex items-start justify-between gap-4">
         <div className="flex flex-col gap-1">
           <BackLink />
-          <h1 className="text-2xl font-semibold tracking-tight">
-            {po.poDetail.poNumber}
-          </h1>
+          <h1 className="text-2xl font-semibold tracking-tight">{po.poNumber}</h1>
           <p className="text-sm text-muted-foreground">
-            Disimpan pada {formatDate(po.savedAt.slice(0, 10))}
+            Disimpan pada {formatDate(po.createdAt.slice(0, 10))}
           </p>
         </div>
-        <SharePoDialog
-          poDetail={po.poDetail}
-          supplier={po.supplier}
-          company={po.company}
-          items={po.items}
-        />
+        <SharePoDialog poId={po.id} poNumber={po.poNumber} />
       </div>
 
       <Card>
@@ -105,9 +106,9 @@ export default function PurchaseOrderDetailPage() {
         </CardHeader>
         <CardContent>
           {po.company?.logoUrl ? null : <CompanyLogoUploadHint />}
-          <PoPreviewActions filename={`${po.poDetail.poNumber}.pdf`}>
+          <PoPreviewActions filename={`${po.poNumber}.pdf`}>
             <PoPreview
-              poDetail={po.poDetail}
+              poDetail={poDetail}
               supplier={po.supplier}
               company={po.company}
               items={po.items}

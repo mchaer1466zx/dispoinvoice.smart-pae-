@@ -6,13 +6,6 @@ export type Customer = {
   address: string;
 };
 
-export type Supplier = {
-  id: string;
-  name: string;
-  contactInfo: string;
-  address: string;
-};
-
 export type CompanyProfile = {
   name: string;
   address: string;
@@ -66,23 +59,109 @@ export const MOCK_CUSTOMERS: Customer[] = [
   },
 ];
 
-export const MOCK_SUPPLIERS: Supplier[] = [
+export type DocumentType = "invoice" | "po" | "memo";
+
+export type DocumentLineItem = {
+  description: string;
+  quantity: number;
+  price: number;
+};
+
+export type DocumentSummary = {
+  id: string;
+  type: DocumentType;
+  number: string;
+  partyName: string;
+  date: string;
+  status: string;
+  /** Rincian item barang/jasa; hanya dipakai invoice & PO. */
+  items?: DocumentLineItem[];
+  /** Isi & instruksi memo; hanya dipakai memo disposisi. */
+  content?: string;
+  instructions?: string;
+  notes?: string;
+};
+
+export const DOCUMENT_TYPE_LABELS: Record<DocumentType, string> = {
+  invoice: "Invoice",
+  po: "Purchase Order",
+  memo: "Memo Disposisi",
+};
+
+export const MOCK_DOCUMENTS: DocumentSummary[] = [
   {
-    id: "sup-1",
-    name: "PT Sumber Kertas Nusantara",
-    contactInfo: "021-8889900 · sales@sumberkertas.co.id",
-    address: "Jl. Industri Raya No. 20, Tangerang",
+    id: "doc-inv-1",
+    type: "invoice",
+    number: "INV-202601-0001",
+    partyName: "PT Sinar Abadi Sejahtera",
+    date: "2026-01-10",
+    status: "lunas",
+    items: [
+      { description: "Jasa konsultasi implementasi sistem", quantity: 1, price: 15000000 },
+      { description: "Lisensi perangkat lunak (tahunan)", quantity: 2, price: 3500000 },
+    ],
+    notes: "Pembayaran diterima penuh melalui transfer bank.",
   },
   {
-    id: "sup-2",
-    name: "CV Elektronik Jaya Makmur",
-    contactInfo: "022-6667788 · order@elektronikjaya.com",
-    address: "Jl. Soekarno Hatta No. 55, Bandung",
+    id: "doc-inv-2",
+    type: "invoice",
+    number: "INV-202602-0002",
+    partyName: "CV Mitra Teknik Utama",
+    date: "2026-02-14",
+    status: "terkirim",
+    items: [
+      { description: "Instalasi jaringan kantor", quantity: 1, price: 8500000 },
+      { description: "Perangkat access point", quantity: 4, price: 950000 },
+    ],
+    notes: "Menunggu konfirmasi pembayaran dari klien.",
   },
   {
-    id: "sup-3",
-    name: "PT Percetakan Mandiri Sejahtera",
-    contactInfo: "031-2223344 · cs@percetakanmandiri.id",
-    address: "Jl. Rungkut Industri No. 8, Surabaya",
+    id: "doc-po-1",
+    type: "po",
+    number: "PO-202601-0001",
+    partyName: "PT Sumber Kertas Nusantara",
+    date: "2026-01-18",
+    status: "selesai",
+    items: [
+      { description: "Kertas HVS A4 80gr (rim)", quantity: 50, price: 55000 },
+      { description: "Amplop coklat folio", quantity: 200, price: 1500 },
+    ],
+    notes: "Barang telah diterima sesuai pesanan.",
+  },
+  {
+    id: "doc-po-2",
+    type: "po",
+    number: "PO-202602-0002",
+    partyName: "CV Elektronik Jaya Makmur",
+    date: "2026-02-20",
+    status: "dikirim",
+    items: [
+      { description: "Router WiFi 6 kantor", quantity: 3, price: 2200000 },
+      { description: "Kabel LAN Cat6 (roll)", quantity: 5, price: 850000 },
+    ],
+    notes: "Estimasi tiba dalam 3 hari kerja.",
+  },
+  {
+    id: "doc-memo-1",
+    type: "memo",
+    number: "Persetujuan Anggaran Q1",
+    partyName: "Manajer Keuangan",
+    date: "2026-01-25",
+    status: "draft",
+    content:
+      "Mohon persetujuan atas anggaran operasional kuartal pertama sebesar Rp250.000.000 untuk kebutuhan pengadaan dan operasional kantor.",
+    instructions: "Mohon ditinjau dan disetujui sebelum akhir bulan.",
+  },
+  {
+    id: "doc-memo-2",
+    type: "memo",
+    number: "Disposisi Rapat Koordinasi",
+    partyName: "Kepala Divisi Operasional",
+    date: "2026-03-02",
+    status: "draft",
+    content:
+      "Menindaklanjuti hasil rapat koordinasi mingguan, mohon disposisi untuk tindak lanjut ke masing-masing tim terkait target bulan ini.",
+    instructions: "Harap diteruskan ke seluruh kepala tim paling lambat Jumat ini.",
   },
 ];
+
