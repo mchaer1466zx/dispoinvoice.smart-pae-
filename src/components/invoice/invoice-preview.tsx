@@ -2,6 +2,7 @@
 
 import { Badge } from "@/components/ui/badge";
 import { CompanyLogo } from "@/components/invoice/company-logo";
+import { DocumentQrCode } from "@/components/invoice/document-qr-code";
 import type { BillingInfo } from "@/components/invoice/billing-info-form";
 import { STATUS_OPTIONS } from "@/components/invoice/billing-info-form";
 import type { InvoiceItem } from "@/components/invoice/item-list-form";
@@ -125,6 +126,10 @@ export function InvoicePreview({
             <p>{billingInfo.notes}</p>
           </div>
         ) : null}
+
+        <div className="mt-10 flex justify-end break-inside-avoid">
+          <DocumentQrCode jenis="invoice" nomor={billingInfo.invoiceNumber} />
+        </div>
       </div>
     </div>
   );
