@@ -15,6 +15,9 @@ export const customers = sqliteTable("customers", {
 export const invoices = sqliteTable("invoices", {
   id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),
   userId: text("user_id"),
+  companyId: text("company_id").references(() => companies.id, {
+    onDelete: "set null",
+  }),
   customerId: text("customer_id").references(() => customers.id, {
     onDelete: "set null",
   }),
@@ -53,6 +56,9 @@ export const suppliers = sqliteTable("suppliers", {
 export const purchaseOrders = sqliteTable("purchase_orders", {
   id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),
   userId: text("user_id"),
+  companyId: text("company_id").references(() => companies.id, {
+    onDelete: "set null",
+  }),
   supplierId: text("supplier_id").references(() => suppliers.id, {
     onDelete: "set null",
   }),
@@ -77,14 +83,17 @@ export const poItems = sqliteTable("po_items", {
   price: real("price").notNull(),
 });
 
-/** Profil perusahaan bersifat singleton (satu baris) untuk MVP internal ini. */
-export const companyProfile = sqliteTable("company_profile", {
-  id: text("id").primaryKey().default("default"),
+/** Perusahaan yang dapat dipilih sebagai penerbit invoice/PO/memo (multi company). */
+export const companies = sqliteTable("companies", {
+  id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),
   name: text("name").notNull(),
   address: text("address").notNull(),
   email: text("email").notNull(),
   phone: text("phone").notNull(),
   logoUrl: text("logo_url"),
+  createdAt: text("created_at")
+    .notNull()
+    .default(sql`(current_timestamp)`),
   updatedAt: text("updated_at")
     .notNull()
     .default(sql`(current_timestamp)`),

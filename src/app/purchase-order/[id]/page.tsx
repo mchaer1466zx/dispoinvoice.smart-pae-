@@ -17,7 +17,6 @@ import { PoPreviewActions } from "@/components/po/po-preview-actions";
 import { SharePoDialog } from "@/components/po/share-po-dialog";
 import { CompanyLogoUploadHint } from "@/components/invoice/company-logo-upload-hint";
 import { getPurchaseOrder, type SavedPurchaseOrder } from "@/lib/po-store";
-import { useCompanyProfile } from "@/lib/company-profile-store";
 import { formatDate } from "@/lib/format";
 
 function PageShell({ children }: { children: React.ReactNode }) {
@@ -43,7 +42,6 @@ export default function PurchaseOrderDetailPage() {
   const [po, setPo] = useState<SavedPurchaseOrder | null | undefined>(
     undefined
   );
-  const { logoUrl } = useCompanyProfile();
 
   useEffect(() => {
     let cancelled = false;
@@ -93,6 +91,7 @@ export default function PurchaseOrderDetailPage() {
         <SharePoDialog
           poDetail={po.poDetail}
           supplier={po.supplier}
+          company={po.company}
           items={po.items}
         />
       </div>
@@ -105,11 +104,12 @@ export default function PurchaseOrderDetailPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          {logoUrl ? null : <CompanyLogoUploadHint />}
+          {po.company?.logoUrl ? null : <CompanyLogoUploadHint />}
           <PoPreviewActions filename={`${po.poDetail.poNumber}.pdf`}>
             <PoPreview
               poDetail={po.poDetail}
               supplier={po.supplier}
+              company={po.company}
               items={po.items}
             />
           </PoPreviewActions>

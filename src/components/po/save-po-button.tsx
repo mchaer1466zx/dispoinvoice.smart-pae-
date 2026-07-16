@@ -9,22 +9,25 @@ import { savePurchaseOrder } from "@/lib/po-store";
 import type { PoDetail } from "@/components/po/po-detail-form";
 import type { PoItem } from "@/components/po/po-item-list-form";
 import type { Supplier } from "@/lib/mock-data";
+import type { CompanyRecord } from "@/app/actions/companies";
 
 export function SavePoButton({
   poDetail,
   supplier,
   items,
+  company,
 }: {
   poDetail: PoDetail;
   supplier: Supplier | null;
   items: PoItem[];
+  company: CompanyRecord | null;
 }) {
   const [saving, setSaving] = useState(false);
   const router = useRouter();
 
   function handleSave() {
     setSaving(true);
-    const result = savePurchaseOrder({ poDetail, supplier, items });
+    const result = savePurchaseOrder({ poDetail, supplier, company, items });
     setSaving(false);
 
     if (result.success) {

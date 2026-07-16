@@ -13,10 +13,12 @@ export function SaveInvoiceButton({
   billingInfo,
   customer,
   items,
+  companyId,
 }: {
   billingInfo: BillingInfo;
   customer: Customer | null;
   items: InvoiceItem[];
+  companyId: string | null;
 }) {
   const [saving, setSaving] = useState(false);
 
@@ -29,6 +31,7 @@ export function SaveInvoiceButton({
       status: billingInfo.status,
       notes: billingInfo.notes,
       customerId: customer?.id ?? null,
+      companyId,
       items: items.map((item) => ({
         description: item.description,
         quantity: item.quantity,

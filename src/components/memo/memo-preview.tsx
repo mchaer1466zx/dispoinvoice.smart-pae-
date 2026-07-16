@@ -2,13 +2,17 @@
 
 import { CompanyLogo } from "@/components/invoice/company-logo";
 import type { MemoDetail } from "@/components/memo/memo-detail-form";
-import { MOCK_COMPANY } from "@/lib/mock-data";
 import { formatDate } from "@/lib/format";
-import { useCompanyProfile } from "@/lib/company-profile-store";
+import type { CompanyRecord } from "@/app/actions/companies";
+import { getCompanyInitials } from "@/lib/company-initials";
 
-export function MemoPreview({ memoDetail }: { memoDetail: MemoDetail }) {
-  const { logoUrl } = useCompanyProfile();
-
+export function MemoPreview({
+  memoDetail,
+  company,
+}: {
+  memoDetail: MemoDetail;
+  company: CompanyRecord | null;
+}) {
   return (
     <div className="mx-auto w-full max-w-[210mm] overflow-hidden rounded-lg border border-gray-200 bg-white text-black">
       <div
@@ -19,14 +23,23 @@ export function MemoPreview({ memoDetail }: { memoDetail: MemoDetail }) {
       <div className="p-8 sm:p-12">
         <div className="flex items-start justify-between gap-6 border-b border-gray-200 pb-6 break-inside-avoid">
           <div className="flex items-center gap-4">
-            <CompanyLogo logoUrl={logoUrl} initials={MOCK_COMPANY.logoInitials} />
-            <div className="text-sm">
-              <p className="text-base font-semibold">{MOCK_COMPANY.name}</p>
-              <p className="text-gray-500">{MOCK_COMPANY.address}</p>
-              <p className="text-gray-500">
-                {MOCK_COMPANY.email} &middot; {MOCK_COMPANY.phone}
+            <CompanyLogo
+              logoUrl={company?.logoUrl ?? null}
+              initials={company ? getCompanyInitials(company.name) : "?"}
+            />
+            {company ? (
+              <div className="text-sm">
+                <p className="text-base font-semibold">{company.name}</p>
+                <p className="text-gray-500">{company.address}</p>
+                <p className="text-gray-500">
+                  {company.email} &middot; {company.phone}
+                </p>
+              </div>
+            ) : (
+              <p className="text-sm italic text-gray-400">
+                Perusahaan belum diatur.
               </p>
-            </div>
+            )}
           </div>
           <div className="text-right">
             <h2 className="text-2xl font-bold tracking-tight">MEMO DISPOSISI</h2>

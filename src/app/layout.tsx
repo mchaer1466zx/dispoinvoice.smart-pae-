@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
 import { AppHeader } from "@/components/app-header";
-import { CompanyProfileProvider } from "@/lib/company-profile-store";
+import { CompanyProvider } from "@/lib/company-store";
+import { listCompaniesAction, getActiveCompanyAction } from "@/app/actions/companies";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -20,22 +21,27 @@ export const metadata: Metadata = {
   description: "Buat invoice, purchase order, dan memo disposisi dengan cepat.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const [companies, activeCompany] = await Promise.all([
+    listCompaniesAction(),
+    getActiveCompanyAction(),
+  ]);
+
   return (
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <CompanyProfileProvider>
+        <CompanyProvider companies={companies} activeCompany={activeCompany}>
           <AppHeader />
           {children}
           <Toaster />
-        </CompanyProfileProvider>
+        </CompanyProvider>
       </body>
     </html>
   );

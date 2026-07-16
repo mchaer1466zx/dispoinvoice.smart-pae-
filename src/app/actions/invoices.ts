@@ -16,6 +16,7 @@ export type CreateInvoiceInput = {
   status: "draft" | "terkirim" | "lunas";
   notes: string;
   customerId: string | null;
+  companyId: string | null;
   items: CreateInvoiceItemInput[];
 };
 
@@ -46,6 +47,7 @@ export async function createInvoiceAction(
           status: input.status,
           notes: input.notes || null,
           customerId: input.customerId,
+          companyId: input.companyId,
         })
         .returning({ id: invoices.id });
 

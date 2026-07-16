@@ -2,31 +2,30 @@
 
 import { eq, sql } from "drizzle-orm";
 import { db } from "@/db";
-import { companyProfile } from "@/db/schema";
+import { companies } from "@/db/schema";
 import { validateAndOptimizeLogo } from "@/lib/optimize-logo";
 
 const MAX_LOGO_SIZE_BYTES = 2 * 1024 * 1024;
 const ALLOWED_LOGO_TYPES = ["image/png", "image/jpeg", "image/webp", "image/svg+xml"];
 
-const DEFAULT_PROFILE_ID = "default";
-
 export type UploadCompanyLogoResult =
   | { success: true; logoUrl: string }
   | { success: false; error: string };
 
-/** Server Action untuk mengambil logo perusahaan saat ini (null jika belum diunggah). */
-export async function getCompanyLogoAction(): Promise<string | null> {
-  const [profile] = await db
-    .select({ logoUrl: companyProfile.logoUrl })
-    .from(companyProfile)
-    .where(eq(companyProfile.id, DEFAULT_PROFILE_ID))
+/** Server Action untuk mengambil logo sebuah perusahaan saat ini (null jika belum diunggah). */
+export async function getCompanyLogoAction(companyId: string): Promise<string | null> {
+  const [company] = await db
+    .select({ logoUrl: companies.logoUrl })
+    .from(companies)
+    .where(eq(companies.id, companyId))
     .limit(1);
 
-  return profile?.logoUrl ?? null;
+  return company?.logoUrl ?? null;
 }
 
-/** Server Action untuk mengunggah/mengganti logo perusahaan, dipakai di halaman Profil Perusahaan. */
+/** Server Action untuk mengunggah/mengganti logo sebuah perusahaan, dipakai di halaman Profil Perusahaan. */
 export async function uploadCompanyLogoAction(
+  companyId: string,
   formData: FormData
 ): Promise<UploadCompanyLogoResult> {
   const file = formData.get("logo");
@@ -57,20 +56,36 @@ export async function uploadCompanyLogoAction(
 
   const logoUrl = `data:${optimized.contentType};base64,${optimized.buffer.toString("base64")}`;
 
-  await db
-    .insert(companyProfile)
-    .values({
-      id: DEFAULT_PROFILE_ID,
-      name: "",
-      address: "",
-      email: "",
-      phone: "",
-      logoUrl,
-    })
-    .onConflictDoUpdate({
-      target: companyProfile.id,
-      set: { logoUrl, updatedAt: sql`(current_timestamp)` },
-    });
+  const [updated] = await db
+    .update(companies)
+    .set({ logoUrl, updatedAt: sql`(current_timestamp)` })
+    .where(eq(companies.id, companyId))
+    .returning({ id: companies.id });
+
+  if (!updated) {
+    return { success: false, error: "Perusahaan tidak ditemukan." };
+  }
 
   return { success: true, logoUrl };
+}
+
+export type RemoveCompanyLogoResult =
+  | { success: true }
+  | { success: false; error: string };
+
+/** Server Action untuk menghapus logo sebuah perusahaan (kembali ke placeholder inisial). */
+export async function removeCompanyLogoAction(
+  companyId: string
+): Promise<RemoveCompanyLogoResult> {
+  const [updated] = await db
+    .update(companies)
+    .set({ logoUrl: null, updatedAt: sql`(current_timestamp)` })
+    .where(eq(companies.id, companyId))
+    .returning({ id: companies.id });
+
+  if (!updated) {
+    return { success: false, error: "Perusahaan tidak ditemukan." };
+  }
+
+  return { success: true };
 }

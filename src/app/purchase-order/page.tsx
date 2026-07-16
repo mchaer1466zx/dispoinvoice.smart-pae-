@@ -22,7 +22,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import type { Supplier } from "@/lib/mock-data";
-import { useCompanyProfile } from "@/lib/company-profile-store";
+import { useCompany } from "@/lib/company-store";
 
 export default function PurchaseOrderPage() {
   const [poDetail, setPoDetail] = useState(createDefaultPoDetail);
@@ -30,7 +30,7 @@ export default function PurchaseOrderPage() {
   const [selectedSupplier, setSelectedSupplier] = useState<Supplier | null>(
     null
   );
-  const { logoUrl } = useCompanyProfile();
+  const { activeCompany } = useCompany();
 
   return (
     <div className="flex flex-1 justify-center bg-zinc-50 px-4 py-10 dark:bg-black sm:px-8">
@@ -49,6 +49,7 @@ export default function PurchaseOrderPage() {
             poDetail={poDetail}
             supplier={selectedSupplier}
             items={items}
+            company={activeCompany}
           />
         </div>
 
@@ -69,12 +70,13 @@ export default function PurchaseOrderPage() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            {logoUrl ? null : <CompanyLogoUploadHint />}
+            {activeCompany?.logoUrl ? null : <CompanyLogoUploadHint />}
             <PoPreviewActions filename={`${poDetail.poNumber}.pdf`}>
               <PoPreview
                 poDetail={poDetail}
                 supplier={selectedSupplier}
                 items={items}
+                company={activeCompany}
               />
             </PoPreviewActions>
           </CardContent>

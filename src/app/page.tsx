@@ -23,7 +23,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import type { Customer } from "@/lib/mock-data";
-import { useCompanyProfile } from "@/lib/company-profile-store";
+import { useCompany } from "@/lib/company-store";
 
 export default function BuatInvoicePage() {
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(
@@ -31,7 +31,7 @@ export default function BuatInvoicePage() {
   );
   const [billingInfo, setBillingInfo] = useState(createDefaultBillingInfo);
   const [items, setItems] = useState(createDefaultItems);
-  const { logoUrl } = useCompanyProfile();
+  const { activeCompany } = useCompany();
 
   return (
     <div className="flex flex-1 justify-center bg-zinc-50 px-4 py-10 dark:bg-black sm:px-8">
@@ -52,6 +52,7 @@ export default function BuatInvoicePage() {
               billingInfo={billingInfo}
               customer={selectedCustomer}
               items={items}
+              companyId={activeCompany?.id ?? null}
             />
           </div>
         </div>
@@ -73,12 +74,13 @@ export default function BuatInvoicePage() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            {logoUrl ? null : <CompanyLogoUploadHint />}
+            {activeCompany?.logoUrl ? null : <CompanyLogoUploadHint />}
             <InvoicePreviewActions filename={`${billingInfo.invoiceNumber}.pdf`}>
               <InvoicePreview
                 billingInfo={billingInfo}
                 customer={selectedCustomer}
                 items={items}
+                company={activeCompany}
               />
             </InvoicePreviewActions>
           </CardContent>

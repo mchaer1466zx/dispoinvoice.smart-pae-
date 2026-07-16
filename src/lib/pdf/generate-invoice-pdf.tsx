@@ -2,9 +2,10 @@ import path from "node:path";
 import { eq } from "drizzle-orm";
 import { renderToBuffer } from "@react-pdf/renderer";
 import { db } from "@/db";
-import { companyProfile, customers, invoiceItems, invoices } from "@/db/schema";
+import { companies, customers, invoiceItems, invoices } from "@/db/schema";
 import { InvoiceDocument, type InvoicePdfData } from "@/lib/pdf/invoice-document";
 import { generateVerificationQrDataUrl } from "@/lib/verification";
+import { getActiveCompanyAction } from "@/app/actions/companies";
 
 function resolveLogoSource(logoUrl: string | null): string | null {
   if (!logoUrl) return null;
@@ -40,11 +41,15 @@ export async function generateInvoicePdf(invoiceId: string): Promise<Buffer | nu
       )[0] ?? null)
     : null;
 
-  const [company] = await db
-    .select()
-    .from(companyProfile)
-    .where(eq(companyProfile.id, "default"))
-    .limit(1);
+  const company = invoice.companyId
+    ? ((
+        await db
+          .select()
+          .from(companies)
+          .where(eq(companies.id, invoice.companyId))
+          .limit(1)
+      )[0] ?? null)
+    : await getActiveCompanyAction();
 
   const verificationQrDataUrl = await generateVerificationQrDataUrl(
     "invoice",

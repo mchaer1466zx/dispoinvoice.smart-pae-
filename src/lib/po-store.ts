@@ -1,6 +1,7 @@
 import type { PoDetail } from "@/components/po/po-detail-form";
 import type { PoItem } from "@/components/po/po-item-list-form";
 import type { Supplier } from "@/lib/mock-data";
+import type { CompanyRecord } from "@/app/actions/companies";
 
 const STORAGE_KEY = "dispoinvoice:purchase-orders";
 
@@ -8,6 +9,7 @@ export type SavedPurchaseOrder = {
   id: string;
   poDetail: PoDetail;
   supplier: Supplier | null;
+  company: CompanyRecord | null;
   items: PoItem[];
   savedAt: string;
 };
@@ -29,6 +31,7 @@ function writeAll(purchaseOrders: SavedPurchaseOrder[]) {
 export type SavePoInput = {
   poDetail: PoDetail;
   supplier: Supplier | null;
+  company: CompanyRecord | null;
   items: PoItem[];
 };
 
@@ -55,6 +58,7 @@ export function savePurchaseOrder(input: SavePoInput): SavePoResult {
     id,
     poDetail: input.poDetail,
     supplier: input.supplier,
+    company: input.company,
     items: input.items,
     savedAt: new Date().toISOString(),
   };

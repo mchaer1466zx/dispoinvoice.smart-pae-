@@ -5,9 +5,10 @@ import { CompanyLogo } from "@/components/invoice/company-logo";
 import { PO_STATUS_OPTIONS, type PoDetail } from "@/components/po/po-detail-form";
 import type { PoItem } from "@/components/po/po-item-list-form";
 import { calculatePoItemsTotal } from "@/components/po/po-item-list-form";
-import { MOCK_COMPANY, type Supplier } from "@/lib/mock-data";
+import type { Supplier } from "@/lib/mock-data";
 import { formatCurrency, formatDate } from "@/lib/format";
-import { useCompanyProfile } from "@/lib/company-profile-store";
+import type { CompanyRecord } from "@/app/actions/companies";
+import { getCompanyInitials } from "@/lib/company-initials";
 
 function statusLabel(status: PoDetail["status"]) {
   return PO_STATUS_OPTIONS.find((option) => option.value === status)?.label ?? status;
@@ -25,13 +26,14 @@ export function PoPreview({
   poDetail,
   supplier,
   items,
+  company,
 }: {
   poDetail: PoDetail;
   supplier: Supplier | null;
   items: PoItem[];
+  company: CompanyRecord | null;
 }) {
   const total = calculatePoItemsTotal(items);
-  const { logoUrl } = useCompanyProfile();
 
   return (
     <div className="mx-auto w-full max-w-[210mm] overflow-hidden rounded-lg border border-gray-200 bg-white text-black">
@@ -43,14 +45,23 @@ export function PoPreview({
       <div className="p-8 sm:p-12">
         <div className="flex items-start justify-between gap-6 border-b border-gray-200 pb-6 break-inside-avoid">
           <div className="flex items-center gap-4">
-            <CompanyLogo logoUrl={logoUrl} initials={MOCK_COMPANY.logoInitials} />
-            <div className="text-sm">
-              <p className="text-base font-semibold">{MOCK_COMPANY.name}</p>
-              <p className="text-gray-500">{MOCK_COMPANY.address}</p>
-              <p className="text-gray-500">
-                {MOCK_COMPANY.email} &middot; {MOCK_COMPANY.phone}
+            <CompanyLogo
+              logoUrl={company?.logoUrl ?? null}
+              initials={company ? getCompanyInitials(company.name) : "?"}
+            />
+            {company ? (
+              <div className="text-sm">
+                <p className="text-base font-semibold">{company.name}</p>
+                <p className="text-gray-500">{company.address}</p>
+                <p className="text-gray-500">
+                  {company.email} &middot; {company.phone}
+                </p>
+              </div>
+            ) : (
+              <p className="text-sm italic text-gray-400">
+                Perusahaan belum diatur.
               </p>
-            </div>
+            )}
           </div>
           <div className="text-right">
             <h2 className="text-2xl font-bold tracking-tight">PURCHASE ORDER</h2>
