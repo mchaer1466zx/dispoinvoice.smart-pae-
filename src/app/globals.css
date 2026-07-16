@@ -135,22 +135,35 @@
   }
 }
 
+@page {
+  size: A4 portrait;
+  margin: 0;
+}
+
 @media print {
   body * {
     visibility: hidden;
   }
   #invoice-printable,
-  #invoice-printable * {
+  #invoice-printable *,
+  #po-printable,
+  #po-printable *,
+  #memo-printable,
+  #memo-printable * {
     visibility: visible;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
   }
-  #invoice-printable {
+  #invoice-printable,
+  #po-printable,
+  #memo-printable {
     position: absolute;
     inset: 0;
     width: 210mm;
   }
-  #invoice-printable img {
+  #invoice-printable img,
+  #po-printable img,
+  #memo-printable img {
     break-inside: avoid;
   }
 }

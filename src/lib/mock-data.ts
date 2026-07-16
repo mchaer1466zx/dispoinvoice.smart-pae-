@@ -6,6 +6,13 @@ export type Customer = {
   address: string;
 };
 
+export type Supplier = {
+  id: string;
+  name: string;
+  contactInfo: string;
+  address: string;
+};
+
 export type CompanyProfile = {
   name: string;
   address: string;
@@ -56,5 +63,26 @@ export const MOCK_CUSTOMERS: Customer[] = [
     email: "berkahjaya.toko@gmail.com",
     phone: "0811-2233-4455",
     address: "Jl. Ahmad Yani No. 100, Semarang",
+  },
+];
+
+export const MOCK_SUPPLIERS: Supplier[] = [
+  {
+    id: "sup-1",
+    name: "PT Sumber Kertas Nusantara",
+    contactInfo: "021-8889900 · sales@sumberkertas.co.id",
+    address: "Jl. Industri Raya No. 20, Tangerang",
+  },
+  {
+    id: "sup-2",
+    name: "CV Elektronik Jaya Makmur",
+    contactInfo: "022-6667788 · order@elektronikjaya.com",
+    address: "Jl. Soekarno Hatta No. 55, Bandung",
+  },
+  {
+    id: "sup-3",
+    name: "PT Percetakan Mandiri Sejahtera",
+    contactInfo: "031-2223344 · cs@percetakanmandiri.id",
+    address: "Jl. Rungkut Industri No. 8, Surabaya",
   },
 ];
