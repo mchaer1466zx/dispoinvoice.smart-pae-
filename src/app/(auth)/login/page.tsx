@@ -2,7 +2,7 @@
 
 import { useId, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,6 +16,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useAuth } from "@/lib/auth-store";
+import { loginAction } from "@/app/actions/auth";
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -42,18 +43,10 @@ function validate(form: LoginForm): FormErrors {
   return errors;
 }
 
-function nameFromEmail(email: string) {
-  const [localPart] = email.split("@");
-  return localPart
-    .split(/[._-]/)
-    .filter(Boolean)
-    .map((part) => part[0].toUpperCase() + part.slice(1))
-    .join(" ");
-}
-
 export default function LoginPage() {
   const idPrefix = useId();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { login } = useAuth();
   const [form, setForm] = useState<LoginForm>({ email: "", password: "" });
   const [errors, setErrors] = useState<FormErrors>({});
@@ -64,7 +57,7 @@ export default function LoginPage() {
     setErrors((current) => ({ ...current, [field]: undefined }));
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
     const validationErrors = validate(form);
@@ -74,14 +67,29 @@ export default function LoginPage() {
     }
 
     setIsSubmitting(true);
-    const email = form.email.trim();
-    login({
-      id: `user-${Date.now()}`,
-      name: nameFromEmail(email) || email,
-      email,
-    });
-    toast.success("Berhasil masuk", { description: `Selamat datang kembali, ${email}.` });
-    router.push("/");
+    try {
+      const email = form.email.trim();
+      const result = await loginAction({ email, password: form.password });
+      if (!result.success) {
+        setErrors({ password: result.error });
+        toast.error("Gagal masuk", { description: result.error });
+        setIsSubmitting(false);
+        return;
+      }
+
+      login(result.user);
+      toast.success("Berhasil masuk", {
+        description: `Selamat datang kembali, ${result.user.name}.`,
+      });
+      const next = searchParams.get("next");
+      router.push(next && next.startsWith("/") ? next : "/");
+      router.refresh();
+    } catch {
+      toast.error("Terjadi kesalahan", {
+        description: "Tidak bisa masuk. Coba lagi sebentar.",
+      });
+      setIsSubmitting(false);
+    }
   }
 
   return (

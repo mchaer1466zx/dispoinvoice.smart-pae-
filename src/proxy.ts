@@ -13,7 +13,14 @@ const PUBLIC_PREFIXES = [
   "/api/documents/",
 ];
 
+// Aset statis dari folder public (logo, ikon, font, dll.) bersifat publik —
+// jangan sampai tertahan auth, kalau tidak logo & gambar brand tidak muncul
+// dan image optimizer (/_next/image) gagal mengambil sumbernya.
+const PUBLIC_FILE =
+  /\.(?:jpg|jpeg|png|gif|svg|webp|avif|ico|bmp|woff2?|ttf|otf|eot|txt|xml|json|map|mp4|webm)$/i;
+
 function isPublicPath(pathname: string): boolean {
+  if (PUBLIC_FILE.test(pathname)) return true;
   if (PUBLIC_PATHS.includes(pathname)) return true;
   return PUBLIC_PREFIXES.some((prefix) => pathname.startsWith(prefix));
 }

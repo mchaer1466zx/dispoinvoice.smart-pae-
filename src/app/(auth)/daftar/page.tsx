@@ -16,6 +16,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useAuth } from "@/lib/auth-store";
+import { registerAction, loginAction } from "@/app/actions/auth";
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -71,7 +72,7 @@ export default function DaftarPage() {
     setErrors((current) => ({ ...current, [field]: undefined }));
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
     const validationErrors = validate(form);
@@ -81,15 +82,38 @@ export default function DaftarPage() {
     }
 
     setIsSubmitting(true);
-    register({
-      id: `user-${Date.now()}`,
-      name: form.name.trim(),
-      email: form.email.trim(),
-    });
-    toast.success("Akun berhasil dibuat", {
-      description: `Selamat datang, ${form.name.trim()}.`,
-    });
-    router.push("/");
+    try {
+      const name = form.name.trim();
+      const email = form.email.trim();
+
+      const result = await registerAction({ name, email, password: form.password });
+      if (!result.success) {
+        setErrors({ email: result.error });
+        toast.error("Gagal membuat akun", { description: result.error });
+        setIsSubmitting(false);
+        return;
+      }
+
+      // Buat sesi (cookie httpOnly) supaya area internal langsung bisa diakses.
+      const loginResult = await loginAction({ email, password: form.password });
+      if (!loginResult.success) {
+        toast.error("Gagal masuk otomatis", { description: loginResult.error });
+        router.push("/login");
+        return;
+      }
+
+      register(loginResult.user);
+      toast.success("Akun berhasil dibuat", {
+        description: `Selamat datang, ${loginResult.user.name}.`,
+      });
+      router.push("/");
+      router.refresh();
+    } catch {
+      toast.error("Terjadi kesalahan", {
+        description: "Tidak bisa membuat akun. Coba lagi sebentar.",
+      });
+      setIsSubmitting(false);
+    }
   }
 
   return (

@@ -10,13 +10,14 @@ export function AppHeader() {
         <Link href="/" className="flex items-center gap-3">
           <Image
             src="/logo-pae.jpg"
-            alt="Logo DispoInvoice"
+            alt="Logo PT Prima Andalas Energi"
             width={36}
             height={36}
             className="rounded-md"
+            priority
           />
-          <span className="text-lg font-semibold tracking-tight text-foreground">
-            DispoInvoice
+          <span className="text-sm font-bold uppercase leading-tight tracking-tight text-foreground sm:text-base">
+            PT Prima Andalas Energi
           </span>
         </Link>
         <div className="flex items-center gap-3">

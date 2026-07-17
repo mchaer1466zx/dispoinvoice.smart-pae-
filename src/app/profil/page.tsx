@@ -17,6 +17,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useAuth } from "@/lib/auth-store";
+import { updateProfileAction } from "@/app/actions/auth";
 import { getCompanyInitials } from "@/lib/company-initials";
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -48,7 +49,7 @@ export default function ProfilPage() {
     setIsEditing(true);
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
     let hasError = false;
@@ -71,7 +72,14 @@ export default function ProfilPage() {
 
     if (hasError) return;
 
-    updateProfile({ name: name.trim(), email: email.trim() });
+    const result = await updateProfileAction({ name: name.trim(), email: email.trim() });
+    if (!result.success) {
+      setEmailError(result.error);
+      toast.error("Gagal memperbarui profil", { description: result.error });
+      return;
+    }
+
+    updateProfile({ name: result.user.name, email: result.user.email });
     toast.success("Profil diperbarui");
     setIsEditing(false);
   }

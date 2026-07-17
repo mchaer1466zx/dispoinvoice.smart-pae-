@@ -12,6 +12,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useAuth } from "@/lib/auth-store";
+import { logoutAction } from "@/app/actions/auth";
 import { getCompanyInitials } from "@/lib/company-initials";
 
 export function UserMenu() {
@@ -28,10 +29,12 @@ export function UserMenu() {
     );
   }
 
-  function handleLogout() {
+  async function handleLogout() {
+    await logoutAction();
     logout();
     toast.success("Berhasil keluar");
     router.push("/login");
+    router.refresh();
   }
 
   return (

@@ -41,7 +41,7 @@ export function InvoicePreview({
       <div
         aria-hidden
         className="h-1.5 w-full"
-        style={{ background: "linear-gradient(to right, #3A67AE, #76B843)" }}
+        style={{ background: "linear-gradient(to right, #116ABE, #8ABA49)" }}
       />
       <div className="p-8 sm:p-12">
         <DocumentHeaderPreview
