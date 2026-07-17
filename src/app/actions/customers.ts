@@ -3,6 +3,7 @@
 import { db } from "@/db";
 import { customers } from "@/db/schema";
 import { asc } from "drizzle-orm";
+import { requireSessionUser } from "@/app/actions/auth";
 
 export type CustomerListItem = {
   id: string;
@@ -14,6 +15,7 @@ export type CustomerListItem = {
 
 /** Server Action untuk mengambil daftar pelanggan, dipakai pada dropdown pemilih pelanggan. */
 export async function listCustomersAction(): Promise<CustomerListItem[]> {
+  await requireSessionUser();
   return db
     .select({
       id: customers.id,

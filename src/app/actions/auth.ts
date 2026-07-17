@@ -146,6 +146,19 @@ export async function logoutAction(): Promise<void> {
   cookieStore.delete(SESSION_COOKIE);
 }
 
+/**
+ * Lapisan pertahanan kedua di dalam Server Action itu sendiri (selain middleware),
+ * karena Server Action bisa dipanggil lewat POST ke route mana pun. Lempar error jika
+ * belum login; dipakai di awal action yang mengubah atau menampilkan data privat.
+ */
+export async function requireSessionUser(): Promise<UserRecord> {
+  const user = await getSessionUserAction();
+  if (!user) {
+    throw new Error("Belum login.");
+  }
+  return user;
+}
+
 export type RequestPasswordResetResult =
   | { success: true }
   | { success: false; error: string };

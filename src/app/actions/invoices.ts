@@ -2,6 +2,7 @@
 
 import { db } from "@/db";
 import { invoices, invoiceItems } from "@/db/schema";
+import { requireSessionUser } from "@/app/actions/auth";
 
 export type CreateInvoiceItemInput = {
   description: string;
@@ -28,6 +29,7 @@ export type CreateInvoiceResult =
 export async function createInvoiceAction(
   input: CreateInvoiceInput
 ): Promise<CreateInvoiceResult> {
+  await requireSessionUser();
   if (!input.invoiceNumber.trim()) {
     return { success: false, error: "Nomor invoice wajib diisi." };
   }

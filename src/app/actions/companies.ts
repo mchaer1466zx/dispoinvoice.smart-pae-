@@ -4,6 +4,7 @@ import { asc, eq, sql } from "drizzle-orm";
 import { cookies } from "next/headers";
 import { db } from "@/db";
 import { companies } from "@/db/schema";
+import { requireSessionUser } from "@/app/actions/auth";
 
 const ACTIVE_COMPANY_COOKIE = "active_company_id";
 const ACTIVE_COMPANY_COOKIE_OPTIONS = {
@@ -52,6 +53,7 @@ export async function listCompaniesAction(): Promise<CompanyRecord[]> {
 export async function createCompanyAction(
   input: CompanyInput
 ): Promise<CompanyActionResult> {
+  await requireSessionUser();
   const name = input.name.trim();
   if (!name) {
     return { success: false, error: "Nama perusahaan wajib diisi." };
@@ -76,6 +78,7 @@ export async function updateCompanyAction(
   id: string,
   input: CompanyInput
 ): Promise<CompanyActionResult> {
+  await requireSessionUser();
   const name = input.name.trim();
   if (!name) {
     return { success: false, error: "Nama perusahaan wajib diisi." };
@@ -100,6 +103,7 @@ export async function updateCompanyAction(
 
 /** Server Action untuk menghapus perusahaan. Jika sedang aktif, cookie aktif ikut dibersihkan. */
 export async function deleteCompanyAction(id: string): Promise<DeleteCompanyResult> {
+  await requireSessionUser();
   const [deleted] = await db
     .delete(companies)
     .where(eq(companies.id, id))
@@ -119,6 +123,7 @@ export async function deleteCompanyAction(id: string): Promise<DeleteCompanyResu
 
 /** Server Action untuk menandai sebuah perusahaan sebagai perusahaan aktif (dipakai oleh switcher). */
 export async function setActiveCompanyAction(id: string): Promise<void> {
+  await requireSessionUser();
   const cookieStore = await cookies();
   cookieStore.set(ACTIVE_COMPANY_COOKIE, id, ACTIVE_COMPANY_COOKIE_OPTIONS);
 }

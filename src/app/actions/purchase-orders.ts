@@ -3,6 +3,7 @@
 import { asc, eq } from "drizzle-orm";
 import { db } from "@/db";
 import { purchaseOrders, poItems } from "@/db/schema";
+import { requireSessionUser } from "@/app/actions/auth";
 
 export type PoStatus = "draft" | "dikirim" | "selesai";
 
@@ -82,6 +83,7 @@ function validateInput(input: PurchaseOrderInput): string | null {
 
 /** Server Action untuk mengambil daftar purchase order, dipakai pada halaman riwayat. */
 export async function listPurchaseOrdersAction(): Promise<PurchaseOrderRecord[]> {
+  await requireSessionUser();
   return db
     .select(PO_COLUMNS)
     .from(purchaseOrders)
@@ -112,6 +114,7 @@ export async function getPurchaseOrderAction(
 export async function createPurchaseOrderAction(
   input: PurchaseOrderInput
 ): Promise<PurchaseOrderActionResult> {
+  await requireSessionUser();
   const validationError = validateInput(input);
   if (validationError) {
     return { success: false, error: validationError };
@@ -157,6 +160,7 @@ export async function updatePurchaseOrderAction(
   id: string,
   input: PurchaseOrderInput
 ): Promise<PurchaseOrderActionResult> {
+  await requireSessionUser();
   const validationError = validateInput(input);
   if (validationError) {
     return { success: false, error: validationError };
@@ -210,6 +214,7 @@ export async function updatePurchaseOrderAction(
 export async function deletePurchaseOrderAction(
   id: string
 ): Promise<DeletePurchaseOrderResult> {
+  await requireSessionUser();
   const [deleted] = await db
     .delete(purchaseOrders)
     .where(eq(purchaseOrders.id, id))

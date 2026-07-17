@@ -2,6 +2,7 @@
 
 import { desc, eq, like, or } from "drizzle-orm";
 import { db } from "@/db";
+import { requireSessionUser } from "@/app/actions/auth";
 import {
   customers,
   invoiceItems,
@@ -35,6 +36,7 @@ export type ListDocumentsParams = {
 export async function listDocumentsAction(
   params: ListDocumentsParams = {}
 ): Promise<DocumentSummary[]> {
+  await requireSessionUser();
   const query = params.search?.trim();
   const results: DocumentSummary[] = [];
 
@@ -156,6 +158,7 @@ export type DocumentDetail = DocumentSummary & {
  * id-nya. Id dokumen adalah UUID unik per tabel sehingga aman dicari di ketiga tabel.
  */
 export async function getDocumentAction(id: string): Promise<DocumentDetail | null> {
+  await requireSessionUser();
   const [invoice] = await db
     .select()
     .from(invoices)

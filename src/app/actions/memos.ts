@@ -3,6 +3,7 @@
 import { asc, eq } from "drizzle-orm";
 import { db } from "@/db";
 import { memos } from "@/db/schema";
+import { requireSessionUser } from "@/app/actions/auth";
 
 export type MemoRecord = {
   id: string;
@@ -55,6 +56,7 @@ function validateInput(input: MemoInput): string | null {
 
 /** Server Action untuk mengambil daftar memo, dipakai pada halaman riwayat. */
 export async function listMemosAction(): Promise<MemoRecord[]> {
+  await requireSessionUser();
   return db.select(MEMO_COLUMNS).from(memos).orderBy(asc(memos.memoDate));
 }
 
@@ -73,6 +75,7 @@ export async function getMemoAction(id: string): Promise<MemoRecord | null> {
 export async function createMemoAction(
   input: MemoInput
 ): Promise<MemoActionResult> {
+  await requireSessionUser();
   const validationError = validateInput(input);
   if (validationError) {
     return { success: false, error: validationError };
@@ -98,6 +101,7 @@ export async function updateMemoAction(
   id: string,
   input: MemoInput
 ): Promise<MemoActionResult> {
+  await requireSessionUser();
   const validationError = validateInput(input);
   if (validationError) {
     return { success: false, error: validationError };
@@ -125,6 +129,7 @@ export async function updateMemoAction(
 
 /** Server Action untuk menghapus memo disposisi. */
 export async function deleteMemoAction(id: string): Promise<DeleteMemoResult> {
+  await requireSessionUser();
   const [deleted] = await db
     .delete(memos)
     .where(eq(memos.id, id))

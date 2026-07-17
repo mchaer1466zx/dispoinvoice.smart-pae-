@@ -3,6 +3,7 @@
 import { asc, eq, like } from "drizzle-orm";
 import { db } from "@/db";
 import { suppliers } from "@/db/schema";
+import { requireSessionUser } from "@/app/actions/auth";
 
 export type SupplierRecord = {
   id: string;
@@ -34,6 +35,7 @@ export type DeleteSupplierResult =
 
 /** Server Action untuk mengambil daftar pemasok, opsional disaring berdasarkan nama. */
 export async function listSuppliersAction(query?: string): Promise<SupplierRecord[]> {
+  await requireSessionUser();
   const trimmed = query?.trim();
 
   return db
@@ -47,6 +49,7 @@ export async function listSuppliersAction(query?: string): Promise<SupplierRecor
 export async function createSupplierAction(
   input: SupplierInput
 ): Promise<SupplierActionResult> {
+  await requireSessionUser();
   const name = input.name.trim();
   if (!name) {
     return { success: false, error: "Nama pemasok wajib diisi." };
@@ -69,6 +72,7 @@ export async function updateSupplierAction(
   id: string,
   input: SupplierInput
 ): Promise<SupplierActionResult> {
+  await requireSessionUser();
   const name = input.name.trim();
   if (!name) {
     return { success: false, error: "Nama pemasok wajib diisi." };
@@ -93,6 +97,7 @@ export async function updateSupplierAction(
 
 /** Server Action untuk menghapus pemasok. */
 export async function deleteSupplierAction(id: string): Promise<DeleteSupplierResult> {
+  await requireSessionUser();
   const [deleted] = await db
     .delete(suppliers)
     .where(eq(suppliers.id, id))
