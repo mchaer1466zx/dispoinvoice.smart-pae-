@@ -46,7 +46,17 @@ export type DeleteCompanyResult =
 
 /** Server Action untuk mengambil daftar perusahaan, dipakai pada switcher & halaman manajemen. */
 export async function listCompaniesAction(): Promise<CompanyRecord[]> {
-  return db.select(COMPANY_COLUMNS).from(companies).orderBy(asc(companies.name));
+  try {
+    return await db
+      .select(COMPANY_COLUMNS)
+      .from(companies)
+      .orderBy(asc(companies.name));
+  } catch (error) {
+    // Database belum siap (mis. env DATABASE_URL belum diset atau migrasi belum
+    // dijalankan). Kembalikan daftar kosong agar UI tetap tampil, bukan 500.
+    console.error("listCompaniesAction gagal membaca database:", error);
+    return [];
+  }
 }
 
 /** Server Action untuk menambahkan perusahaan baru. Perusahaan pertama otomatis jadi aktif. */
@@ -137,20 +147,26 @@ export async function getActiveCompanyAction(): Promise<CompanyRecord | null> {
   const cookieStore = await cookies();
   const activeId = cookieStore.get(ACTIVE_COMPANY_COOKIE)?.value;
 
-  if (activeId) {
-    const [company] = await db
+  try {
+    if (activeId) {
+      const [company] = await db
+        .select(COMPANY_COLUMNS)
+        .from(companies)
+        .where(eq(companies.id, activeId))
+        .limit(1);
+      if (company) return company;
+    }
+
+    const [first] = await db
       .select(COMPANY_COLUMNS)
       .from(companies)
-      .where(eq(companies.id, activeId))
+      .orderBy(asc(companies.name))
       .limit(1);
-    if (company) return company;
+
+    return first ?? null;
+  } catch (error) {
+    // Database belum siap — jangan bikin seluruh layout 500.
+    console.error("getActiveCompanyAction gagal membaca database:", error);
+    return null;
   }
-
-  const [first] = await db
-    .select(COMPANY_COLUMNS)
-    .from(companies)
-    .orderBy(asc(companies.name))
-    .limit(1);
-
-  return first ?? null;
 }
