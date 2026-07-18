@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { ArrowLeft, Mail, MapPin, Phone, Search, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -19,11 +19,30 @@ import {
 import { AddCustomerDialog } from "@/components/pelanggan/add-customer-dialog";
 import { EditCustomerDialog } from "@/components/pelanggan/edit-customer-dialog";
 import { DeleteCustomerDialog } from "@/components/pelanggan/delete-customer-dialog";
-import { MOCK_CUSTOMERS, type Customer } from "@/lib/mock-data";
+import { type Customer } from "@/lib/mock-data";
+import { listCustomersAction } from "@/app/actions/customers";
 
 export default function PelangganPage() {
-  const [customers, setCustomers] = useState(MOCK_CUSTOMERS);
+  const [customers, setCustomers] = useState<Customer[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState("");
+
+  useEffect(() => {
+    let active = true;
+    listCustomersAction()
+      .then((data) => {
+        if (active) setCustomers(data);
+      })
+      .catch(() => {
+        // Biarkan daftar kosong bila gagal memuat.
+      })
+      .finally(() => {
+        if (active) setIsLoading(false);
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
 
   const filteredCustomers = useMemo(() => {
     const query = search.trim().toLowerCase();
@@ -89,7 +108,11 @@ export default function PelangganPage() {
               />
             </InputGroup>
 
-            {customers.length === 0 ? (
+            {isLoading ? (
+              <div className="flex flex-col items-center gap-2 py-10 text-center text-muted-foreground">
+                <p className="text-sm">Memuat pelanggan...</p>
+              </div>
+            ) : customers.length === 0 ? (
               <div className="flex flex-col items-center gap-2 py-10 text-center text-muted-foreground">
                 <Users className="size-8" />
                 <p className="text-sm">Belum ada pelanggan tersimpan.</p>

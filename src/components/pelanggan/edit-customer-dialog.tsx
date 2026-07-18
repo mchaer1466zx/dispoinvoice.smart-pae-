@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/dialog";
 import { CustomerFormFields } from "@/components/pelanggan/customer-form-fields";
 import type { Customer } from "@/lib/mock-data";
+import { updateCustomerAction } from "@/app/actions/customers";
 
 export function EditCustomerDialog({
   customer,
@@ -26,6 +27,7 @@ export function EditCustomerDialog({
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState<Customer>(customer);
   const [nameError, setNameError] = useState<string | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
 
   function handleOpenChange(next: boolean) {
     setOpen(next);
@@ -35,7 +37,7 @@ export function EditCustomerDialog({
     }
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
     if (!form.name.trim()) {
@@ -43,19 +45,32 @@ export function EditCustomerDialog({
       return;
     }
 
-    const updated: Customer = {
-      id: customer.id,
-      name: form.name.trim(),
-      email: form.email.trim(),
-      phone: form.phone.trim(),
-      address: form.address.trim(),
-    };
+    setIsSaving(true);
+    try {
+      const result = await updateCustomerAction(customer.id, {
+        name: form.name,
+        email: form.email,
+        phone: form.phone,
+        address: form.address,
+      });
+      if (!result.success) {
+        setNameError(result.error);
+        toast.error("Gagal memperbarui", { description: result.error });
+        return;
+      }
 
-    onSave(updated);
-    toast.success("Pelanggan diperbarui", {
-      description: `Data ${updated.name} berhasil diperbarui.`,
-    });
-    setOpen(false);
+      onSave(result.customer);
+      toast.success("Pelanggan diperbarui", {
+        description: `Data ${result.customer.name} berhasil diperbarui.`,
+      });
+      setOpen(false);
+    } catch {
+      toast.error("Terjadi kesalahan", {
+        description: "Tidak bisa memperbarui pelanggan. Coba lagi.",
+      });
+    } finally {
+      setIsSaving(false);
+    }
   }
 
   return (
@@ -84,8 +99,8 @@ export function EditCustomerDialog({
           />
 
           <DialogFooter>
-            <Button type="submit">
-              <Save /> Simpan Perubahan
+            <Button type="submit" disabled={isSaving}>
+              <Save /> {isSaving ? "Menyimpan..." : "Simpan Perubahan"}
             </Button>
           </DialogFooter>
         </form>

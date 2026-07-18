@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Check, ChevronsUpDown, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -24,7 +24,8 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
-import { MOCK_CUSTOMERS, type Customer } from "@/lib/mock-data";
+import { type Customer } from "@/lib/mock-data";
+import { listCustomersAction } from "@/app/actions/customers";
 
 export function CustomerPicker({
   selected,
@@ -34,6 +35,21 @@ export function CustomerPicker({
   onSelectedChange: (customer: Customer) => void;
 }) {
   const [open, setOpen] = useState(false);
+  const [customers, setCustomers] = useState<Customer[]>([]);
+
+  useEffect(() => {
+    let active = true;
+    listCustomersAction()
+      .then((data) => {
+        if (active) setCustomers(data);
+      })
+      .catch(() => {
+        // Biarkan kosong bila gagal memuat.
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
 
   return (
     <Card>
@@ -60,7 +76,7 @@ export function CustomerPicker({
               <CommandList>
                 <CommandEmpty>Pelanggan tidak ditemukan.</CommandEmpty>
                 <CommandGroup>
-                  {MOCK_CUSTOMERS.map((customer) => (
+                  {customers.map((customer) => (
                     <CommandItem
                       key={customer.id}
                       value={customer.name}

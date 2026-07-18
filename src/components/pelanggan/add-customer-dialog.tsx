@@ -18,6 +18,7 @@ import {
   type CustomerFormValues,
 } from "@/components/pelanggan/customer-form-fields";
 import type { Customer } from "@/lib/mock-data";
+import { createCustomerAction } from "@/app/actions/customers";
 
 function createEmptyForm(): CustomerFormValues {
   return { name: "", email: "", phone: "", address: "" };
@@ -31,6 +32,7 @@ export function AddCustomerDialog({
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState<CustomerFormValues>(createEmptyForm);
   const [nameError, setNameError] = useState<string | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
 
   function handleOpenChange(next: boolean) {
     setOpen(next);
@@ -40,7 +42,7 @@ export function AddCustomerDialog({
     }
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
     if (!form.name.trim()) {
@@ -48,18 +50,27 @@ export function AddCustomerDialog({
       return;
     }
 
-    onAdd({
-      id: `cust-${Date.now()}`,
-      name: form.name.trim(),
-      email: form.email.trim(),
-      phone: form.phone.trim(),
-      address: form.address.trim(),
-    });
+    setIsSaving(true);
+    try {
+      const result = await createCustomerAction(form);
+      if (!result.success) {
+        setNameError(result.error);
+        toast.error("Gagal menambah pelanggan", { description: result.error });
+        return;
+      }
 
-    toast.success("Pelanggan ditambahkan", {
-      description: `${form.name.trim()} berhasil ditambahkan ke daftar pelanggan.`,
-    });
-    handleOpenChange(false);
+      onAdd(result.customer);
+      toast.success("Pelanggan ditambahkan", {
+        description: `${result.customer.name} berhasil disimpan ke database.`,
+      });
+      handleOpenChange(false);
+    } catch {
+      toast.error("Terjadi kesalahan", {
+        description: "Tidak bisa menyimpan pelanggan. Coba lagi.",
+      });
+    } finally {
+      setIsSaving(false);
+    }
   }
 
   return (
@@ -88,8 +99,8 @@ export function AddCustomerDialog({
           />
 
           <DialogFooter>
-            <Button type="submit">
-              <Plus /> Tambah
+            <Button type="submit" disabled={isSaving}>
+              <Plus /> {isSaving ? "Menyimpan..." : "Tambah"}
             </Button>
           </DialogFooter>
         </form>
