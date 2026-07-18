@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Check, ChevronsUpDown, User } from "lucide-react";
+import Link from "next/link";
+import { Check, ChevronsUpDown, User, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -116,6 +117,13 @@ export function CustomerPicker({
             Belum ada pelanggan dipilih.
           </p>
         )}
+
+        <Link
+          href="/pelanggan"
+          className="flex items-center gap-1.5 text-sm font-medium text-primary underline-offset-4 hover:underline"
+        >
+          <Users className="size-3.5" /> Tambah / kelola pelanggan
+        </Link>
       </CardContent>
     </Card>
   );

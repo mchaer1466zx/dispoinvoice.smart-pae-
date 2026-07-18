@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { LogOut, UserRound } from "lucide-react";
+import { FileText, LogOut, Users, UserRound } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -53,6 +53,16 @@ export function UserMenu() {
           <p className="truncate text-xs text-muted-foreground">{user.email}</p>
         </div>
         <div className="mt-1 flex flex-col border-t pt-1.5">
+          <Button variant="ghost" size="sm" className="w-full justify-start" asChild>
+            <Link href="/">
+              <FileText /> Buat Invoice
+            </Link>
+          </Button>
+          <Button variant="ghost" size="sm" className="w-full justify-start" asChild>
+            <Link href="/pelanggan">
+              <Users /> Pelanggan
+            </Link>
+          </Button>
           <Button variant="ghost" size="sm" className="w-full justify-start" asChild>
             <Link href="/profil">
               <UserRound /> Profil
