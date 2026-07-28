@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
+import { getSessionUserAction } from "@/app/actions/auth";
 
 const STORAGE_KEY = "dispoinvoice:auth-user";
 
@@ -32,9 +33,11 @@ function readStoredUser(): AuthUser | null {
 }
 
 /**
- * Menyediakan sesi akun tiruan (localStorage) ke seluruh app selagi backend
- * autentikasi (Better Auth) belum dipasang. Halaman login/daftar/profil
- * memakai login/register/updateProfile; tombol keluar di header memakai logout.
+ * Menyediakan sesi akun ke seluruh app. Sumber kebenaran adalah SESI SERVER
+ * (cookie httpOnly) yang diverifikasi lewat getSessionUserAction: saat app dimuat,
+ * status login diselaraskan dengan sesi server sungguhan sehingga konsisten di
+ * perangkat/tab mana pun. localStorage hanya cache cadangan bila jaringan gagal,
+ * bukan penentu status login.
  */
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
@@ -42,12 +45,27 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     let cancelled = false;
+    const cached = readStoredUser();
 
-    Promise.resolve(readStoredUser()).then((stored) => {
-      if (cancelled) return;
-      setUser(stored);
-      setIsLoading(false);
-    });
+    // Selaraskan dengan sesi server (cookie). setState hanya dipanggil di dalam
+    // callback promise agar sesuai aturan efek React.
+    getSessionUserAction()
+      .then((serverUser) => {
+        if (cancelled) return;
+        persist(
+          serverUser
+            ? { id: serverUser.id, name: serverUser.name, email: serverUser.email }
+            : null
+        );
+      })
+      .catch(() => {
+        // Jaringan gagal: pertahankan cache lokal (jika ada) agar sesi tidak
+        // terputus keliru; server tetap sumber kebenaran saat berhasil dimuat.
+        if (!cancelled && cached) setUser(cached);
+      })
+      .finally(() => {
+        if (!cancelled) setIsLoading(false);
+      });
 
     return () => {
       cancelled = true;
@@ -56,6 +74,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   function persist(nextUser: AuthUser | null) {
     setUser(nextUser);
+    if (typeof window === "undefined") return;
     if (nextUser) {
       window.localStorage.setItem(STORAGE_KEY, JSON.stringify(nextUser));
     } else {
@@ -79,7 +98,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setUser((current) => {
       if (!current) return current;
       const next = { ...current, ...patch };
-      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+      if (typeof window !== "undefined") {
+        window.localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+      }
       return next;
     });
   }
