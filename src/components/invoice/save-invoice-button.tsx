@@ -31,6 +31,8 @@ export function SaveInvoiceButton({
       issueDate: billingInfo.issueDate,
       dueDate: billingInfo.dueDate,
       status: billingInfo.status,
+      tax: billingInfo.tax,
+      discount: billingInfo.discount,
       notes: billingInfo.notes,
       customerId: customer?.id ?? null,
       companyId,

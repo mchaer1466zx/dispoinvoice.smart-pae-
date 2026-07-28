@@ -17,6 +17,8 @@ export type CreateInvoiceInput = {
   issueDate: string;
   dueDate: string;
   status: "draft" | "terkirim" | "lunas";
+  tax: number;
+  discount: number;
   notes: string;
   customerId: string | null;
   companyId: string | null;
@@ -50,6 +52,8 @@ export async function createInvoiceAction(
           issueDate: input.issueDate,
           dueDate: input.dueDate || null,
           status: input.status,
+          tax: input.tax,
+          discount: input.discount,
           notes: input.notes || null,
           customerId: input.customerId,
           companyId: input.companyId,

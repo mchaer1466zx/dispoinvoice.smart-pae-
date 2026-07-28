@@ -1,5 +1,6 @@
 import { Document, Image, Page, StyleSheet, Text, View } from "@react-pdf/renderer";
 import { formatCurrency, formatDate } from "@/lib/format";
+import { calculateInvoiceTotals } from "@/lib/invoice-totals";
 
 const STATUS_LABELS: Record<string, string> = {
   draft: "Draf",
@@ -58,6 +59,21 @@ const styles = StyleSheet.create({
   },
   totalLabel: { fontWeight: 700, marginRight: 24 },
   totalValue: { fontWeight: 700 },
+  summaryBlock: { marginTop: 12, marginLeft: "auto", width: 220 },
+  summaryRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingVertical: 2,
+  },
+  summaryMuted: { color: "#6b7280" },
+  summaryTotalRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 4,
+    paddingTop: 6,
+    borderTopWidth: 1,
+    borderTopColor: "#e5e7eb",
+  },
   notes: { marginTop: 24, paddingTop: 12, borderTopWidth: 1, borderTopColor: "#e5e7eb" },
   qrFooter: { marginTop: 32, flexDirection: "row", justifyContent: "flex-end" },
   qrImage: { width: 71, height: 71 },
@@ -90,6 +106,8 @@ export type InvoicePdfData = {
   issueDate: string;
   dueDate: string;
   status: "draft" | "terkirim" | "lunas";
+  tax: number;
+  discount: number;
   notes: string | null;
   company: InvoicePdfCompany;
   customer: InvoicePdfCustomer;
@@ -98,10 +116,7 @@ export type InvoicePdfData = {
 };
 
 export function InvoiceDocument({ data }: { data: InvoicePdfData }) {
-  const total = data.items.reduce(
-    (sum, item) => sum + item.quantity * item.price,
-    0
-  );
+  const totals = calculateInvoiceTotals(data.items, data.tax, data.discount);
 
   return (
     <Document>
@@ -169,9 +184,33 @@ export function InvoiceDocument({ data }: { data: InvoicePdfData }) {
           ))}
         </View>
 
-        <View style={styles.totalRow}>
-          <Text style={styles.totalLabel}>Total</Text>
-          <Text style={styles.totalValue}>{formatCurrency(total)}</Text>
+        <View style={styles.summaryBlock}>
+          <View style={styles.summaryRow}>
+            <Text style={styles.summaryMuted}>Subtotal</Text>
+            <Text style={styles.summaryMuted}>
+              {formatCurrency(totals.subtotal)}
+            </Text>
+          </View>
+          {totals.discount > 0 ? (
+            <View style={styles.summaryRow}>
+              <Text style={styles.summaryMuted}>Diskon</Text>
+              <Text style={styles.summaryMuted}>
+                -{formatCurrency(totals.discount)}
+              </Text>
+            </View>
+          ) : null}
+          {totals.taxPercent > 0 ? (
+            <View style={styles.summaryRow}>
+              <Text style={styles.summaryMuted}>PPN ({totals.taxPercent}%)</Text>
+              <Text style={styles.summaryMuted}>
+                {formatCurrency(totals.taxAmount)}
+              </Text>
+            </View>
+          ) : null}
+          <View style={styles.summaryTotalRow}>
+            <Text style={styles.totalValue}>Total</Text>
+            <Text style={styles.totalValue}>{formatCurrency(totals.total)}</Text>
+          </View>
         </View>
 
         {data.notes ? (

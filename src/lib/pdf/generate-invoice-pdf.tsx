@@ -61,6 +61,8 @@ export async function generateInvoicePdf(invoiceId: string): Promise<Buffer | nu
     issueDate: invoice.issueDate,
     dueDate: invoice.dueDate ?? "",
     status: invoice.status,
+    tax: invoice.tax,
+    discount: invoice.discount,
     notes: invoice.notes,
     company: {
       name: company?.name ?? "",
