@@ -130,9 +130,12 @@ export const prItems = sqliteTable("pr_items", {
   prId: text("pr_id")
     .notNull()
     .references(() => purchaseRequests.id, { onDelete: "cascade" }),
+  // Kelompok item (mis. "Persiapan Pekerjaan") untuk tabel bertingkat gaya CBS.
+  groupLabel: text("group_label"),
   description: text("description").notNull(),
   spec: text("spec"),
-  quantity: integer("quantity").notNull(),
+  quantity: real("quantity").notNull(),
+  unit: text("unit"),
   estPrice: real("est_price").notNull(),
 });
 
@@ -185,8 +188,11 @@ export const poItems = sqliteTable("po_items", {
   poId: text("po_id")
     .notNull()
     .references(() => purchaseOrders.id, { onDelete: "cascade" }),
+  // Kelompok item (mis. "Pekerjaan Mesin") untuk tabel bertingkat gaya CBS.
+  groupLabel: text("group_label"),
   description: text("description").notNull(),
-  quantity: integer("quantity").notNull(),
+  quantity: real("quantity").notNull(),
+  unit: text("unit"),
   price: real("price").notNull(),
 });
 

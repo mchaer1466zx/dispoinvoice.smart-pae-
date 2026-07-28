@@ -32,9 +32,11 @@ export function SavePrButton({
       notes: prDetail.notes,
       companyId: company?.id ?? null,
       items: items.map((item) => ({
+        group: item.group,
         description: item.description,
         spec: item.spec,
         quantity: item.quantity,
+        unit: item.unit,
         estPrice: item.estPrice,
       })),
     });

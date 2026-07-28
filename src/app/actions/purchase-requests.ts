@@ -23,9 +23,11 @@ export const PR_STATUS_LABELS: Record<PrStatus, string> = {
 };
 
 export type PurchaseRequestItemInput = {
+  group: string;
   description: string;
   spec: string;
   quantity: number;
+  unit: string;
   estPrice: number;
 };
 
@@ -74,9 +76,11 @@ export async function createPurchaseRequestAction(
       await tx.insert(prItems).values(
         input.items.map((item) => ({
           prId: pr.id,
+          groupLabel: item.group || null,
           description: item.description,
           spec: item.spec || null,
           quantity: item.quantity,
+          unit: item.unit || null,
           estPrice: item.estPrice,
         }))
       );

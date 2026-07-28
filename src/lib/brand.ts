@@ -26,5 +26,6 @@ export const BRAND_COLORS = {
   white: "#FFFFFF",
   black: "#000000",
   yellowBlock: "#FFF3B0",
+  groupBg: "#F5F5F5",
   watermark: "rgba(212, 175, 55, 0.08)",
 } as const;

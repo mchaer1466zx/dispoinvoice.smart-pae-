@@ -55,8 +55,10 @@ export function SavePoButton({
       supplierId,
       companyId: company?.id ?? null,
       items: items.map((item) => ({
+        group: item.group,
         description: item.description,
         quantity: item.quantity,
+        unit: item.unit,
         price: item.price,
       })),
     });
