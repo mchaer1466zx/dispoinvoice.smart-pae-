@@ -149,6 +149,8 @@ export type DocumentLineItem = {
 
 export type DocumentDetail = DocumentSummary & {
   items?: DocumentLineItem[];
+  tax?: number;
+  discount?: number;
   content?: string;
   instructions?: string;
   notes?: string;
@@ -194,6 +196,8 @@ export async function getDocumentAction(id: string): Promise<DocumentDetail | nu
         quantity: item.quantity,
         price: item.price,
       })),
+      tax: invoice.tax,
+      discount: invoice.discount,
       notes: invoice.notes ?? undefined,
     };
   }

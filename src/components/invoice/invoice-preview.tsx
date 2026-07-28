@@ -6,8 +6,8 @@ import { DocumentQrCode } from "@/components/invoice/document-qr-code";
 import type { BillingInfo } from "@/components/invoice/billing-info-form";
 import { STATUS_OPTIONS } from "@/components/invoice/billing-info-form";
 import type { InvoiceItem } from "@/components/invoice/item-list-form";
-import { calculateItemsTotal } from "@/components/invoice/item-list-form";
 import type { Customer } from "@/lib/mock-data";
+import { calculateInvoiceTotals } from "@/lib/invoice-totals";
 import { formatCurrency, formatDate } from "@/lib/format";
 import type { CompanyRecord } from "@/app/actions/companies";
 
@@ -34,7 +34,7 @@ export function InvoicePreview({
   items: InvoiceItem[];
   company: CompanyRecord | null;
 }) {
-  const total = calculateItemsTotal(items);
+  const totals = calculateInvoiceTotals(items, billingInfo.tax, billingInfo.discount);
 
   return (
     <div className="mx-auto w-full max-w-[210mm] overflow-hidden rounded-lg border border-gray-200 bg-white text-black">
@@ -104,9 +104,27 @@ export function InvoicePreview({
         </table>
 
         <div className="mt-4 flex justify-end">
-          <div className="flex w-56 justify-between border-t border-gray-200 pt-2 text-base font-semibold">
-            <span>Total</span>
-            <span>{formatCurrency(total)}</span>
+          <div className="flex w-64 flex-col gap-1 text-sm">
+            <div className="flex justify-between text-gray-500">
+              <span>Subtotal</span>
+              <span>{formatCurrency(totals.subtotal)}</span>
+            </div>
+            {totals.discount > 0 ? (
+              <div className="flex justify-between text-gray-500">
+                <span>Diskon</span>
+                <span>-{formatCurrency(totals.discount)}</span>
+              </div>
+            ) : null}
+            {totals.taxPercent > 0 ? (
+              <div className="flex justify-between text-gray-500">
+                <span>PPN ({totals.taxPercent}%)</span>
+                <span>{formatCurrency(totals.taxAmount)}</span>
+              </div>
+            ) : null}
+            <div className="mt-1 flex justify-between border-t border-gray-200 pt-2 text-base font-semibold">
+              <span>Total</span>
+              <span>{formatCurrency(totals.total)}</span>
+            </div>
           </div>
         </div>
 

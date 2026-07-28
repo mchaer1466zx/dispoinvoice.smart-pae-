@@ -48,6 +48,8 @@ export const invoices = sqliteTable(
       .default("draft"),
     issueDate: text("issue_date").notNull(),
     dueDate: text("due_date"),
+    tax: real("tax").notNull().default(0),
+    discount: real("discount").notNull().default(0),
     notes: text("notes"),
     createdAt: text("created_at")
       .notNull()

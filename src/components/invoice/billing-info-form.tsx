@@ -23,6 +23,8 @@ export type BillingInfo = {
   issueDate: string;
   dueDate: string;
   status: (typeof STATUS_OPTIONS)[number]["value"];
+  tax: number;
+  discount: number;
   notes: string;
 };
 
@@ -42,6 +44,8 @@ export function createDefaultBillingInfo(): BillingInfo {
     issueDate: today,
     dueDate: today,
     status: "draft",
+    tax: 0,
+    discount: 0,
     notes: "",
   };
 }
@@ -112,6 +116,30 @@ export function BillingInfoForm({
             type="date"
             value={value.dueDate}
             onChange={(e) => updateField("dueDate", e.target.value)}
+          />
+        </div>
+
+        <div className="grid gap-1.5">
+          <Label htmlFor={`${idPrefix}-tax`}>Pajak / PPN (%)</Label>
+          <Input
+            id={`${idPrefix}-tax`}
+            type="number"
+            min={0}
+            step="0.1"
+            value={value.tax}
+            onChange={(e) => updateField("tax", Number(e.target.value) || 0)}
+          />
+        </div>
+
+        <div className="grid gap-1.5">
+          <Label htmlFor={`${idPrefix}-discount`}>Diskon (Rp)</Label>
+          <Input
+            id={`${idPrefix}-discount`}
+            type="number"
+            min={0}
+            step="1"
+            value={value.discount}
+            onChange={(e) => updateField("discount", Number(e.target.value) || 0)}
           />
         </div>
 
