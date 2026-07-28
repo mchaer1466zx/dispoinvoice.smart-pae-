@@ -5,6 +5,7 @@ import { db } from "@/db";
 import { invoices, invoiceItems } from "@/db/schema";
 import { requireSessionUser } from "@/app/actions/auth";
 import { createNotification } from "@/lib/notify";
+import { recordAudit } from "@/lib/audit";
 import { generateInvoiceNumberAction } from "@/app/actions/numbering";
 
 export type CreateInvoiceItemInput = {
@@ -73,18 +74,26 @@ export async function createInvoiceAction(
       return invoice.id;
     });
 
+    await recordAudit({
+      entityType: "invoice",
+      entityId: invoiceId,
+      action: "create",
+      actorUserId: user.id,
+    });
+
     return { success: true, invoiceId };
   } catch {
     return { success: false, error: "Gagal menyimpan invoice ke database." };
   }
 }
 
-export type InvoiceStatus = "draft" | "terkirim" | "lunas";
+export type InvoiceStatus = "draft" | "terkirim" | "lunas" | "dibatalkan";
 
 const INVOICE_STATUS_LABELS: Record<InvoiceStatus, string> = {
   draft: "Draft",
   terkirim: "Terkirim",
   lunas: "Lunas",
+  dibatalkan: "Dibatalkan",
 };
 
 export type UpdateInvoiceStatusResult =
@@ -140,6 +149,14 @@ export async function updateInvoiceStatusAction(
     title: `Invoice ${invoice.invoiceNumber} → ${INVOICE_STATUS_LABELS[newStatus]}`,
     docType: "invoice",
     docId: invoice.id,
+  });
+
+  await recordAudit({
+    entityType: "invoice",
+    entityId: invoice.id,
+    action: "update",
+    actorUserId: user.id,
+    changes: { status: { from: invoice.status, to: newStatus } },
   });
 
   return { success: true };

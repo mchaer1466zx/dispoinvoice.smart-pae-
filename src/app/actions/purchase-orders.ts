@@ -5,9 +5,10 @@ import { db } from "@/db";
 import { purchaseOrders, poItems } from "@/db/schema";
 import { requireSessionUser } from "@/app/actions/auth";
 import { createNotification } from "@/lib/notify";
+import { recordAudit } from "@/lib/audit";
 import { generatePurchaseOrderNumberAction } from "@/app/actions/numbering";
 
-export type PoStatus = "draft" | "dikirim" | "selesai";
+export type PoStatus = "draft" | "dikirim" | "selesai" | "dibatalkan";
 
 export type PurchaseOrderItemInput = {
   description: string;
@@ -160,6 +161,13 @@ export async function createPurchaseOrderAction(
       return { ...po, items };
     });
 
+    await recordAudit({
+      entityType: "po",
+      entityId: purchaseOrder.id,
+      action: "create",
+      actorUserId: user.id,
+    });
+
     return { success: true, purchaseOrder };
   } catch {
     return { success: false, error: "Gagal menyimpan purchase order ke database." };
@@ -227,6 +235,7 @@ const PO_STATUS_LABELS: Record<PoStatus, string> = {
   draft: "Draft",
   dikirim: "Dikirim",
   selesai: "Selesai",
+  dibatalkan: "Dibatalkan",
 };
 
 export type UpdatePurchaseOrderStatusResult =
@@ -280,6 +289,14 @@ export async function updatePurchaseOrderStatusAction(
     title: `PO ${po.poNumber} → ${PO_STATUS_LABELS[newStatus]}`,
     docType: "po",
     docId: po.id,
+  });
+
+  await recordAudit({
+    entityType: "po",
+    entityId: po.id,
+    action: "update",
+    actorUserId: user.id,
+    changes: { status: { from: po.status, to: newStatus } },
   });
 
   return { success: true };

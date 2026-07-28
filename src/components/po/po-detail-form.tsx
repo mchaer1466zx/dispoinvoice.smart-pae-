@@ -11,6 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import type { PoStatus } from "@/app/actions/purchase-orders";
 
 export const PO_STATUS_OPTIONS = [
   { value: "draft", label: "Draft" },
@@ -21,7 +22,7 @@ export const PO_STATUS_OPTIONS = [
 export type PoDetail = {
   poNumber: string;
   orderDate: string;
-  status: (typeof PO_STATUS_OPTIONS)[number]["value"];
+  status: PoStatus;
   tax: number;
   discount: number;
   notes: string;
