@@ -15,12 +15,14 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { InvoiceStatusControl } from "@/components/invoice/invoice-status-control";
+import { PurchaseOrderStatusControl } from "@/components/po/po-status-control";
 import { DOCUMENT_TYPE_LABELS } from "@/lib/mock-data";
 import {
   getDocumentAction,
   type DocumentDetail,
 } from "@/app/actions/documents";
 import type { InvoiceStatus } from "@/app/actions/invoices";
+import type { PoStatus } from "@/app/actions/purchase-orders";
 import { formatCurrency, formatDate } from "@/lib/format";
 
 const STATUS_VARIANTS: Record<string, "secondary" | "success" | "outline"> = {
@@ -136,6 +138,20 @@ export default function DocumentDetailPage() {
               invoiceId={doc.id}
               currentStatus={doc.status}
               onChanged={(status: InvoiceStatus) =>
+                setDoc((prev) => (prev ? { ...prev, status } : prev))
+              }
+            />
+          </CardContent>
+        </Card>
+      ) : null}
+
+      {doc.type === "po" ? (
+        <Card className="print:hidden">
+          <CardContent className="pt-6">
+            <PurchaseOrderStatusControl
+              poId={doc.id}
+              currentStatus={doc.status}
+              onChanged={(status: PoStatus) =>
                 setDoc((prev) => (prev ? { ...prev, status } : prev))
               }
             />
