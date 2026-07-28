@@ -5,6 +5,7 @@ import { db } from "@/db";
 import { purchaseOrders, poItems } from "@/db/schema";
 import { requireSessionUser } from "@/app/actions/auth";
 import { createNotification } from "@/lib/notify";
+import { generatePurchaseOrderNumberAction } from "@/app/actions/numbering";
 
 export type PoStatus = "draft" | "dikirim" | "selesai";
 
@@ -282,6 +283,77 @@ export async function updatePurchaseOrderStatusAction(
   });
 
   return { success: true };
+}
+
+export type DuplicatePurchaseOrderResult =
+  | { success: true; purchaseOrderId: string }
+  | { success: false; error: string };
+
+/**
+ * Server Action "Duplikat" (Copy as New) untuk purchase order: membuat PO baru
+ * dari PO lama. Salinan berstatus `draft`, memakai nomor urut baru & tanggal
+ * pemesanan hari ini, mencatat parentId, serta menyalin pemasok, perusahaan,
+ * pajak, diskon, catatan, dan item.
+ */
+export async function duplicatePurchaseOrderAction(
+  sourceId: string
+): Promise<DuplicatePurchaseOrderResult> {
+  const user = await requireSessionUser();
+
+  const [source] = await db
+    .select()
+    .from(purchaseOrders)
+    .where(eq(purchaseOrders.id, sourceId))
+    .limit(1);
+
+  if (!source) {
+    return { success: false, error: "Purchase order tidak ditemukan." };
+  }
+
+  const items = await db
+    .select()
+    .from(poItems)
+    .where(eq(poItems.poId, sourceId));
+
+  const newNumber = await generatePurchaseOrderNumberAction();
+  const today = new Date().toISOString().slice(0, 10);
+
+  try {
+    const purchaseOrderId = await db.transaction(async (tx) => {
+      const [created] = await tx
+        .insert(purchaseOrders)
+        .values({
+          userId: user.id,
+          poNumber: newNumber,
+          status: "draft",
+          orderDate: today,
+          tax: source.tax,
+          discount: source.discount,
+          notes: source.notes,
+          supplierId: source.supplierId,
+          companyId: source.companyId,
+          parentId: source.id,
+        })
+        .returning({ id: purchaseOrders.id });
+
+      if (items.length > 0) {
+        await tx.insert(poItems).values(
+          items.map((item) => ({
+            poId: created.id,
+            description: item.description,
+            quantity: item.quantity,
+            price: item.price,
+          }))
+        );
+      }
+
+      return created.id;
+    });
+
+    return { success: true, purchaseOrderId };
+  } catch {
+    return { success: false, error: "Gagal menduplikasi purchase order." };
+  }
 }
 
 /** Server Action untuk menghapus purchase order; item terkait ikut terhapus (cascade). */
