@@ -17,7 +17,9 @@ import {
 import { InvoiceStatusControl } from "@/components/invoice/invoice-status-control";
 import { DuplicateInvoiceButton } from "@/components/invoice/duplicate-invoice-button";
 import { PurchaseOrderStatusControl } from "@/components/po/po-status-control";
+import { DuplicatePurchaseOrderButton } from "@/components/po/duplicate-po-button";
 import { MemoStatusControl } from "@/components/memo/memo-status-control";
+import { DuplicateMemoButton } from "@/components/memo/duplicate-memo-button";
 import { DOCUMENT_TYPE_LABELS } from "@/lib/mock-data";
 import {
   getDocumentAction,
@@ -133,6 +135,12 @@ export default function DocumentDetailPage() {
         <div className="flex gap-2">
           {doc.type === "invoice" ? (
             <DuplicateInvoiceButton invoiceId={doc.id} />
+          ) : null}
+          {doc.type === "po" ? (
+            <DuplicatePurchaseOrderButton poId={doc.id} />
+          ) : null}
+          {doc.type === "memo" ? (
+            <DuplicateMemoButton memoId={doc.id} />
           ) : null}
           <Button type="button" variant="outline" onClick={() => window.print()}>
             <Printer /> Cetak

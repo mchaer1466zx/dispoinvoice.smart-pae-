@@ -102,6 +102,8 @@ export const purchaseOrders = sqliteTable(
     orderDate: text("order_date").notNull(),
     tax: real("tax").notNull().default(0),
     discount: real("discount").notNull().default(0),
+    // PO sumber bila dokumen ini hasil "Duplikat" (Copy as New).
+    parentId: text("parent_id"),
     notes: text("notes"),
     createdAt: text("created_at")
       .notNull()
@@ -139,6 +141,8 @@ export const memos = sqliteTable(
     status: text("status", { enum: ["terkirim", "dibaca", "selesai"] })
       .notNull()
       .default("terkirim"),
+    // Memo sumber bila dokumen ini hasil "Duplikat" (Copy as New).
+    parentId: text("parent_id"),
     memoDate: text("memo_date").notNull(),
     createdAt: text("created_at")
       .notNull()

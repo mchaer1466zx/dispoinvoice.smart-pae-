@@ -195,6 +195,54 @@ export async function updateMemoStatusAction(
   return { success: true };
 }
 
+export type DuplicateMemoResult =
+  | { success: true; memoId: string }
+  | { success: false; error: string };
+
+/**
+ * Server Action "Duplikat" (Copy as New) untuk memo disposisi: membuat memo baru
+ * dari memo lama. Salinan berstatus awal `terkirim` dengan tanggal hari ini,
+ * mencatat parentId, serta menyalin penerima, subjek, instruksi, dan isi.
+ */
+export async function duplicateMemoAction(
+  sourceId: string
+): Promise<DuplicateMemoResult> {
+  const user = await requireSessionUser();
+
+  const [source] = await db
+    .select()
+    .from(memos)
+    .where(eq(memos.id, sourceId))
+    .limit(1);
+
+  if (!source) {
+    return { success: false, error: "Memo tidak ditemukan." };
+  }
+
+  const today = new Date().toISOString().slice(0, 10);
+
+  try {
+    const [created] = await db
+      .insert(memos)
+      .values({
+        userId: user.id,
+        recipientName: source.recipientName,
+        subject: source.subject,
+        instructions: source.instructions,
+        content: source.content,
+        status: "terkirim",
+        companyId: source.companyId,
+        parentId: source.id,
+        memoDate: today,
+      })
+      .returning({ id: memos.id });
+
+    return { success: true, memoId: created.id };
+  } catch {
+    return { success: false, error: "Gagal menduplikasi memo." };
+  }
+}
+
 /** Server Action untuk menghapus memo disposisi. */
 export async function deleteMemoAction(id: string): Promise<DeleteMemoResult> {
   await requireSessionUser();
