@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { CompanySwitcher } from "@/components/company-switcher";
+import { NotificationBell } from "@/components/notifications/notification-bell";
 import { UserMenu } from "@/components/user-menu";
 
 export function AppHeader() {
@@ -22,6 +23,7 @@ export function AppHeader() {
         </Link>
         <div className="flex items-center gap-3">
           <CompanySwitcher />
+          <NotificationBell />
           <UserMenu />
         </div>
       </div>
