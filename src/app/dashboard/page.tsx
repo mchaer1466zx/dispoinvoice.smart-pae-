@@ -4,6 +4,7 @@ import {
   ClipboardList,
   FileText,
   History,
+  PackageCheck,
   Settings,
   ShoppingCart,
   StickyNote,
@@ -36,6 +37,12 @@ const LINKS = [
     title: "Buat Purchase Order",
     description: "Terbitkan pesanan pembelian ke pemasok.",
     icon: ShoppingCart,
+  },
+  {
+    href: "/buat-grn",
+    title: "Buat Goods Receipt (GRN)",
+    description: "Catat barang yang diterima dari pemasok.",
+    icon: PackageCheck,
   },
   {
     href: "/buat-invoice",

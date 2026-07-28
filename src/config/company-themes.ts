@@ -21,7 +21,7 @@ export interface CompanyTheme {
   email: string;
   website: string;
   // Format nomor dokumen otomatis, contoh: PR/KSP/YYYY/MM/XXX
-  docFormat: { pr: string; po: string; invoice: string };
+  docFormat: { pr: string; po: string; grn: string; invoice: string };
   // PALET WARNA RESMI (diambil dari gambar kop surat)
   colors: {
     primary: string; // Warna utama nama perusahaan
@@ -73,6 +73,7 @@ export const COMPANY_THEMES: Record<CompanyId, CompanyTheme> = {
     docFormat: {
       pr: "PR/KSP/YYYY/MM/XXX",
       po: "PO/KSP/YYYY/MM/XXX",
+      grn: "GRN/KSP/YYYY/MM/XXX",
       invoice: "INV/KSP/YYYY/MM/XXX",
     },
     colors: {
@@ -115,6 +116,7 @@ export const COMPANY_THEMES: Record<CompanyId, CompanyTheme> = {
     docFormat: {
       pr: "PR/PAE/YYYY/MM/XXX",
       po: "PO/PAE/YYYY/MM/XXX",
+      grn: "GRN/PAE/YYYY/MM/XXX",
       invoice: "INV/PAE/YYYY/MM/XXX",
     },
     colors: {
@@ -158,6 +160,7 @@ export const COMPANY_THEMES: Record<CompanyId, CompanyTheme> = {
     docFormat: {
       pr: "PR/PUB/YYYY/MM/XXX",
       po: "PO/PUB/YYYY/MM/XXX",
+      grn: "GRN/PUB/YYYY/MM/XXX",
       invoice: "INV/PUB/YYYY/MM/XXX",
     },
     colors: {

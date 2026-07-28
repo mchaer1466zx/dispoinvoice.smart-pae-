@@ -21,6 +21,8 @@ import { DuplicatePurchaseOrderButton } from "@/components/po/duplicate-po-butto
 import { MemoStatusControl } from "@/components/memo/memo-status-control";
 import { DuplicateMemoButton } from "@/components/memo/duplicate-memo-button";
 import { PurchaseRequestStatusControl } from "@/components/pr/pr-status-control";
+import { GoodsReceiptStatusControl } from "@/components/grn/grn-status-control";
+import { DuplicateGoodsReceiptButton } from "@/components/grn/duplicate-grn-button";
 import { DOCUMENT_TYPE_LABELS } from "@/lib/mock-data";
 import {
   getDocumentAction,
@@ -30,6 +32,7 @@ import type { InvoiceStatus } from "@/app/actions/invoices";
 import type { PoStatus } from "@/app/actions/purchase-orders";
 import type { MemoStatus } from "@/app/actions/memos";
 import type { PrStatus } from "@/app/actions/purchase-requests";
+import type { GrnStatus } from "@/app/actions/goods-receipts";
 import { CancelDocumentButton } from "@/components/cancel-document-button";
 import { DocumentAuditPanel } from "@/components/document-audit-panel";
 import { DocumentAttachments } from "@/components/document-attachments";
@@ -45,9 +48,11 @@ const STATUS_VARIANTS: Record<
   dikirim: "secondary",
   dibaca: "secondary",
   menunggu_approval: "secondary",
+  sebagian: "secondary",
   lunas: "success",
   selesai: "success",
   disetujui: "success",
+  diterima: "success",
   ditolak: "destructive",
   dibatalkan: "destructive",
 };
@@ -55,6 +60,7 @@ const STATUS_VARIANTS: Record<
 const PARTY_LABELS = {
   invoice: "Ditagih Kepada",
   po: "Kepada Pemasok",
+  grn: "Diterima Dari Pemasok",
   memo: "Kepada",
   pr: "Departemen Peminta",
 } as const;
@@ -170,6 +176,9 @@ export default function DocumentDetailPage() {
           {doc.type === "memo" ? (
             <DuplicateMemoButton memoId={doc.id} />
           ) : null}
+          {doc.type === "grn" ? (
+            <DuplicateGoodsReceiptButton grnId={doc.id} />
+          ) : null}
           <Button type="button" variant="outline" onClick={() => window.print()}>
             <Printer /> Cetak
           </Button>
@@ -231,6 +240,21 @@ export default function DocumentDetailPage() {
               prId={doc.id}
               currentStatus={doc.status}
               onChanged={(status: PrStatus) => {
+                setDoc((prev) => (prev ? { ...prev, status } : prev));
+                setAuditReloadToken((token) => token + 1);
+              }}
+            />
+          </CardContent>
+        </Card>
+      ) : null}
+
+      {doc.type === "grn" && !isCancelled ? (
+        <Card className="print:hidden">
+          <CardContent className="pt-6">
+            <GoodsReceiptStatusControl
+              grnId={doc.id}
+              currentStatus={doc.status}
+              onChanged={(status: GrnStatus) => {
                 setDoc((prev) => (prev ? { ...prev, status } : prev));
                 setAuditReloadToken((token) => token + 1);
               }}

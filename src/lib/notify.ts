@@ -7,6 +7,7 @@ export type NotifyInput = {
   type:
     | "invoice_status"
     | "po_status"
+    | "grn_status"
     | "memo_status"
     | "pr_status"
     | "doc_shared"
@@ -14,7 +15,7 @@ export type NotifyInput = {
     | "invoice_overdue";
   title: string;
   body?: string;
-  docType?: "invoice" | "po" | "memo" | "pr";
+  docType?: "invoice" | "po" | "grn" | "memo" | "pr";
   docId?: string;
   dedupeKey?: string;
 };
