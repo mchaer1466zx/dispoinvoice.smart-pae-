@@ -28,16 +28,22 @@ import {
 import type { InvoiceStatus } from "@/app/actions/invoices";
 import type { PoStatus } from "@/app/actions/purchase-orders";
 import type { MemoStatus } from "@/app/actions/memos";
+import { CancelDocumentButton } from "@/components/cancel-document-button";
+import { DocumentAuditPanel } from "@/components/document-audit-panel";
 import { calculateInvoiceTotals } from "@/lib/invoice-totals";
 import { formatCurrency, formatDate } from "@/lib/format";
 
-const STATUS_VARIANTS: Record<string, "secondary" | "success" | "outline"> = {
+const STATUS_VARIANTS: Record<
+  string,
+  "secondary" | "success" | "outline" | "destructive"
+> = {
   draft: "outline",
   terkirim: "secondary",
   dikirim: "secondary",
   dibaca: "secondary",
   lunas: "success",
   selesai: "success",
+  dibatalkan: "destructive",
 };
 
 const PARTY_LABELS = {
@@ -68,6 +74,7 @@ export default function DocumentDetailPage() {
   const params = useParams<{ id: string }>();
   const [doc, setDoc] = useState<DocumentDetail | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [auditReloadToken, setAuditReloadToken] = useState(0);
 
   useEffect(() => {
     let active = true;
@@ -128,11 +135,25 @@ export default function DocumentDetailPage() {
     doc.discount ?? 0
   );
 
+  const isCancelled = doc.status === "dibatalkan";
+
+  function handleCancelled() {
+    setDoc((prev) => (prev ? { ...prev, status: "dibatalkan" } : prev));
+    setAuditReloadToken((token) => token + 1);
+  }
+
   return (
     <PageShell>
       <div className="flex items-center justify-between gap-2 print:hidden">
         <BackLink />
         <div className="flex gap-2">
+          {!isCancelled ? (
+            <CancelDocumentButton
+              kind={doc.type}
+              id={doc.id}
+              onCancelled={handleCancelled}
+            />
+          ) : null}
           {doc.type === "invoice" ? (
             <DuplicateInvoiceButton invoiceId={doc.id} />
           ) : null}
@@ -151,43 +172,46 @@ export default function DocumentDetailPage() {
         </div>
       </div>
 
-      {doc.type === "invoice" ? (
+      {doc.type === "invoice" && !isCancelled ? (
         <Card className="print:hidden">
           <CardContent className="pt-6">
             <InvoiceStatusControl
               invoiceId={doc.id}
               currentStatus={doc.status}
-              onChanged={(status: InvoiceStatus) =>
-                setDoc((prev) => (prev ? { ...prev, status } : prev))
-              }
+              onChanged={(status: InvoiceStatus) => {
+                setDoc((prev) => (prev ? { ...prev, status } : prev));
+                setAuditReloadToken((token) => token + 1);
+              }}
             />
           </CardContent>
         </Card>
       ) : null}
 
-      {doc.type === "po" ? (
+      {doc.type === "po" && !isCancelled ? (
         <Card className="print:hidden">
           <CardContent className="pt-6">
             <PurchaseOrderStatusControl
               poId={doc.id}
               currentStatus={doc.status}
-              onChanged={(status: PoStatus) =>
-                setDoc((prev) => (prev ? { ...prev, status } : prev))
-              }
+              onChanged={(status: PoStatus) => {
+                setDoc((prev) => (prev ? { ...prev, status } : prev));
+                setAuditReloadToken((token) => token + 1);
+              }}
             />
           </CardContent>
         </Card>
       ) : null}
 
-      {doc.type === "memo" ? (
+      {doc.type === "memo" && !isCancelled ? (
         <Card className="print:hidden">
           <CardContent className="pt-6">
             <MemoStatusControl
               memoId={doc.id}
               currentStatus={doc.status}
-              onChanged={(status: MemoStatus) =>
-                setDoc((prev) => (prev ? { ...prev, status } : prev))
-              }
+              onChanged={(status: MemoStatus) => {
+                setDoc((prev) => (prev ? { ...prev, status } : prev));
+                setAuditReloadToken((token) => token + 1);
+              }}
             />
           </CardContent>
         </Card>
@@ -287,6 +311,12 @@ export default function DocumentDetailPage() {
           ) : null}
         </CardContent>
       </Card>
+
+      <DocumentAuditPanel
+        entityType={doc.type}
+        entityId={doc.id}
+        reloadToken={auditReloadToken}
+      />
     </PageShell>
   );
 }

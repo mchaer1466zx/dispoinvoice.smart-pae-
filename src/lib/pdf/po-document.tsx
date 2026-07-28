@@ -103,7 +103,7 @@ export type PoPdfItem = {
 export type PoPdfData = {
   poNumber: string;
   orderDate: string;
-  status: "draft" | "dikirim" | "selesai";
+  status: "draft" | "dikirim" | "selesai" | "dibatalkan";
   tax: number;
   discount: number;
   notes: string | null;

@@ -5,8 +5,9 @@ import { db } from "@/db";
 import { memos } from "@/db/schema";
 import { requireSessionUser } from "@/app/actions/auth";
 import { createNotification } from "@/lib/notify";
+import { recordAudit } from "@/lib/audit";
 
-export type MemoStatus = "terkirim" | "dibaca" | "selesai";
+export type MemoStatus = "terkirim" | "dibaca" | "selesai" | "dibatalkan";
 
 export type MemoRecord = {
   id: string;
@@ -99,6 +100,13 @@ export async function createMemoAction(
     })
     .returning(MEMO_COLUMNS);
 
+  await recordAudit({
+    entityType: "memo",
+    entityId: created.id,
+    action: "create",
+    actorUserId: user.id,
+  });
+
   return { success: true, memo: created };
 }
 
@@ -137,6 +145,7 @@ const MEMO_STATUS_LABELS: Record<MemoStatus, string> = {
   terkirim: "Terkirim",
   dibaca: "Dibaca",
   selesai: "Selesai",
+  dibatalkan: "Dibatalkan",
 };
 
 export type UpdateMemoStatusResult =
@@ -190,6 +199,14 @@ export async function updateMemoStatusAction(
     title: `Memo "${memo.subject}" → ${MEMO_STATUS_LABELS[newStatus]}`,
     docType: "memo",
     docId: memo.id,
+  });
+
+  await recordAudit({
+    entityType: "memo",
+    entityId: memo.id,
+    action: "update",
+    actorUserId: user.id,
+    changes: { status: { from: memo.status, to: newStatus } },
   });
 
   return { success: true };

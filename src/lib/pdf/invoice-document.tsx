@@ -105,7 +105,7 @@ export type InvoicePdfData = {
   invoiceNumber: string;
   issueDate: string;
   dueDate: string;
-  status: "draft" | "terkirim" | "lunas";
+  status: "draft" | "terkirim" | "lunas" | "dibatalkan";
   tax: number;
   discount: number;
   notes: string | null;

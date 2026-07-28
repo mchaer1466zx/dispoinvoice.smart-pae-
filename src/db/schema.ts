@@ -63,7 +63,9 @@ export const invoices = sqliteTable(
       onDelete: "set null",
     }),
     invoiceNumber: text("invoice_number").notNull(),
-    status: text("status", { enum: ["draft", "terkirim", "lunas"] })
+    status: text("status", {
+      enum: ["draft", "terkirim", "lunas", "dibatalkan"],
+    })
       .notNull()
       .default("draft"),
     issueDate: text("issue_date").notNull(),
@@ -116,7 +118,9 @@ export const purchaseOrders = sqliteTable(
       onDelete: "set null",
     }),
     poNumber: text("po_number").notNull(),
-    status: text("status", { enum: ["draft", "dikirim", "selesai"] })
+    status: text("status", {
+      enum: ["draft", "dikirim", "selesai", "dibatalkan"],
+    })
       .notNull()
       .default("draft"),
     orderDate: text("order_date").notNull(),
@@ -158,7 +162,9 @@ export const memos = sqliteTable(
     subject: text("subject").notNull(),
     instructions: text("instructions"),
     content: text("content").notNull(),
-    status: text("status", { enum: ["terkirim", "dibaca", "selesai"] })
+    status: text("status", {
+      enum: ["terkirim", "dibaca", "selesai", "dibatalkan"],
+    })
       .notNull()
       .default("terkirim"),
     // Memo sumber bila dokumen ini hasil "Duplikat" (Copy as New).
@@ -172,6 +178,34 @@ export const memos = sqliteTable(
     index("memos_user_id_idx").on(table.userId),
     index("memos_status_idx").on(table.status),
     index("memos_memo_date_idx").on(table.memoDate),
+  ]
+);
+
+/**
+ * Jejak audit: mencatat "siapa, kapan, apa" untuk setiap dokumen. Dokumen tidak
+ * dihapus permanen — dibatalkan dengan alasan wajib (action "cancel"). Perubahan
+ * field dicatat sebagai JSON di `changes`.
+ */
+export const auditLogs = sqliteTable(
+  "audit_logs",
+  {
+    id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),
+    entityType: text("entity_type").notNull(),
+    entityId: text("entity_id").notNull(),
+    action: text("action", {
+      enum: ["create", "update", "approve", "reject", "cancel"],
+    }).notNull(),
+    actorUserId: text("actor_user_id").references(() => users.id, {
+      onDelete: "set null",
+    }),
+    changes: text("changes"),
+    reason: text("reason"),
+    createdAt: text("created_at")
+      .notNull()
+      .default(sql`(current_timestamp)`),
+  },
+  (table) => [
+    index("audit_logs_entity_idx").on(table.entityType, table.entityId),
   ]
 );
 
