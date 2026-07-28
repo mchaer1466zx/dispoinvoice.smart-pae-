@@ -7,6 +7,7 @@ import { Resend } from "resend";
 import { db } from "@/db";
 import { sessions, users } from "@/db/schema";
 import { hashPassword, verifyPassword } from "@/lib/password";
+import { isCompanyId, type CompanyId } from "@/config/company-themes";
 
 const RESET_TOKEN_TTL_MS = 60 * 60 * 1000;
 const SESSION_TTL_MS = 60 * 60 * 24 * 30 * 1000;
@@ -38,6 +39,7 @@ export type UserRecord = {
   name: string;
   email: string;
   role: UserRole;
+  defaultCompany: CompanyId;
   createdAt: string;
 };
 
@@ -46,6 +48,7 @@ const USER_COLUMNS = {
   name: users.name,
   email: users.email,
   role: users.role,
+  defaultCompany: users.defaultCompany,
   createdAt: users.createdAt,
 };
 
@@ -125,6 +128,7 @@ export async function loginAction(input: LoginInput): Promise<LoginResult> {
       name: users.name,
       email: users.email,
       role: users.role,
+      defaultCompany: users.defaultCompany,
       passwordHash: users.passwordHash,
       createdAt: users.createdAt,
     })
@@ -145,6 +149,7 @@ export async function loginAction(input: LoginInput): Promise<LoginResult> {
       name: user.name,
       email: user.email,
       role: user.role,
+      defaultCompany: user.defaultCompany,
       createdAt: user.createdAt,
     },
   };
@@ -166,6 +171,7 @@ export async function getSessionUserAction(): Promise<UserRecord | null> {
       name: users.name,
       email: users.email,
       role: users.role,
+      defaultCompany: users.defaultCompany,
       createdAt: users.createdAt,
     })
     .from(sessions)
@@ -328,6 +334,33 @@ export async function resetPasswordAction(
   await db.delete(sessions).where(eq(sessions.userId, user.id));
 
   return { success: true };
+}
+
+export type UpdateDefaultCompanyResult =
+  | { success: true; defaultCompany: CompanyId }
+  | { success: false; error: string };
+
+/** Server Action untuk menyimpan "Perusahaan Default" milik akun yang login. */
+export async function updateDefaultCompanyAction(
+  companyId: string
+): Promise<UpdateDefaultCompanyResult> {
+  const sessionUser = await getSessionUserAction();
+  if (!sessionUser) {
+    return { success: false, error: "Anda belum masuk." };
+  }
+  if (!isCompanyId(companyId)) {
+    return { success: false, error: "Perusahaan tidak dikenal." };
+  }
+
+  try {
+    await db
+      .update(users)
+      .set({ defaultCompany: companyId })
+      .where(eq(users.id, sessionUser.id));
+    return { success: true, defaultCompany: companyId };
+  } catch {
+    return { success: false, error: "Gagal menyimpan perusahaan default." };
+  }
 }
 
 export type UpdateProfileInput = {

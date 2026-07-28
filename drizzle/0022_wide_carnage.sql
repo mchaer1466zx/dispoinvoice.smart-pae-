@@ -1,0 +1,1 @@
+ALTER TABLE `users` ADD `default_company` text DEFAULT 'KSP' NOT NULL;

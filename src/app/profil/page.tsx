@@ -17,8 +17,13 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useAuth } from "@/lib/auth-store";
-import { updateProfileAction } from "@/app/actions/auth";
+import { updateProfileAction, updateDefaultCompanyAction } from "@/app/actions/auth";
 import { getCompanyInitials } from "@/lib/company-initials";
+import {
+  COMPANY_THEMES,
+  COMPANY_IDS,
+  type CompanyId,
+} from "@/config/company-themes";
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -32,7 +37,23 @@ function PageShell({ children }: { children: React.ReactNode }) {
 
 export default function ProfilPage() {
   const idPrefix = useId();
-  const { user, isLoading, updateProfile } = useAuth();
+  const { user, isLoading, updateProfile, updateDefaultCompany } = useAuth();
+
+  async function handleDefaultCompanyChange(companyId: CompanyId) {
+    const previous = user?.defaultCompany;
+    updateDefaultCompany(companyId); // optimistis
+    const result = await updateDefaultCompanyAction(companyId);
+    if (result.success) {
+      toast.success("Perusahaan default disimpan", {
+        description: COMPANY_THEMES[companyId].fullName,
+      });
+    } else {
+      if (previous) updateDefaultCompany(previous); // kembalikan bila gagal
+      toast.error("Gagal menyimpan perusahaan default", {
+        description: result.error,
+      });
+    }
+  }
 
   const [isEditing, setIsEditing] = useState(false);
   const [name, setName] = useState("");
@@ -187,6 +208,35 @@ export default function ProfilPage() {
             <Pencil /> Ubah Profil
           </Button>
         </CardFooter>
+      </Card>
+
+      <Card className="mt-6">
+        <CardHeader>
+          <CardTitle>Perusahaan Default Saya</CardTitle>
+          <CardDescription>
+            Perusahaan penerbit yang dipilih otomatis saat membuat PR/PO/invoice
+            baru. Tetap bisa diganti per dokumen.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="grid gap-1.5">
+            <Label htmlFor={`${idPrefix}-default-company`}>Perusahaan</Label>
+            <select
+              id={`${idPrefix}-default-company`}
+              value={user.defaultCompany}
+              onChange={(e) =>
+                handleDefaultCompanyChange(e.target.value as CompanyId)
+              }
+              className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
+            >
+              {COMPANY_IDS.map((cid) => (
+                <option key={cid} value={cid}>
+                  {COMPANY_THEMES[cid].fullName} ({cid})
+                </option>
+              ))}
+            </select>
+          </div>
+        </CardContent>
       </Card>
     </PageShell>
   );

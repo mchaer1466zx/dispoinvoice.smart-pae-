@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -24,12 +24,23 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useCompany } from "@/lib/company-store";
+import { useAuth } from "@/lib/auth-store";
 import { generatePurchaseRequestNumberAction } from "@/app/actions/numbering";
 
 export default function PurchaseRequestPage() {
   const [prDetail, setPrDetail] = useState(createDefaultPrDetail);
   const [items, setItems] = useState(createDefaultPrItems);
   const { activeCompany } = useCompany();
+  const { user } = useAuth();
+  const appliedDefaultCompany = useRef(false);
+
+  // Terapkan "Perusahaan Default" akun sekali saat sesi termuat.
+  useEffect(() => {
+    if (!appliedDefaultCompany.current && user?.defaultCompany) {
+      appliedDefaultCompany.current = true;
+      setPrDetail((prev) => ({ ...prev, companyId: user.defaultCompany }));
+    }
+  }, [user?.defaultCompany]);
 
   // Prefill/segarkan nomor PR sesuai perusahaan penerbit terpilih. Berjalan saat
   // mount & setiap companyId berubah → prefix nomor ikut berganti instan.

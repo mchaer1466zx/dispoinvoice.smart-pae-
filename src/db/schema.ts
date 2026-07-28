@@ -14,6 +14,10 @@ export const users = sqliteTable("users", {
   email: text("email").notNull().unique(),
   passwordHash: text("password_hash").notNull(),
   role: text("role").notNull().default("staff").$type<"admin" | "staff">(),
+  defaultCompany: text("default_company")
+    .notNull()
+    .default("KSP")
+    .$type<"KSP" | "PAE" | "PUB">(),
   resetToken: text("reset_token"),
   resetTokenExpiresAt: text("reset_token_expires_at"),
   createdAt: text("created_at")
