@@ -13,6 +13,8 @@ import {
 } from "@/components/ui/card";
 import type { PrStatus } from "@/app/actions/purchase-requests";
 import { PR_REASON_MIN_LENGTH } from "@/lib/pr-validation";
+import { CompanyPicker } from "@/components/procurement/company-picker";
+import { DEFAULT_COMPANY, type CompanyId } from "@/config/company-themes";
 
 // Status yang boleh dipilih saat membuat PR (approval terjadi kemudian).
 export const PR_CREATE_STATUS_OPTIONS = [
@@ -21,6 +23,7 @@ export const PR_CREATE_STATUS_OPTIONS = [
 ] as const;
 
 export type PrDetail = {
+  companyId: CompanyId;
   prNumber: string;
   department: string;
   needDate: string;
@@ -38,6 +41,7 @@ function generatePrNumber() {
 export function createDefaultPrDetail(): PrDetail {
   const today = new Date().toISOString().slice(0, 10);
   return {
+    companyId: DEFAULT_COMPANY,
     prNumber: generatePrNumber(),
     department: "",
     needDate: today,
@@ -68,6 +72,13 @@ export function PrDetailForm({
         </CardDescription>
       </CardHeader>
       <CardContent className="grid gap-4 sm:grid-cols-2">
+        <div className="sm:col-span-2">
+          <CompanyPicker
+            value={value.companyId}
+            onChange={(companyId) => updateField("companyId", companyId)}
+          />
+        </div>
+
         <div className="grid gap-1.5">
           <Label htmlFor={`${idPrefix}-pr-number`}>Nomor PR *</Label>
           <Input

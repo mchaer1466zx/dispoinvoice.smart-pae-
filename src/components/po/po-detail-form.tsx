@@ -12,6 +12,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import type { PoStatus } from "@/app/actions/purchase-orders";
+import { CompanyPicker } from "@/components/procurement/company-picker";
+import { DEFAULT_COMPANY, type CompanyId } from "@/config/company-themes";
 
 export const PO_STATUS_OPTIONS = [
   { value: "draft", label: "Draft" },
@@ -20,6 +22,7 @@ export const PO_STATUS_OPTIONS = [
 ] as const;
 
 export type PoDetail = {
+  companyId: CompanyId;
   poNumber: string;
   orderDate: string;
   status: PoStatus;
@@ -40,6 +43,7 @@ function generatePoNumber() {
 export function createDefaultPoDetail(): PoDetail {
   const today = new Date().toISOString().slice(0, 10);
   return {
+    companyId: DEFAULT_COMPANY,
     poNumber: generatePoNumber(),
     orderDate: today,
     status: "draft",
@@ -71,6 +75,13 @@ export function PoDetailForm({
         </CardDescription>
       </CardHeader>
       <CardContent className="grid gap-4 sm:grid-cols-2">
+        <div className="sm:col-span-2">
+          <CompanyPicker
+            value={value.companyId}
+            onChange={(companyId) => updateField("companyId", companyId)}
+          />
+        </div>
+
         <div className="grid gap-1.5">
           <Label htmlFor={`${idPrefix}-po-number`}>Nomor PO *</Label>
           <Input

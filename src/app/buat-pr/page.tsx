@@ -31,10 +31,11 @@ export default function PurchaseRequestPage() {
   const [items, setItems] = useState(createDefaultPrItems);
   const { activeCompany } = useCompany();
 
-  // Prefill nomor PR urut asli dari server (menggantikan placeholder).
+  // Prefill/segarkan nomor PR sesuai perusahaan penerbit terpilih. Berjalan saat
+  // mount & setiap companyId berubah → prefix nomor ikut berganti instan.
   useEffect(() => {
     let active = true;
-    generatePurchaseRequestNumberAction()
+    generatePurchaseRequestNumberAction(prDetail.companyId)
       .then((prNumber) => {
         if (active) {
           setPrDetail((prev) => ({ ...prev, prNumber }));
@@ -46,7 +47,7 @@ export default function PurchaseRequestPage() {
     return () => {
       active = false;
     };
-  }, []);
+  }, [prDetail.companyId]);
 
   return (
     <div className="flex flex-1 justify-center bg-zinc-50 px-4 py-10 dark:bg-black sm:px-8">
@@ -84,7 +85,7 @@ export default function PurchaseRequestPage() {
           <CardContent>
             {activeCompany?.logoUrl ? null : <CompanyLogoUploadHint />}
             <PoPreviewActions filename={`${prDetail.prNumber}.pdf`}>
-              <PrPreview prDetail={prDetail} items={items} company={activeCompany} />
+              <PrPreview prDetail={prDetail} items={items} />
             </PoPreviewActions>
           </CardContent>
         </Card>

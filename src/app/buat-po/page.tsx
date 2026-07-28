@@ -36,10 +36,11 @@ export default function PurchaseOrderPage() {
   );
   const { activeCompany } = useCompany();
 
-  // Prefill nomor PO urut asli dari server (menggantikan placeholder).
+  // Prefill/segarkan nomor PO sesuai perusahaan penerbit terpilih (mount & saat
+  // companyId berubah → prefix nomor ikut berganti instan).
   useEffect(() => {
     let active = true;
-    generatePurchaseOrderNumberAction()
+    generatePurchaseOrderNumberAction(poDetail.companyId)
       .then((poNumber) => {
         if (active) {
           setPoDetail((prev) => ({ ...prev, poNumber }));
@@ -51,7 +52,7 @@ export default function PurchaseOrderPage() {
     return () => {
       active = false;
     };
-  }, []);
+  }, [poDetail.companyId]);
 
   return (
     <div className="flex flex-1 justify-center bg-zinc-50 px-4 py-10 dark:bg-black sm:px-8">
@@ -104,7 +105,6 @@ export default function PurchaseOrderPage() {
                 poDetail={poDetail}
                 supplier={selectedSupplier}
                 items={items}
-                company={activeCompany}
               />
             </PoPreviewActions>
           </CardContent>

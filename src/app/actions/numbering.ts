@@ -3,6 +3,11 @@
 import { like } from "drizzle-orm";
 import { db } from "@/db";
 import { invoices, purchaseOrders, purchaseRequests } from "@/db/schema";
+import {
+  buildDocPrefix,
+  getCompanyTheme,
+  type CompanyId,
+} from "@/config/company-themes";
 
 /** Cari nomor urut berikutnya dari daftar nomor yang berbagi prefix sama. */
 function nextSequence(numbers: string[], prefix: string): number {
@@ -15,17 +20,19 @@ function nextSequence(numbers: string[], prefix: string): number {
   return max + 1;
 }
 
-/**
- * Server Action untuk menghasilkan nomor invoice unik berikutnya dengan format
- * INV/[TAHUN]/[BULAN]/[URUT] (urut per bulan berjalan). Menghindari duplikasi
- * dengan mengambil nomor urut tertinggi yang sudah ada untuk bulan ini.
- */
-export async function generateInvoiceNumberAction(): Promise<string> {
+function currentPrefix(pattern: string): string {
   const now = new Date();
-  const year = now.getFullYear();
-  const month = String(now.getMonth() + 1).padStart(2, "0");
-  const prefix = `INV/${year}/${month}/`;
+  return buildDocPrefix(pattern, now.getFullYear(), now.getMonth() + 1);
+}
 
+/**
+ * Server Action nomor invoice berikutnya, format dari tema perusahaan
+ * (mis. INV/KSP/YYYY/MM/XXX). Urut per bulan & per perusahaan, anti-duplikat.
+ */
+export async function generateInvoiceNumberAction(
+  companyId?: CompanyId
+): Promise<string> {
+  const prefix = currentPrefix(getCompanyTheme(companyId).docFormat.invoice);
   const rows = await db
     .select({ invoiceNumber: invoices.invoiceNumber })
     .from(invoices)
@@ -39,15 +46,13 @@ export async function generateInvoiceNumberAction(): Promise<string> {
 }
 
 /**
- * Server Action untuk menghasilkan nomor purchase order unik berikutnya dengan
- * format PO/KSP/[TAHUN]/[BULAN]/[URUT] (urut per bulan berjalan).
+ * Server Action nomor purchase order berikutnya, format dari tema perusahaan
+ * (mis. PO/KSP/YYYY/MM/XXX). Urut per bulan & per perusahaan.
  */
-export async function generatePurchaseOrderNumberAction(): Promise<string> {
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = String(now.getMonth() + 1).padStart(2, "0");
-  const prefix = `PO/KSP/${year}/${month}/`;
-
+export async function generatePurchaseOrderNumberAction(
+  companyId?: CompanyId
+): Promise<string> {
+  const prefix = currentPrefix(getCompanyTheme(companyId).docFormat.po);
   const rows = await db
     .select({ poNumber: purchaseOrders.poNumber })
     .from(purchaseOrders)
@@ -61,15 +66,13 @@ export async function generatePurchaseOrderNumberAction(): Promise<string> {
 }
 
 /**
- * Server Action untuk menghasilkan nomor Purchase Request unik berikutnya dengan
- * format PR/KSP/[TAHUN]/[BULAN]/[URUT] (urut per bulan berjalan).
+ * Server Action nomor Purchase Request berikutnya, format dari tema perusahaan
+ * (mis. PR/KSP/YYYY/MM/XXX). Urut per bulan & per perusahaan.
  */
-export async function generatePurchaseRequestNumberAction(): Promise<string> {
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = String(now.getMonth() + 1).padStart(2, "0");
-  const prefix = `PR/KSP/${year}/${month}/`;
-
+export async function generatePurchaseRequestNumberAction(
+  companyId?: CompanyId
+): Promise<string> {
+  const prefix = currentPrefix(getCompanyTheme(companyId).docFormat.pr);
   const rows = await db
     .select({ prNumber: purchaseRequests.prNumber })
     .from(purchaseRequests)

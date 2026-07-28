@@ -2,6 +2,7 @@ import { FileX2 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { PoPreview } from "@/components/po/po-preview";
 import { getPublicPurchaseOrderAction } from "@/app/actions/po-public";
+import { companyIdFromDocNumber } from "@/config/company-themes";
 
 export default async function PublicPoPreviewPage({
   params,
@@ -43,6 +44,7 @@ export default async function PublicPoPreviewPage({
         </div>
         <PoPreview
           poDetail={{
+            companyId: companyIdFromDocNumber(po.poNumber),
             poNumber: po.poNumber,
             orderDate: po.orderDate,
             status: po.status,
@@ -51,7 +53,6 @@ export default async function PublicPoPreviewPage({
             notes: po.notes ?? "",
           }}
           supplier={po.supplier}
-          company={po.company}
           items={po.items}
         />
       </main>

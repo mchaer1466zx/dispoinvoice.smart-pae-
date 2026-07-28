@@ -9,7 +9,6 @@ import {
   buildCbsGroups,
   type CbsTotalRow,
 } from "@/components/procurement/cbs-document";
-import type { CompanyRecord } from "@/app/actions/companies";
 
 const DEFAULT_PAYMENT_TERMS = [
   "50% Uang Muka (DP) setelah PO disetujui",
@@ -21,12 +20,10 @@ export function PoPreview({
   poDetail,
   supplier,
   items,
-  company,
 }: {
   poDetail: PoDetail;
   supplier: SupplierRecord | null;
   items: PoItem[];
-  company: CompanyRecord | null;
 }) {
   const groups = buildCbsGroups(
     items.map((item) => ({
@@ -57,7 +54,7 @@ export function PoPreview({
       <CbsDocument
         docTitle="PURCHASE ORDER"
         docNumber={poDetail.poNumber}
-        company={company}
+        companyId={poDetail.companyId}
         perihal="Pesanan Pembelian Barang/Jasa"
         partyLabel="Kepada Pemasok"
         partyName={supplier?.name ?? ""}
