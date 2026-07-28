@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect } from "react";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -19,7 +18,6 @@ import {
   type CbsTotalRow,
 } from "@/components/procurement/cbs-document";
 import { useCompany } from "@/lib/company-store";
-import { BRAND } from "@/lib/brand";
 
 /**
  * Contoh dokumen PO "Pengadaan & Instalasi Cold Storage" dengan angka tetap
@@ -121,10 +119,6 @@ const EXAMPLE_PAYMENT_TERMS = [
 
 export default function ContohPdfPage() {
   const { activeCompany } = useCompany();
-
-  useEffect(() => {
-    document.title = `Contoh Dokumen PDF · ${BRAND.shortName}`;
-  }, []);
 
   return (
     <div className="flex flex-1 justify-center bg-zinc-50 px-4 py-10 dark:bg-black sm:px-8">
