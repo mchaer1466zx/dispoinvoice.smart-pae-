@@ -81,6 +81,8 @@ export default function PurchaseOrderDetailPage() {
     poNumber: po.poNumber,
     orderDate: po.orderDate,
     status: po.status,
+    tax: po.tax,
+    discount: po.discount,
     notes: po.notes ?? "",
   };
 

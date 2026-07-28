@@ -46,6 +46,8 @@ export default async function PublicPoPreviewPage({
             poNumber: po.poNumber,
             orderDate: po.orderDate,
             status: po.status,
+            tax: po.tax,
+            discount: po.discount,
             notes: po.notes ?? "",
           }}
           supplier={po.supplier}

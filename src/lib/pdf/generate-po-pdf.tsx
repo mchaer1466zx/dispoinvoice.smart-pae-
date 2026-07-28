@@ -60,6 +60,8 @@ export async function generatePoPdf(poId: string): Promise<Buffer | null> {
     poNumber: po.poNumber,
     orderDate: po.orderDate,
     status: po.status,
+    tax: po.tax,
+    discount: po.discount,
     notes: po.notes,
     company: {
       name: company?.name ?? "",
