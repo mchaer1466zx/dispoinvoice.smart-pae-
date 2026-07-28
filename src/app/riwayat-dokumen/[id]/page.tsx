@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/card";
 import { InvoiceStatusControl } from "@/components/invoice/invoice-status-control";
 import { PurchaseOrderStatusControl } from "@/components/po/po-status-control";
+import { MemoStatusControl } from "@/components/memo/memo-status-control";
 import { DOCUMENT_TYPE_LABELS } from "@/lib/mock-data";
 import {
   getDocumentAction,
@@ -23,12 +24,14 @@ import {
 } from "@/app/actions/documents";
 import type { InvoiceStatus } from "@/app/actions/invoices";
 import type { PoStatus } from "@/app/actions/purchase-orders";
+import type { MemoStatus } from "@/app/actions/memos";
 import { formatCurrency, formatDate } from "@/lib/format";
 
 const STATUS_VARIANTS: Record<string, "secondary" | "success" | "outline"> = {
   draft: "outline",
   terkirim: "secondary",
   dikirim: "secondary",
+  dibaca: "secondary",
   lunas: "success",
   selesai: "success",
 };
@@ -152,6 +155,20 @@ export default function DocumentDetailPage() {
               poId={doc.id}
               currentStatus={doc.status}
               onChanged={(status: PoStatus) =>
+                setDoc((prev) => (prev ? { ...prev, status } : prev))
+              }
+            />
+          </CardContent>
+        </Card>
+      ) : null}
+
+      {doc.type === "memo" ? (
+        <Card className="print:hidden">
+          <CardContent className="pt-6">
+            <MemoStatusControl
+              memoId={doc.id}
+              currentStatus={doc.status}
+              onChanged={(status: MemoStatus) =>
                 setDoc((prev) => (prev ? { ...prev, status } : prev))
               }
             />

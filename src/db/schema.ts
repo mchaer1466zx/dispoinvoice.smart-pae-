@@ -130,6 +130,9 @@ export const memos = sqliteTable(
     subject: text("subject").notNull(),
     instructions: text("instructions"),
     content: text("content").notNull(),
+    status: text("status", { enum: ["terkirim", "dibaca", "selesai"] })
+      .notNull()
+      .default("terkirim"),
     memoDate: text("memo_date").notNull(),
     createdAt: text("created_at")
       .notNull()
@@ -137,6 +140,7 @@ export const memos = sqliteTable(
   },
   (table) => [
     index("memos_user_id_idx").on(table.userId),
+    index("memos_status_idx").on(table.status),
     index("memos_memo_date_idx").on(table.memoDate),
   ]
 );
