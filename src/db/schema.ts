@@ -1,5 +1,12 @@
 import { sql } from "drizzle-orm";
-import { index, sqliteTable, text, integer, real } from "drizzle-orm/sqlite-core";
+import {
+  index,
+  sqliteTable,
+  text,
+  integer,
+  real,
+  uniqueIndex,
+} from "drizzle-orm/sqlite-core";
 
 export const users = sqliteTable("users", {
   id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),
@@ -131,6 +138,43 @@ export const memos = sqliteTable(
   (table) => [
     index("memos_user_id_idx").on(table.userId),
     index("memos_memo_date_idx").on(table.memoDate),
+  ]
+);
+
+/**
+ * Notifikasi in-app untuk karyawan (lonceng di header). Penerima = users.id.
+ * `userId` nullable selama audit trail (created_by) belum mengisi pemilik dokumen.
+ * `dedupeKey` menjaga notifikasi otomatis (mis. reminder due date) tidak berganda.
+ */
+export const notifications = sqliteTable(
+  "notifications",
+  {
+    id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),
+    userId: text("user_id").references(() => users.id, { onDelete: "cascade" }),
+    type: text("type", {
+      enum: [
+        "invoice_status",
+        "po_status",
+        "memo_status",
+        "doc_shared",
+        "invoice_due_soon",
+        "invoice_overdue",
+      ],
+    }).notNull(),
+    title: text("title").notNull(),
+    body: text("body"),
+    docType: text("doc_type", { enum: ["invoice", "po", "memo"] }),
+    docId: text("doc_id"),
+    isRead: integer("is_read", { mode: "boolean" }).notNull().default(false),
+    dedupeKey: text("dedupe_key"),
+    createdAt: text("created_at")
+      .notNull()
+      .default(sql`(current_timestamp)`),
+  },
+  (table) => [
+    index("notifications_user_id_idx").on(table.userId),
+    index("notifications_is_read_idx").on(table.isRead),
+    uniqueIndex("notifications_dedupe_key_uq").on(table.dedupeKey),
   ]
 );
 
