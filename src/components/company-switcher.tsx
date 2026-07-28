@@ -9,19 +9,22 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useCompany } from "@/lib/company-store";
+import { useAuth } from "@/lib/auth-store";
 import { getCompanyInitials } from "@/lib/company-initials";
 
 export function CompanySwitcher() {
   const { companies, activeCompany, isSwitching, setActiveCompanyId } = useCompany();
+  const { user } = useAuth();
+  const isAdmin = user?.role === "admin";
 
   if (companies.length === 0) {
-    return (
+    return isAdmin ? (
       <Button variant="outline" size="sm" asChild>
         <Link href="/pengaturan">
           <Building2 /> Tambah Perusahaan
         </Link>
       </Button>
-    );
+    ) : null;
   }
 
   return (
@@ -61,13 +64,15 @@ export function CompanySwitcher() {
             </button>
           ))}
         </div>
-        <div className="mt-1.5 border-t pt-1.5">
-          <Button variant="ghost" size="sm" className="w-full justify-start" asChild>
-            <Link href="/pengaturan">
-              <Settings /> Kelola Perusahaan
-            </Link>
-          </Button>
-        </div>
+        {isAdmin ? (
+          <div className="mt-1.5 border-t pt-1.5">
+            <Button variant="ghost" size="sm" className="w-full justify-start" asChild>
+              <Link href="/pengaturan">
+                <Settings /> Kelola Perusahaan
+              </Link>
+            </Button>
+          </div>
+        ) : null}
       </PopoverContent>
     </Popover>
   );

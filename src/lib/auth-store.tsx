@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
-import { getSessionUserAction } from "@/app/actions/auth";
+import { getSessionUserAction, type UserRole } from "@/app/actions/auth";
 
 const STORAGE_KEY = "dispoinvoice:auth-user";
 
@@ -9,6 +9,7 @@ export type AuthUser = {
   id: string;
   name: string;
   email: string;
+  role: UserRole;
 };
 
 type AuthContextValue = {
@@ -54,7 +55,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         if (cancelled) return;
         persist(
           serverUser
-            ? { id: serverUser.id, name: serverUser.name, email: serverUser.email }
+            ? {
+                id: serverUser.id,
+                name: serverUser.name,
+                email: serverUser.email,
+                role: serverUser.role,
+              }
             : null
         );
       })

@@ -1,7 +1,7 @@
 "use server";
 
 import { randomBytes } from "node:crypto";
-import { and, eq, gt } from "drizzle-orm";
+import { and, count, eq, gt } from "drizzle-orm";
 import { cookies } from "next/headers";
 import { Resend } from "resend";
 import { db } from "@/db";
@@ -31,10 +31,13 @@ async function createSession(userId: string): Promise<void> {
   cookieStore.set(SESSION_COOKIE, token, SESSION_COOKIE_OPTIONS);
 }
 
+export type UserRole = "admin" | "staff";
+
 export type UserRecord = {
   id: string;
   name: string;
   email: string;
+  role: UserRole;
   createdAt: string;
 };
 
@@ -42,6 +45,7 @@ const USER_COLUMNS = {
   id: users.id,
   name: users.name,
   email: users.email,
+  role: users.role,
   createdAt: users.createdAt,
 };
 
@@ -83,9 +87,13 @@ export async function registerAction(input: RegisterInput): Promise<RegisterResu
   try {
     const passwordHash = await hashPassword(input.password);
 
+    // Pengguna pertama di sistem otomatis menjadi admin; selebihnya staff.
+    const [row] = await db.select({ total: count() }).from(users);
+    const role: UserRole = (row?.total ?? 0) === 0 ? "admin" : "staff";
+
     const [created] = await db
       .insert(users)
-      .values({ name, email, passwordHash })
+      .values({ name, email, passwordHash, role })
       .returning(USER_COLUMNS);
 
     return { success: true, user: created };
@@ -116,6 +124,7 @@ export async function loginAction(input: LoginInput): Promise<LoginResult> {
       id: users.id,
       name: users.name,
       email: users.email,
+      role: users.role,
       passwordHash: users.passwordHash,
       createdAt: users.createdAt,
     })
@@ -131,7 +140,13 @@ export async function loginAction(input: LoginInput): Promise<LoginResult> {
 
   return {
     success: true,
-    user: { id: user.id, name: user.name, email: user.email, createdAt: user.createdAt },
+    user: {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      createdAt: user.createdAt,
+    },
   };
 }
 
@@ -150,6 +165,7 @@ export async function getSessionUserAction(): Promise<UserRecord | null> {
       id: users.id,
       name: users.name,
       email: users.email,
+      role: users.role,
       createdAt: users.createdAt,
     })
     .from(sessions)
@@ -184,6 +200,29 @@ export async function requireSessionUser(): Promise<UserRecord> {
   const user = await getSessionUserAction();
   if (!user) {
     throw new Error("Belum login.");
+  }
+  return user;
+}
+
+/**
+ * Server Action ringan untuk memeriksa apakah sesi saat ini milik admin.
+ * Dipakai komponen server (mis. halaman /pengaturan) untuk memutuskan render
+ * konten admin atau halaman 403 Forbidden tanpa melempar error.
+ */
+export async function isAdminAction(): Promise<boolean> {
+  const user = await getSessionUserAction();
+  return user?.role === "admin";
+}
+
+/**
+ * Pertahanan tingkat Server Action untuk operasi khusus admin (mis. kelola
+ * perusahaan). Melempar error bila belum login atau bukan admin, sehingga
+ * action tetap aman walau dipanggil langsung lewat POST.
+ */
+export async function requireAdmin(): Promise<UserRecord> {
+  const user = await requireSessionUser();
+  if (user.role !== "admin") {
+    throw new Error("Akses ditolak: khusus admin.");
   }
   return user;
 }
