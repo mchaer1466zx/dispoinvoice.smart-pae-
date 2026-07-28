@@ -1,6 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
+import { FileText } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
   PoDetailForm,
   createDefaultPoDetail,
@@ -63,12 +66,19 @@ export default function PurchaseOrderPage() {
               halaman.
             </p>
           </div>
-          <SavePoButton
-            poDetail={poDetail}
-            supplier={selectedSupplier}
-            items={items}
-            company={activeCompany}
-          />
+          <div className="flex flex-wrap justify-end gap-2">
+            <Button type="button" variant="outline" asChild>
+              <Link href="/contoh-pdf">
+                <FileText /> Lihat Contoh PDF
+              </Link>
+            </Button>
+            <SavePoButton
+              poDetail={poDetail}
+              supplier={selectedSupplier}
+              items={items}
+              company={activeCompany}
+            />
+          </div>
         </div>
 
         <PoDetailForm value={poDetail} onChange={setPoDetail} />

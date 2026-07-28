@@ -1,6 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
+import { FileText } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
   PrDetailForm,
   createDefaultPrDetail,
@@ -57,7 +60,14 @@ export default function PurchaseRequestPage() {
               Ajukan permintaan pembelian dari departemen ke Procurement.
             </p>
           </div>
-          <SavePrButton prDetail={prDetail} items={items} company={activeCompany} />
+          <div className="flex flex-wrap justify-end gap-2">
+            <Button type="button" variant="outline" asChild>
+              <Link href="/contoh-pdf">
+                <FileText /> Lihat Contoh PDF
+              </Link>
+            </Button>
+            <SavePrButton prDetail={prDetail} items={items} company={activeCompany} />
+          </div>
         </div>
 
         <PrDetailForm value={prDetail} onChange={setPrDetail} />
