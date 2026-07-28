@@ -17,7 +17,7 @@ export function CompanySwitcher() {
   if (companies.length === 0) {
     return (
       <Button variant="outline" size="sm" asChild>
-        <Link href="/profil-perusahaan">
+        <Link href="/pengaturan">
           <Building2 /> Tambah Perusahaan
         </Link>
       </Button>
@@ -63,7 +63,7 @@ export function CompanySwitcher() {
         </div>
         <div className="mt-1.5 border-t pt-1.5">
           <Button variant="ghost" size="sm" className="w-full justify-start" asChild>
-            <Link href="/profil-perusahaan">
+            <Link href="/pengaturan">
               <Settings /> Kelola Perusahaan
             </Link>
           </Button>

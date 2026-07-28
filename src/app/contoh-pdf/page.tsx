@@ -125,7 +125,7 @@ export default function ContohPdfPage() {
       <main className="flex w-full max-w-4xl flex-col gap-6">
         <div className="flex flex-col gap-1">
           <Button variant="ghost" size="sm" className="w-fit" asChild>
-            <Link href="/purchase-order">
+            <Link href="/buat-po">
               <ArrowLeft /> Kembali
             </Link>
           </Button>

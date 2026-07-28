@@ -2,7 +2,13 @@ import { NextRequest, NextResponse } from "next/server";
 
 const SESSION_COOKIE = "session_token";
 
-const PUBLIC_PATHS = ["/login", "/daftar", "/reset-password"];
+const PUBLIC_PATHS = [
+  "/",
+  "/login",
+  "/daftar",
+  "/reset-password",
+  "/profil-perusahaan",
+];
 
 const PUBLIC_PREFIXES = [
   "/verify/",

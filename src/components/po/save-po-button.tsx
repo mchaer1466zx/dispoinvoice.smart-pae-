@@ -68,7 +68,7 @@ export function SavePoButton({
       toast.success("Purchase order berhasil disimpan", {
         description: `${poDetail.poNumber} telah disimpan ke riwayat dokumen.`,
       });
-      router.push(`/purchase-order/${result.purchaseOrder.id}`);
+      router.push(`/riwayat/${result.purchaseOrder.id}`);
     } else {
       toast.error("Gagal menyimpan purchase order", {
         description: result.error,

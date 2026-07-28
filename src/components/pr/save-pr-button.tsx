@@ -59,7 +59,7 @@ export function SavePrButton({
       toast.success("Purchase request berhasil disimpan", {
         description: `${prDetail.prNumber} telah disimpan ke riwayat dokumen.`,
       });
-      router.push(`/riwayat-dokumen/${result.purchaseRequestId}`);
+      router.push(`/riwayat/${result.purchaseRequestId}`);
     } else {
       toast.error("Gagal menyimpan purchase request", {
         description: result.error,
