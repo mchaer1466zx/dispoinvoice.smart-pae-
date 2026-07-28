@@ -12,6 +12,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import type { PrStatus } from "@/app/actions/purchase-requests";
+import { PR_REASON_MIN_LENGTH } from "@/lib/pr-validation";
 
 // Status yang boleh dipilih saat membuat PR (approval terjadi kemudian).
 export const PR_CREATE_STATUS_OPTIONS = [
@@ -28,8 +29,10 @@ export type PrDetail = {
 };
 
 function generatePrNumber() {
-  const yyyy = new Date().getFullYear();
-  return `PR/${yyyy}/001`;
+  const now = new Date();
+  const yyyy = now.getFullYear();
+  const mm = String(now.getMonth() + 1).padStart(2, "0");
+  return `PR/KSP/${yyyy}/${mm}/001`;
 }
 
 export function createDefaultPrDetail(): PrDetail {
@@ -94,34 +97,44 @@ export function PrDetailForm({
         </div>
 
         <div className="grid gap-1.5">
-          <Label htmlFor={`${idPrefix}-department`}>Departemen Peminta</Label>
+          <Label htmlFor={`${idPrefix}-department`}>Departemen Peminta *</Label>
           <Input
             id={`${idPrefix}-department`}
             placeholder="Misal: Operasional / IT / HRD"
             value={value.department}
             onChange={(e) => updateField("department", e.target.value)}
+            aria-invalid={!value.department.trim() ? true : undefined}
           />
         </div>
 
         <div className="grid gap-1.5">
-          <Label htmlFor={`${idPrefix}-need-date`}>Tanggal Kebutuhan</Label>
+          <Label htmlFor={`${idPrefix}-need-date`}>Tanggal Kebutuhan *</Label>
           <Input
             id={`${idPrefix}-need-date`}
             type="date"
             value={value.needDate}
             onChange={(e) => updateField("needDate", e.target.value)}
+            aria-invalid={!value.needDate.trim() ? true : undefined}
           />
         </div>
 
         <div className="grid gap-1.5 sm:col-span-2">
-          <Label htmlFor={`${idPrefix}-notes`}>Catatan</Label>
+          <Label htmlFor={`${idPrefix}-notes`}>
+            Alasan / Justifikasi Permintaan *
+          </Label>
           <Textarea
             id={`${idPrefix}-notes`}
-            placeholder="Justifikasi/keterangan permintaan (opsional)"
+            placeholder={`Jelaskan alasan permintaan (minimal ${PR_REASON_MIN_LENGTH} karakter)`}
             value={value.notes}
             onChange={(e) => updateField("notes", e.target.value)}
             rows={3}
+            aria-invalid={
+              value.notes.trim().length < PR_REASON_MIN_LENGTH ? true : undefined
+            }
           />
+          <p className="text-xs text-muted-foreground">
+            {value.notes.trim().length}/{PR_REASON_MIN_LENGTH} karakter minimum.
+          </p>
         </div>
       </CardContent>
     </Card>

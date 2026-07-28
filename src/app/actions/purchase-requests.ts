@@ -6,6 +6,7 @@ import { purchaseRequests, prItems } from "@/db/schema";
 import { requireSessionUser } from "@/app/actions/auth";
 import { createNotification } from "@/lib/notify";
 import { recordAudit } from "@/lib/audit";
+import { validatePurchaseRequestInput } from "@/lib/pr-validation";
 
 export type PrStatus =
   | "draft"
@@ -51,11 +52,9 @@ export async function createPurchaseRequestAction(
 ): Promise<CreatePurchaseRequestResult> {
   const user = await requireSessionUser();
 
-  if (!input.prNumber.trim()) {
-    return { success: false, error: "Nomor PR wajib diisi." };
-  }
-  if (!input.items.some((item) => item.description.trim())) {
-    return { success: false, error: "Minimal satu item dengan deskripsi wajib diisi." };
+  const validationError = validatePurchaseRequestInput(input);
+  if (validationError) {
+    return { success: false, error: validationError };
   }
 
   try {

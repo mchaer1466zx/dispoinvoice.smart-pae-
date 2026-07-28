@@ -40,12 +40,13 @@ export async function generateInvoiceNumberAction(): Promise<string> {
 
 /**
  * Server Action untuk menghasilkan nomor purchase order unik berikutnya dengan
- * format PO/[TAHUN]/[URUT] (urut per tahun berjalan).
+ * format PO/KSP/[TAHUN]/[BULAN]/[URUT] (urut per bulan berjalan).
  */
 export async function generatePurchaseOrderNumberAction(): Promise<string> {
   const now = new Date();
   const year = now.getFullYear();
-  const prefix = `PO/${year}/`;
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const prefix = `PO/KSP/${year}/${month}/`;
 
   const rows = await db
     .select({ poNumber: purchaseOrders.poNumber })
@@ -61,12 +62,13 @@ export async function generatePurchaseOrderNumberAction(): Promise<string> {
 
 /**
  * Server Action untuk menghasilkan nomor Purchase Request unik berikutnya dengan
- * format PR/[TAHUN]/[URUT] (urut per tahun berjalan).
+ * format PR/KSP/[TAHUN]/[BULAN]/[URUT] (urut per bulan berjalan).
  */
 export async function generatePurchaseRequestNumberAction(): Promise<string> {
   const now = new Date();
   const year = now.getFullYear();
-  const prefix = `PR/${year}/`;
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const prefix = `PR/KSP/${year}/${month}/`;
 
   const rows = await db
     .select({ prNumber: purchaseRequests.prNumber })
