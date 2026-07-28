@@ -30,6 +30,7 @@ import type { PoStatus } from "@/app/actions/purchase-orders";
 import type { MemoStatus } from "@/app/actions/memos";
 import { CancelDocumentButton } from "@/components/cancel-document-button";
 import { DocumentAuditPanel } from "@/components/document-audit-panel";
+import { DocumentAttachments } from "@/components/document-attachments";
 import { calculateInvoiceTotals } from "@/lib/invoice-totals";
 import { formatCurrency, formatDate } from "@/lib/format";
 
@@ -309,6 +310,12 @@ export default function DocumentDetailPage() {
               <p className="whitespace-pre-line">{doc.notes}</p>
             </div>
           ) : null}
+        </CardContent>
+      </Card>
+
+      <Card className="print:hidden">
+        <CardContent className="pt-6">
+          <DocumentAttachments entityType={doc.type} entityId={doc.id} />
         </CardContent>
       </Card>
 

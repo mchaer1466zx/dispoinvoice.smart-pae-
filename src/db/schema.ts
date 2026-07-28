@@ -182,6 +182,32 @@ export const memos = sqliteTable(
 );
 
 /**
+ * Lampiran bukti untuk dokumen (scan penawaran, foto barang datang, PDF invoice
+ * asli, dll). Berkas disimpan di Vercel Blob; tabel ini menyimpan metadata + URL.
+ */
+export const attachments = sqliteTable(
+  "attachments",
+  {
+    id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),
+    entityType: text("entity_type").notNull(),
+    entityId: text("entity_id").notNull(),
+    filename: text("filename").notNull(),
+    contentType: text("content_type").notNull(),
+    size: integer("size").notNull(),
+    url: text("url").notNull(),
+    uploadedByUserId: text("uploaded_by_user_id").references(() => users.id, {
+      onDelete: "set null",
+    }),
+    createdAt: text("created_at")
+      .notNull()
+      .default(sql`(current_timestamp)`),
+  },
+  (table) => [
+    index("attachments_entity_idx").on(table.entityType, table.entityId),
+  ]
+);
+
+/**
  * Jejak audit: mencatat "siapa, kapan, apa" untuk setiap dokumen. Dokumen tidak
  * dihapus permanen — dibatalkan dengan alasan wajib (action "cancel"). Perubahan
  * field dicatat sebagai JSON di `changes`.
