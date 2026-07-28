@@ -1,24 +1,35 @@
 "use server";
 
 import { randomBytes } from "node:crypto";
-import { eq } from "drizzle-orm";
+import { and, eq, gt } from "drizzle-orm";
 import { cookies } from "next/headers";
 import { Resend } from "resend";
 import { db } from "@/db";
-import { users } from "@/db/schema";
+import { sessions, users } from "@/db/schema";
 import { hashPassword, verifyPassword } from "@/lib/password";
 
 const RESET_TOKEN_TTL_MS = 60 * 60 * 1000;
+const SESSION_TTL_MS = 60 * 60 * 24 * 30 * 1000;
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-const SESSION_COOKIE = "session_user_id";
+const SESSION_COOKIE = "session_token";
 const SESSION_COOKIE_OPTIONS = {
   path: "/",
   httpOnly: true,
   sameSite: "lax" as const,
   maxAge: 60 * 60 * 24 * 30,
 };
+
+/** Membuat sesi baru (token acak) untuk user lalu memasang cookie httpOnly. */
+async function createSession(userId: string): Promise<void> {
+  const token = randomBytes(32).toString("hex");
+  const expiresAt = new Date(Date.now() + SESSION_TTL_MS).toISOString();
+  await db.insert(sessions).values({ token, userId, expiresAt });
+
+  const cookieStore = await cookies();
+  cookieStore.set(SESSION_COOKIE, token, SESSION_COOKIE_OPTIONS);
+}
 
 export type UserRecord = {
   id: string;
@@ -116,8 +127,7 @@ export async function loginAction(input: LoginInput): Promise<LoginResult> {
     return { success: false, error: "Email atau kata sandi salah." };
   }
 
-  const cookieStore = await cookies();
-  cookieStore.set(SESSION_COOKIE, user.id, SESSION_COOKIE_OPTIONS);
+  await createSession(user.id);
 
   return {
     success: true,
@@ -125,24 +135,43 @@ export async function loginAction(input: LoginInput): Promise<LoginResult> {
   };
 }
 
-/** Server Action untuk mengambil pengguna dari sesi aktif saat ini (null jika belum login). */
+/**
+ * Server Action untuk mengambil pengguna dari sesi aktif saat ini (null jika belum
+ * login). Sesi diverifikasi lewat token cookie yang dipetakan ke tabel sessions,
+ * dan hanya sesi yang belum kedaluwarsa yang diterima.
+ */
 export async function getSessionUserAction(): Promise<UserRecord | null> {
   const cookieStore = await cookies();
-  const userId = cookieStore.get(SESSION_COOKIE)?.value;
-  if (!userId) return null;
+  const token = cookieStore.get(SESSION_COOKIE)?.value;
+  if (!token) return null;
 
-  const [user] = await db
-    .select(USER_COLUMNS)
-    .from(users)
-    .where(eq(users.id, userId))
+  const [row] = await db
+    .select({
+      id: users.id,
+      name: users.name,
+      email: users.email,
+      createdAt: users.createdAt,
+    })
+    .from(sessions)
+    .innerJoin(users, eq(sessions.userId, users.id))
+    .where(
+      and(
+        eq(sessions.token, token),
+        gt(sessions.expiresAt, new Date().toISOString())
+      )
+    )
     .limit(1);
 
-  return user ?? null;
+  return row ?? null;
 }
 
-/** Server Action untuk logout; menghapus cookie sesi. */
+/** Server Action untuk logout; menghapus baris sesi di database dan cookie-nya. */
 export async function logoutAction(): Promise<void> {
   const cookieStore = await cookies();
+  const token = cookieStore.get(SESSION_COOKIE)?.value;
+  if (token) {
+    await db.delete(sessions).where(eq(sessions.token, token));
+  }
   cookieStore.delete(SESSION_COOKIE);
 }
 
@@ -256,6 +285,9 @@ export async function resetPasswordAction(
     .set({ passwordHash, resetToken: null, resetTokenExpiresAt: null })
     .where(eq(users.id, user.id));
 
+  // Cabut semua sesi lama pengguna ini setelah kata sandi diganti.
+  await db.delete(sessions).where(eq(sessions.userId, user.id));
+
   return { success: true };
 }
 
@@ -272,11 +304,11 @@ export type UpdateProfileResult =
 export async function updateProfileAction(
   input: UpdateProfileInput
 ): Promise<UpdateProfileResult> {
-  const cookieStore = await cookies();
-  const userId = cookieStore.get(SESSION_COOKIE)?.value;
-  if (!userId) {
+  const sessionUser = await getSessionUserAction();
+  if (!sessionUser) {
     return { success: false, error: "Anda belum masuk." };
   }
+  const userId = sessionUser.id;
 
   const name = input.name.trim();
   const email = input.email.trim().toLowerCase();

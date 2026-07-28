@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const SESSION_COOKIE = "session_user_id";
+const SESSION_COOKIE = "session_token";
 
 const PUBLIC_PATHS = ["/login", "/daftar", "/reset-password"];
 
