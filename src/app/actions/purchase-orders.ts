@@ -115,7 +115,7 @@ export async function getPurchaseOrderAction(
 export async function createPurchaseOrderAction(
   input: PurchaseOrderInput
 ): Promise<PurchaseOrderActionResult> {
-  await requireSessionUser();
+  const user = await requireSessionUser();
   const validationError = validateInput(input);
   if (validationError) {
     return { success: false, error: validationError };
@@ -126,6 +126,7 @@ export async function createPurchaseOrderAction(
       const [po] = await tx
         .insert(purchaseOrders)
         .values({
+          userId: user.id,
           poNumber: input.poNumber,
           orderDate: input.orderDate,
           status: input.status,
