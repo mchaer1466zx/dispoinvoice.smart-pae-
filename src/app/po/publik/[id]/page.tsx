@@ -38,7 +38,7 @@ export default async function PublicPoPreviewPage({
             Pratinjau Purchase Order
           </h1>
           <p className="text-sm text-muted-foreground">
-            Dibagikan melalui tautan publik DispoInvoice.
+            Dibagikan melalui tautan publik PT Karya Sang Prabu.
           </p>
         </div>
         <PoPreview

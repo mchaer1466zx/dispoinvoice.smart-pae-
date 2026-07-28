@@ -18,8 +18,12 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "DispoInvoice",
-  description: "Buat invoice, purchase order, dan memo disposisi dengan cepat.",
+  title: {
+    default: "Sistem Pengadaan Digital · PT KARYA SANG PRABU",
+    template: "%s · PT KSP",
+  },
+  description:
+    "Sistem Pengadaan Digital PT Karya Sang Prabu — Purchase Request, Purchase Order, invoice, dan memo.",
 };
 
 export default async function RootLayout({

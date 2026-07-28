@@ -83,7 +83,7 @@ function VerificationShell({ children }: { children: React.ReactNode }) {
             Verifikasi Dokumen
           </h1>
           <p className="text-sm text-muted-foreground">
-            Hasil pemindaian QR code dokumen DispoInvoice.
+            Hasil pemindaian QR code dokumen PT Karya Sang Prabu.
           </p>
         </div>
         {children}
@@ -133,7 +133,7 @@ export default async function VerifyDocumentPage({
             <CardTitle>Dokumen Terverifikasi</CardTitle>
           </div>
           <CardDescription>
-            Invoice ini tercatat resmi di sistem DispoInvoice.
+            Invoice ini tercatat resmi di sistem PT Karya Sang Prabu.
           </CardDescription>
         </CardHeader>
         <CardContent className="grid gap-3 text-sm">

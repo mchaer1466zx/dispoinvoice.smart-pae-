@@ -78,7 +78,7 @@ export async function sendPoEmailAction(
 
   const resend = new Resend(apiKey);
   const { error } = await resend.emails.send({
-    from: process.env.INVOICE_EMAIL_FROM ?? "DispoInvoice <invoice@dispoinvoice.app>",
+    from: process.env.INVOICE_EMAIL_FROM ?? "PT Karya Sang Prabu <no-reply@karyasangprabu.co.id>",
     to: input.recipientEmail,
     subject: `Purchase Order ${poNumber}`,
     text: `Berikut purchase order ${poNumber} terlampir dalam format PDF.`,

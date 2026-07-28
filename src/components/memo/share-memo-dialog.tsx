@@ -21,7 +21,7 @@ export function ShareMemoDialog({ recipientName }: { recipientName: string }) {
   const [open, setOpen] = useState(false);
   const [email, setEmail] = useState("");
 
-  const shareLink = `https://dispoinvoice.example.com/memo/${idPrefix.replace(/[^a-zA-Z0-9]/g, "")}`;
+  const shareLink = `https://karyasangprabu.co.id/memo/${idPrefix.replace(/[^a-zA-Z0-9]/g, "")}`;
 
   function handleSendEmail() {
     if (!email.trim()) return;

@@ -171,7 +171,7 @@ export default function ProfilPage() {
       <Card>
         <CardHeader>
           <CardTitle>Profil Pengguna</CardTitle>
-          <CardDescription>Informasi akun Anda di DispoInvoice.</CardDescription>
+          <CardDescription>Informasi akun Anda di Sistem Pengadaan PT KSP.</CardDescription>
         </CardHeader>
         <CardContent className="flex items-center gap-4">
           <Avatar size="lg">
