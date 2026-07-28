@@ -31,7 +31,7 @@ export type CreateInvoiceResult =
 export async function createInvoiceAction(
   input: CreateInvoiceInput
 ): Promise<CreateInvoiceResult> {
-  await requireSessionUser();
+  const user = await requireSessionUser();
   if (!input.invoiceNumber.trim()) {
     return { success: false, error: "Nomor invoice wajib diisi." };
   }
@@ -45,6 +45,7 @@ export async function createInvoiceAction(
       const [invoice] = await tx
         .insert(invoices)
         .values({
+          userId: user.id,
           invoiceNumber: input.invoiceNumber,
           issueDate: input.issueDate,
           dueDate: input.dueDate || null,

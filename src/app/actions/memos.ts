@@ -80,7 +80,7 @@ export async function getMemoAction(id: string): Promise<MemoRecord | null> {
 export async function createMemoAction(
   input: MemoInput
 ): Promise<MemoActionResult> {
-  await requireSessionUser();
+  const user = await requireSessionUser();
   const validationError = validateInput(input);
   if (validationError) {
     return { success: false, error: validationError };
@@ -89,6 +89,7 @@ export async function createMemoAction(
   const [created] = await db
     .insert(memos)
     .values({
+      userId: user.id,
       recipientName: input.recipientName.trim(),
       subject: input.subject.trim(),
       instructions: input.instructions.trim() || null,
