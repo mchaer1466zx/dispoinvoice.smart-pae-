@@ -15,6 +15,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { InvoiceStatusControl } from "@/components/invoice/invoice-status-control";
+import { DuplicateInvoiceButton } from "@/components/invoice/duplicate-invoice-button";
 import { PurchaseOrderStatusControl } from "@/components/po/po-status-control";
 import { MemoStatusControl } from "@/components/memo/memo-status-control";
 import { DOCUMENT_TYPE_LABELS } from "@/lib/mock-data";
@@ -130,6 +131,9 @@ export default function DocumentDetailPage() {
       <div className="flex items-center justify-between gap-2 print:hidden">
         <BackLink />
         <div className="flex gap-2">
+          {doc.type === "invoice" ? (
+            <DuplicateInvoiceButton invoiceId={doc.id} />
+          ) : null}
           <Button type="button" variant="outline" onClick={() => window.print()}>
             <Printer /> Cetak
           </Button>

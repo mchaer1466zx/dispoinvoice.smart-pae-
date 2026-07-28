@@ -5,6 +5,7 @@ import { db } from "@/db";
 import { invoices, invoiceItems } from "@/db/schema";
 import { requireSessionUser } from "@/app/actions/auth";
 import { createNotification } from "@/lib/notify";
+import { generateInvoiceNumberAction } from "@/app/actions/numbering";
 
 export type CreateInvoiceItemInput = {
   description: string;
@@ -142,4 +143,76 @@ export async function updateInvoiceStatusAction(
   });
 
   return { success: true };
+}
+
+export type DuplicateInvoiceResult =
+  | { success: true; invoiceId: string }
+  | { success: false; error: string };
+
+/**
+ * Server Action "Duplikat" (Copy as New): membuat invoice baru dari invoice lama
+ * untuk mempercepat input data serupa. Salinan selalu berstatus `draft`, memakai
+ * nomor urut baru & tanggal terbit hari ini, mencatat parentId sebagai jejak asal,
+ * dan menyalin pelanggan, perusahaan, pajak, diskon, catatan, serta item.
+ */
+export async function duplicateInvoiceAction(
+  sourceId: string
+): Promise<DuplicateInvoiceResult> {
+  const user = await requireSessionUser();
+
+  const [source] = await db
+    .select()
+    .from(invoices)
+    .where(eq(invoices.id, sourceId))
+    .limit(1);
+
+  if (!source) {
+    return { success: false, error: "Invoice tidak ditemukan." };
+  }
+
+  const items = await db
+    .select()
+    .from(invoiceItems)
+    .where(eq(invoiceItems.invoiceId, sourceId));
+
+  const newNumber = await generateInvoiceNumberAction();
+  const today = new Date().toISOString().slice(0, 10);
+
+  try {
+    const invoiceId = await db.transaction(async (tx) => {
+      const [created] = await tx
+        .insert(invoices)
+        .values({
+          userId: user.id,
+          invoiceNumber: newNumber,
+          status: "draft",
+          issueDate: today,
+          dueDate: source.dueDate,
+          tax: source.tax,
+          discount: source.discount,
+          notes: source.notes,
+          customerId: source.customerId,
+          companyId: source.companyId,
+          parentId: source.id,
+        })
+        .returning({ id: invoices.id });
+
+      if (items.length > 0) {
+        await tx.insert(invoiceItems).values(
+          items.map((item) => ({
+            invoiceId: created.id,
+            description: item.description,
+            quantity: item.quantity,
+            price: item.price,
+          }))
+        );
+      }
+
+      return created.id;
+    });
+
+    return { success: true, invoiceId };
+  } catch {
+    return { success: false, error: "Gagal menduplikasi invoice." };
+  }
 }

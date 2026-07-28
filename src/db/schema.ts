@@ -50,6 +50,8 @@ export const invoices = sqliteTable(
     dueDate: text("due_date"),
     tax: real("tax").notNull().default(0),
     discount: real("discount").notNull().default(0),
+    // Invoice sumber bila dokumen ini hasil "Duplikat" (Copy as New).
+    parentId: text("parent_id"),
     notes: text("notes"),
     createdAt: text("created_at")
       .notNull()
