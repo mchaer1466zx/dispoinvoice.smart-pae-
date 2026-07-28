@@ -3,7 +3,16 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { FileText, LogOut, Users, UserRound } from "lucide-react";
+import {
+  Archive,
+  ClipboardList,
+  FileText,
+  LogOut,
+  Receipt,
+  ScrollText,
+  Users,
+  UserRound,
+} from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -56,6 +65,26 @@ export function UserMenu() {
           <Button variant="ghost" size="sm" className="w-full justify-start" asChild>
             <Link href="/">
               <FileText /> Buat Invoice
+            </Link>
+          </Button>
+          <Button variant="ghost" size="sm" className="w-full justify-start" asChild>
+            <Link href="/purchase-request">
+              <ClipboardList /> Buat Purchase Request
+            </Link>
+          </Button>
+          <Button variant="ghost" size="sm" className="w-full justify-start" asChild>
+            <Link href="/purchase-order">
+              <Receipt /> Buat Purchase Order
+            </Link>
+          </Button>
+          <Button variant="ghost" size="sm" className="w-full justify-start" asChild>
+            <Link href="/memo">
+              <ScrollText /> Buat Memo
+            </Link>
+          </Button>
+          <Button variant="ghost" size="sm" className="w-full justify-start" asChild>
+            <Link href="/riwayat-dokumen">
+              <Archive /> Riwayat Dokumen
             </Link>
           </Button>
           <Button variant="ghost" size="sm" className="w-full justify-start" asChild>

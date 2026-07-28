@@ -8,12 +8,13 @@ export type NotifyInput = {
     | "invoice_status"
     | "po_status"
     | "memo_status"
+    | "pr_status"
     | "doc_shared"
     | "invoice_due_soon"
     | "invoice_overdue";
   title: string;
   body?: string;
-  docType?: "invoice" | "po" | "memo";
+  docType?: "invoice" | "po" | "memo" | "pr";
   docId?: string;
   dedupeKey?: string;
 };
