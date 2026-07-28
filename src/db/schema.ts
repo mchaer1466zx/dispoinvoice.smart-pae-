@@ -20,6 +20,26 @@ export const users = sqliteTable("users", {
     .default(sql`(current_timestamp)`),
 });
 
+/**
+ * Sesi login: token acak (opaque) yang disimpan di cookie httpOnly, dipetakan ke
+ * user. Memakai token khusus alih-alih user_id sebagai nilai cookie sehingga id
+ * pengguna tidak dipakai sebagai kredensial sesi.
+ */
+export const sessions = sqliteTable(
+  "sessions",
+  {
+    token: text("token").primaryKey(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    expiresAt: text("expires_at").notNull(),
+    createdAt: text("created_at")
+      .notNull()
+      .default(sql`(current_timestamp)`),
+  },
+  (table) => [index("sessions_user_id_idx").on(table.userId)]
+);
+
 export const customers = sqliteTable("customers", {
   id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),
   name: text("name").notNull(),
