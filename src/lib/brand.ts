@@ -13,6 +13,7 @@ export const BRAND = {
   website: "www.karyasangprabu.co.id",
   appName: "Sistem Pengadaan Digital",
   emailFrom: "PT Karya Sang Prabu <no-reply@karyasangprabu.co.id>",
+  logoPath: "/logo-ksp.png",
 } as const;
 
 /** Palet warna resmi dari kop surat PT Karya Sang Prabu. */

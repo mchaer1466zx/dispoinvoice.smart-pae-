@@ -106,7 +106,7 @@ export function CbsDocument(props: CbsDocumentProps) {
   const address = company?.address ?? BRAND.address;
   const phone = company?.phone ?? BRAND.phone;
   const email = company?.email ?? BRAND.email;
-  const logoUrl = company?.logoUrl ?? null;
+  const logoUrl = company?.logoUrl ?? BRAND.logoPath;
 
   const printedAt = new Intl.DateTimeFormat("id-ID", {
     dateStyle: "short",
