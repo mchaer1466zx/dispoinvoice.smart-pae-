@@ -4,6 +4,9 @@ import { asc, eq } from "drizzle-orm";
 import { db } from "@/db";
 import { memos } from "@/db/schema";
 import { requireSessionUser } from "@/app/actions/auth";
+import { createNotification } from "@/lib/notify";
+
+export type MemoStatus = "terkirim" | "dibaca" | "selesai";
 
 export type MemoRecord = {
   id: string;
@@ -11,6 +14,7 @@ export type MemoRecord = {
   subject: string;
   instructions: string | null;
   content: string;
+  status: MemoStatus;
   memoDate: string;
   companyId: string | null;
   createdAt: string;
@@ -22,6 +26,7 @@ const MEMO_COLUMNS = {
   subject: memos.subject,
   instructions: memos.instructions,
   content: memos.content,
+  status: memos.status,
   memoDate: memos.memoDate,
   companyId: memos.companyId,
   createdAt: memos.createdAt,
@@ -125,6 +130,68 @@ export async function updateMemoAction(
   }
 
   return { success: true, memo: updated };
+}
+
+const MEMO_STATUS_LABELS: Record<MemoStatus, string> = {
+  terkirim: "Terkirim",
+  dibaca: "Dibaca",
+  selesai: "Selesai",
+};
+
+export type UpdateMemoStatusResult =
+  | { success: true }
+  | { success: false; error: string };
+
+/**
+ * Server Action untuk mengubah status memo (terkirim → dibaca → selesai).
+ * Memicu notifikasi in-app `memo_status` HANYA bila status benar-benar berubah,
+ * mengikuti pola updateInvoiceStatusAction. Kegagalan notifikasi tidak
+ * memengaruhi hasil pembaruan status.
+ */
+export async function updateMemoStatusAction(
+  memoId: string,
+  newStatus: MemoStatus
+): Promise<UpdateMemoStatusResult> {
+  const user = await requireSessionUser();
+
+  const [memo] = await db
+    .select({
+      id: memos.id,
+      subject: memos.subject,
+      status: memos.status,
+      userId: memos.userId,
+    })
+    .from(memos)
+    .where(eq(memos.id, memoId))
+    .limit(1);
+
+  if (!memo) {
+    return { success: false, error: "Memo tidak ditemukan." };
+  }
+
+  // Tidak ada perubahan → sukses tanpa notifikasi.
+  if (memo.status === newStatus) {
+    return { success: true };
+  }
+
+  try {
+    await db
+      .update(memos)
+      .set({ status: newStatus })
+      .where(eq(memos.id, memoId));
+  } catch {
+    return { success: false, error: "Gagal memperbarui status memo." };
+  }
+
+  await createNotification({
+    userId: memo.userId ?? user.id,
+    type: "memo_status",
+    title: `Memo "${memo.subject}" → ${MEMO_STATUS_LABELS[newStatus]}`,
+    docType: "memo",
+    docId: memo.id,
+  });
+
+  return { success: true };
 }
 
 /** Server Action untuk menghapus memo disposisi. */

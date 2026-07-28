@@ -113,6 +113,7 @@ export async function listDocumentsAction(
         number: memos.subject,
         partyName: memos.recipientName,
         date: memos.memoDate,
+        status: memos.status,
       })
       .from(memos)
       .where(
@@ -132,7 +133,7 @@ export async function listDocumentsAction(
         number: row.number,
         partyName: row.partyName,
         date: row.date,
-        status: "draft",
+        status: row.status,
       }))
     );
   }
@@ -241,7 +242,7 @@ export async function getDocumentAction(id: string): Promise<DocumentDetail | nu
       number: memo.subject,
       partyName: memo.recipientName,
       date: memo.memoDate,
-      status: "draft",
+      status: memo.status,
       content: memo.content,
       instructions: memo.instructions ?? undefined,
     };

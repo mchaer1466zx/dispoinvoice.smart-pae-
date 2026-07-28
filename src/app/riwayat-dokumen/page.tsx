@@ -29,6 +29,7 @@ const STATUS_VARIANTS: Record<string, "secondary" | "success" | "outline"> = {
   draft: "outline",
   terkirim: "secondary",
   dikirim: "secondary",
+  dibaca: "secondary",
   lunas: "success",
   selesai: "success",
 };
