@@ -25,11 +25,12 @@ export type PoDetail = {
   notes: string;
 };
 
+// Placeholder sementara sebelum nomor urut asli diambil dari server
+// (generatePurchaseOrderNumberAction). Format mengikuti PRD: PO/[TAHUN]/[URUT].
 function generatePoNumber() {
   const today = new Date();
   const yyyy = today.getFullYear();
-  const mm = String(today.getMonth() + 1).padStart(2, "0");
-  return `PO-${yyyy}${mm}-0001`;
+  return `PO/${yyyy}/001`;
 }
 
 export function createDefaultPoDetail(): PoDetail {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   PoDetailForm,
   createDefaultPoDetail,
@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/card";
 import type { SupplierRecord } from "@/app/actions/suppliers";
 import { useCompany } from "@/lib/company-store";
+import { generatePurchaseOrderNumberAction } from "@/app/actions/numbering";
 
 export default function PurchaseOrderPage() {
   const [poDetail, setPoDetail] = useState(createDefaultPoDetail);
@@ -31,6 +32,23 @@ export default function PurchaseOrderPage() {
     null
   );
   const { activeCompany } = useCompany();
+
+  // Prefill nomor PO urut asli dari server (menggantikan placeholder).
+  useEffect(() => {
+    let active = true;
+    generatePurchaseOrderNumberAction()
+      .then((poNumber) => {
+        if (active) {
+          setPoDetail((prev) => ({ ...prev, poNumber }));
+        }
+      })
+      .catch(() => {
+        // Pakai placeholder bila gagal mengambil nomor dari server.
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
 
   return (
     <div className="flex flex-1 justify-center bg-zinc-50 px-4 py-10 dark:bg-black sm:px-8">
