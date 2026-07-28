@@ -235,9 +235,9 @@ export async function requestPasswordResetAction(
 
   const resend = new Resend(apiKey);
   const { error } = await resend.emails.send({
-    from: process.env.INVOICE_EMAIL_FROM ?? "DispoInvoice <invoice@dispoinvoice.app>",
+    from: process.env.INVOICE_EMAIL_FROM ?? "PT Karya Sang Prabu <no-reply@karyasangprabu.co.id>",
     to: normalizedEmail,
-    subject: "Atur ulang kata sandi DispoInvoice",
+    subject: "Atur ulang kata sandi Sistem Pengadaan PT KSP",
     text: `Halo ${user.name}, klik tautan berikut untuk mengatur ulang kata sandi Anda (berlaku 1 jam): ${resetUrl}`,
   });
 

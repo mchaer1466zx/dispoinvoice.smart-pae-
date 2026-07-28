@@ -16,15 +16,15 @@ export type CompanyProfile = {
   logoUrl: string | null;
 };
 
-/** Logo resmi perusahaan, disimpan di public/logo-pae.jpg. */
-export const COMPANY_LOGO_URL = "/logo-pae.jpg";
+/** Logo perusahaan; diisi dari Profil Perusahaan. */
+export const COMPANY_LOGO_URL = "";
 
 export const MOCK_COMPANY: CompanyProfile = {
-  name: "PT Prima Andalas Energi",
-  address: "Jl. Sudirman Kav. 25, Jakarta Pusat, Indonesia",
-  email: "info@primaandalasenergi.co.id",
-  phone: "021-2233-4567",
-  logoInitials: "PAE",
+  name: "PT KARYA SANG PRABU",
+  address: "Jl. Pertanian Raya No. 64, Lebak Bulus, Cilandak, Jakarta Selatan 12440",
+  email: "info@karyasangprabu.co.id",
+  phone: "021 29862350",
+  logoInitials: "KSP",
   logoUrl: COMPANY_LOGO_URL,
 };
 

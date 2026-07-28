@@ -77,7 +77,7 @@ export async function sendMemoEmailAction(
 
   const resend = new Resend(apiKey);
   const { error } = await resend.emails.send({
-    from: process.env.INVOICE_EMAIL_FROM ?? "DispoInvoice <invoice@dispoinvoice.app>",
+    from: process.env.INVOICE_EMAIL_FROM ?? "PT Karya Sang Prabu <no-reply@karyasangprabu.co.id>",
     to: input.recipientEmail,
     subject: `Memo Disposisi: ${subject}`,
     text: `Berikut memo disposisi "${subject}" terlampir dalam format PDF.`,

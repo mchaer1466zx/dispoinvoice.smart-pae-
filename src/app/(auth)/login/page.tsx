@@ -95,7 +95,7 @@ export default function LoginPage() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Masuk ke DispoInvoice</CardTitle>
+        <CardTitle>Masuk ke Sistem Pengadaan PT KSP</CardTitle>
         <CardDescription>
           Masuk untuk membuat dan mengelola invoice, PO, dan memo perusahaan.
         </CardDescription>

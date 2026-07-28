@@ -80,7 +80,7 @@ export async function sendInvoiceEmailAction(
 
   const resend = new Resend(apiKey);
   const { error } = await resend.emails.send({
-    from: process.env.INVOICE_EMAIL_FROM ?? "DispoInvoice <invoice@dispoinvoice.app>",
+    from: process.env.INVOICE_EMAIL_FROM ?? "PT Karya Sang Prabu <no-reply@karyasangprabu.co.id>",
     to: input.recipientEmail,
     subject: `Invoice ${invoiceNumber}`,
     text: `Berikut invoice ${invoiceNumber} terlampir dalam format PDF.`,
