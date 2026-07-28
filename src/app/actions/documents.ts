@@ -9,11 +9,13 @@ import {
   invoices,
   memos,
   poItems,
+  prItems,
   purchaseOrders,
+  purchaseRequests,
   suppliers,
 } from "@/db/schema";
 
-export type DocumentType = "invoice" | "po" | "memo";
+export type DocumentType = "invoice" | "po" | "memo" | "pr";
 
 export type DocumentSummary = {
   id: string;
@@ -138,6 +140,36 @@ export async function listDocumentsAction(
     );
   }
 
+  if (!params.type || params.type === "pr") {
+    const rows = await db
+      .select({
+        id: purchaseRequests.id,
+        number: purchaseRequests.prNumber,
+        partyName: purchaseRequests.department,
+        date: purchaseRequests.needDate,
+        createdAt: purchaseRequests.createdAt,
+        status: purchaseRequests.status,
+      })
+      .from(purchaseRequests)
+      .where(
+        query
+          ? like(purchaseRequests.prNumber, `%${query}%`)
+          : undefined
+      )
+      .orderBy(desc(purchaseRequests.createdAt));
+
+    results.push(
+      ...rows.map((row) => ({
+        id: row.id,
+        type: "pr" as const,
+        number: row.number,
+        partyName: row.partyName ?? "-",
+        date: row.date ?? row.createdAt.slice(0, 10),
+        status: row.status,
+      }))
+    );
+  }
+
   return results.sort((a, b) => (a.date < b.date ? 1 : -1));
 }
 
@@ -251,6 +283,36 @@ export async function getDocumentAction(id: string): Promise<DocumentDetail | nu
       status: memo.status,
       content: memo.content,
       instructions: memo.instructions ?? undefined,
+    };
+  }
+
+  const [pr] = await db
+    .select()
+    .from(purchaseRequests)
+    .where(eq(purchaseRequests.id, id))
+    .limit(1);
+
+  if (pr) {
+    const items = await db
+      .select()
+      .from(prItems)
+      .where(eq(prItems.prId, id));
+
+    return {
+      id: pr.id,
+      type: "pr",
+      number: pr.prNumber,
+      partyName: pr.department ?? "-",
+      date: pr.needDate ?? pr.createdAt.slice(0, 10),
+      status: pr.status,
+      items: items.map((item) => ({
+        description: item.spec
+          ? `${item.description} (${item.spec})`
+          : item.description,
+        quantity: item.quantity,
+        price: item.estPrice,
+      })),
+      notes: pr.notes ?? undefined,
     };
   }
 

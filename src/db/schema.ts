@@ -96,6 +96,46 @@ export const invoiceItems = sqliteTable("invoice_items", {
   price: real("price").notNull(),
 });
 
+/** Purchase Request: permintaan pembelian internal dari departemen ke Procurement. */
+export const purchaseRequests = sqliteTable(
+  "purchase_requests",
+  {
+    id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),
+    userId: text("user_id"),
+    companyId: text("company_id").references(() => companies.id, {
+      onDelete: "set null",
+    }),
+    prNumber: text("pr_number").notNull(),
+    status: text("status", {
+      enum: ["draft", "menunggu_approval", "disetujui", "ditolak", "dibatalkan"],
+    })
+      .notNull()
+      .default("draft"),
+    department: text("department"),
+    needDate: text("need_date"),
+    notes: text("notes"),
+    parentId: text("parent_id"),
+    createdAt: text("created_at")
+      .notNull()
+      .default(sql`(current_timestamp)`),
+  },
+  (table) => [
+    index("purchase_requests_user_id_idx").on(table.userId),
+    index("purchase_requests_status_idx").on(table.status),
+  ]
+);
+
+export const prItems = sqliteTable("pr_items", {
+  id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),
+  prId: text("pr_id")
+    .notNull()
+    .references(() => purchaseRequests.id, { onDelete: "cascade" }),
+  description: text("description").notNull(),
+  spec: text("spec"),
+  quantity: integer("quantity").notNull(),
+  estPrice: real("est_price").notNull(),
+});
+
 export const suppliers = sqliteTable("suppliers", {
   id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),
   name: text("name").notNull(),
@@ -250,6 +290,7 @@ export const notifications = sqliteTable(
         "invoice_status",
         "po_status",
         "memo_status",
+        "pr_status",
         "doc_shared",
         "invoice_due_soon",
         "invoice_overdue",
@@ -257,7 +298,7 @@ export const notifications = sqliteTable(
     }).notNull(),
     title: text("title").notNull(),
     body: text("body"),
-    docType: text("doc_type", { enum: ["invoice", "po", "memo"] }),
+    docType: text("doc_type", { enum: ["invoice", "po", "memo", "pr"] }),
     docId: text("doc_id"),
     isRead: integer("is_read", { mode: "boolean" }).notNull().default(false),
     dedupeKey: text("dedupe_key"),

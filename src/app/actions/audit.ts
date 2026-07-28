@@ -2,11 +2,18 @@
 
 import { and, desc, eq } from "drizzle-orm";
 import { db } from "@/db";
-import { auditLogs, invoices, memos, purchaseOrders, users } from "@/db/schema";
+import {
+  auditLogs,
+  invoices,
+  memos,
+  purchaseOrders,
+  purchaseRequests,
+  users,
+} from "@/db/schema";
 import { requireSessionUser } from "@/app/actions/auth";
 import { recordAudit } from "@/lib/audit";
 
-export type DocKind = "invoice" | "po" | "memo";
+export type DocKind = "invoice" | "po" | "memo" | "pr";
 
 export type CancelDocumentResult =
   | { success: true }
@@ -43,6 +50,13 @@ export async function cancelDocumentAction(
       .where(eq(purchaseOrders.id, id))
       .limit(1);
     currentStatus = row?.status;
+  } else if (kind === "pr") {
+    const [row] = await db
+      .select({ status: purchaseRequests.status })
+      .from(purchaseRequests)
+      .where(eq(purchaseRequests.id, id))
+      .limit(1);
+    currentStatus = row?.status;
   } else {
     const [row] = await db
       .select({ status: memos.status })
@@ -70,6 +84,11 @@ export async function cancelDocumentAction(
         .update(purchaseOrders)
         .set({ status: "dibatalkan" })
         .where(eq(purchaseOrders.id, id));
+    } else if (kind === "pr") {
+      await db
+        .update(purchaseRequests)
+        .set({ status: "dibatalkan" })
+        .where(eq(purchaseRequests.id, id));
     } else {
       await db.update(memos).set({ status: "dibatalkan" }).where(eq(memos.id, id));
     }

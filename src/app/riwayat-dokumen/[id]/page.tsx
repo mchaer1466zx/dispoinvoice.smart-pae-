@@ -20,6 +20,7 @@ import { PurchaseOrderStatusControl } from "@/components/po/po-status-control";
 import { DuplicatePurchaseOrderButton } from "@/components/po/duplicate-po-button";
 import { MemoStatusControl } from "@/components/memo/memo-status-control";
 import { DuplicateMemoButton } from "@/components/memo/duplicate-memo-button";
+import { PurchaseRequestStatusControl } from "@/components/pr/pr-status-control";
 import { DOCUMENT_TYPE_LABELS } from "@/lib/mock-data";
 import {
   getDocumentAction,
@@ -28,6 +29,7 @@ import {
 import type { InvoiceStatus } from "@/app/actions/invoices";
 import type { PoStatus } from "@/app/actions/purchase-orders";
 import type { MemoStatus } from "@/app/actions/memos";
+import type { PrStatus } from "@/app/actions/purchase-requests";
 import { CancelDocumentButton } from "@/components/cancel-document-button";
 import { DocumentAuditPanel } from "@/components/document-audit-panel";
 import { DocumentAttachments } from "@/components/document-attachments";
@@ -42,8 +44,11 @@ const STATUS_VARIANTS: Record<
   terkirim: "secondary",
   dikirim: "secondary",
   dibaca: "secondary",
+  menunggu_approval: "secondary",
   lunas: "success",
   selesai: "success",
+  disetujui: "success",
+  ditolak: "destructive",
   dibatalkan: "destructive",
 };
 
@@ -51,6 +56,7 @@ const PARTY_LABELS = {
   invoice: "Ditagih Kepada",
   po: "Kepada Pemasok",
   memo: "Kepada",
+  pr: "Departemen Peminta",
 } as const;
 
 function PageShell({ children }: { children: React.ReactNode }) {
@@ -210,6 +216,21 @@ export default function DocumentDetailPage() {
               memoId={doc.id}
               currentStatus={doc.status}
               onChanged={(status: MemoStatus) => {
+                setDoc((prev) => (prev ? { ...prev, status } : prev));
+                setAuditReloadToken((token) => token + 1);
+              }}
+            />
+          </CardContent>
+        </Card>
+      ) : null}
+
+      {doc.type === "pr" && !isCancelled ? (
+        <Card className="print:hidden">
+          <CardContent className="pt-6">
+            <PurchaseRequestStatusControl
+              prId={doc.id}
+              currentStatus={doc.status}
+              onChanged={(status: PrStatus) => {
                 setDoc((prev) => (prev ? { ...prev, status } : prev));
                 setAuditReloadToken((token) => token + 1);
               }}

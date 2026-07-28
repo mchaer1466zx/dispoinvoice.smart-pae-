@@ -2,7 +2,7 @@
 
 import { like } from "drizzle-orm";
 import { db } from "@/db";
-import { invoices, purchaseOrders } from "@/db/schema";
+import { invoices, purchaseOrders, purchaseRequests } from "@/db/schema";
 
 /** Cari nomor urut berikutnya dari daftar nomor yang berbagi prefix sama. */
 function nextSequence(numbers: string[], prefix: string): number {
@@ -54,6 +54,27 @@ export async function generatePurchaseOrderNumberAction(): Promise<string> {
 
   const seq = nextSequence(
     rows.map((row) => row.poNumber),
+    prefix
+  );
+  return `${prefix}${String(seq).padStart(3, "0")}`;
+}
+
+/**
+ * Server Action untuk menghasilkan nomor Purchase Request unik berikutnya dengan
+ * format PR/[TAHUN]/[URUT] (urut per tahun berjalan).
+ */
+export async function generatePurchaseRequestNumberAction(): Promise<string> {
+  const now = new Date();
+  const year = now.getFullYear();
+  const prefix = `PR/${year}/`;
+
+  const rows = await db
+    .select({ prNumber: purchaseRequests.prNumber })
+    .from(purchaseRequests)
+    .where(like(purchaseRequests.prNumber, `${prefix}%`));
+
+  const seq = nextSequence(
+    rows.map((row) => row.prNumber),
     prefix
   );
   return `${prefix}${String(seq).padStart(3, "0")}`;
