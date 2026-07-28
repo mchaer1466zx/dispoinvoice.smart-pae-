@@ -1,132 +1,80 @@
-"use client";
+/* eslint-disable @next/next/no-img-element */
+import Link from "next/link";
+import { ArrowRight, Building2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { BRAND, BRAND_COLORS as C } from "@/lib/brand";
 
-import { useEffect, useState } from "react";
-import {
-  BillingInfoForm,
-  createDefaultBillingInfo,
-} from "@/components/invoice/billing-info-form";
-import { CustomerPicker } from "@/components/invoice/customer-picker";
-import {
-  ItemListForm,
-  createDefaultItems,
-} from "@/components/invoice/item-list-form";
-import { CompanyLogoUploadHint } from "@/components/invoice/company-logo-upload-hint";
-import { InvoicePreview } from "@/components/invoice/invoice-preview";
-import { InvoicePreviewActions } from "@/components/invoice/invoice-preview-actions";
-import { SaveInvoiceButton } from "@/components/invoice/save-invoice-button";
-import { ShareInvoiceDialog } from "@/components/invoice/share-invoice-dialog";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import type { Customer } from "@/lib/mock-data";
-import { useCompany } from "@/lib/company-store";
-import { generateInvoiceNumberAction } from "@/app/actions/numbering";
-
-export default function BuatInvoicePage() {
-  const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(
-    null
-  );
-  const [billingInfo, setBillingInfo] = useState(createDefaultBillingInfo);
-  const [items, setItems] = useState(createDefaultItems);
-  // Id invoice yang tersimpan; jadi acuan tombol "Bagikan". Direset ke null
-  // setiap kali isi invoice diubah, supaya yang dibagikan selalu versi tersimpan.
-  const [savedInvoiceId, setSavedInvoiceId] = useState<string | null>(null);
-  const { activeCompany } = useCompany();
-
-  // Prefill nomor invoice urut asli dari server (menggantikan placeholder).
-  // setState dipanggil di dalam callback promise agar sesuai aturan efek.
-  useEffect(() => {
-    let active = true;
-    generateInvoiceNumberAction()
-      .then((invoiceNumber) => {
-        if (active) {
-          setBillingInfo((prev) => ({ ...prev, invoiceNumber }));
-        }
-      })
-      .catch(() => {
-        // Pakai placeholder bila gagal mengambil nomor dari server.
-      });
-    return () => {
-      active = false;
-    };
-  }, []);
-
+/**
+ * Landing page publik: logo + nama PT KSP + tagline + tombol "Masuk ke Sistem".
+ * Halaman ini publik (lihat proxy.ts). Pengguna yang sudah login diarahkan ke
+ * /dashboard oleh alur login.
+ */
+export default function LandingPage() {
   return (
-    <div className="flex flex-1 justify-center bg-zinc-50 px-4 py-10 dark:bg-black sm:px-8">
-      <main className="flex w-full max-w-4xl flex-col gap-6">
-        <div className="flex items-start justify-between gap-4">
-          <div className="flex flex-col gap-1">
-            <h1 className="text-2xl font-semibold tracking-tight">
-              Buat Invoice
-            </h1>
-            <p className="text-sm text-muted-foreground">
-              Isi detail invoice, lalu pratinjau dan cetak dalam satu halaman.
-              {selectedCustomer ? ` Ditagih kepada ${selectedCustomer.name}.` : ""}
-            </p>
-          </div>
-          <div className="flex gap-2">
-            <ShareInvoiceDialog
-              invoiceNumber={billingInfo.invoiceNumber}
-              invoiceId={savedInvoiceId}
-            />
-            <SaveInvoiceButton
-              billingInfo={billingInfo}
-              customer={selectedCustomer}
-              items={items}
-              companyId={activeCompany?.id ?? null}
-              onSaved={setSavedInvoiceId}
-            />
-          </div>
-        </div>
+    <div
+      className="flex flex-1 flex-col items-center justify-center px-6 py-16 text-center"
+      style={{ background: C.green, color: C.white }}
+    >
+      <img
+        src={BRAND.logoPath}
+        alt={`Logo ${BRAND.name}`}
+        width={150}
+        height={150}
+        className="h-36 w-36 object-contain sm:h-40 sm:w-40"
+      />
+      <h1
+        className="mt-6 text-3xl font-extrabold uppercase sm:text-5xl"
+        style={{ letterSpacing: "0.06em" }}
+      >
+        {BRAND.name}
+      </h1>
+      <p
+        className="mt-3 text-sm font-semibold uppercase sm:text-lg"
+        style={{ color: C.gold, letterSpacing: "0.24em" }}
+      >
+        {BRAND.tagline}
+      </p>
 
-        <BillingInfoForm
-          value={billingInfo}
-          onChange={(next) => {
-            setBillingInfo(next);
-            setSavedInvoiceId(null);
-          }}
-        />
+      <div className="relative mx-auto mt-6 w-40">
+        <div style={{ height: 3, background: C.gold }} />
+        <span
+          className="absolute left-1/2 -top-3 -translate-x-1/2 px-2 text-xl"
+          style={{ color: C.red, background: C.green }}
+        >
+          ∞
+        </span>
+      </div>
 
-        <CustomerPicker
-          selected={selectedCustomer}
-          onSelectedChange={(next) => {
-            setSelectedCustomer(next);
-            setSavedInvoiceId(null);
-          }}
-        />
+      <p className="mt-6 max-w-md text-sm text-white/80 sm:text-base">
+        {BRAND.appName} — kelola Purchase Request, Purchase Order, invoice, dan
+        memo dalam satu sistem yang rapi dan terlacak.
+      </p>
 
-        <ItemListForm
-          items={items}
-          onChange={(next) => {
-            setItems(next);
-            setSavedInvoiceId(null);
-          }}
-        />
+      <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+        <Button
+          size="lg"
+          asChild
+          style={{ background: C.gold, color: C.black }}
+        >
+          <Link href="/login">
+            Masuk ke Sistem <ArrowRight />
+          </Link>
+        </Button>
+        <Button
+          size="lg"
+          variant="outline"
+          asChild
+          className="border-white/40 bg-transparent text-white hover:bg-white/10 hover:text-white"
+        >
+          <Link href="/profil-perusahaan">
+            <Building2 /> Profil Perusahaan
+          </Link>
+        </Button>
+      </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Pratinjau</CardTitle>
-            <CardDescription>
-              Tampilan akhir invoice, lengkap dengan logo perusahaan.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            {activeCompany?.logoUrl ? null : <CompanyLogoUploadHint />}
-            <InvoicePreviewActions filename={`${billingInfo.invoiceNumber}.pdf`}>
-              <InvoicePreview
-                billingInfo={billingInfo}
-                customer={selectedCustomer}
-                items={items}
-                company={activeCompany}
-              />
-            </InvoicePreviewActions>
-          </CardContent>
-        </Card>
-      </main>
+      <p className="mt-12 text-xs text-white/60">
+        © 2026 {BRAND.name} · {BRAND.appName}
+      </p>
     </div>
   );
 }

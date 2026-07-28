@@ -24,7 +24,7 @@ export function DuplicatePurchaseOrderButton({ poId }: { poId: string }) {
       toast.success("Purchase order diduplikasi", {
         description: "Salinan baru berstatus Draft telah dibuat.",
       });
-      router.push(`/riwayat-dokumen/${result.purchaseOrderId}`);
+      router.push(`/riwayat/${result.purchaseOrderId}`);
     } else {
       toast.error("Gagal menduplikasi", { description: result.error });
     }

@@ -7,9 +7,11 @@ import {
   Archive,
   ClipboardList,
   FileText,
+  LayoutDashboard,
   LogOut,
   Receipt,
   ScrollText,
+  Settings,
   Users,
   UserRound,
 } from "lucide-react";
@@ -63,17 +65,22 @@ export function UserMenu() {
         </div>
         <div className="mt-1 flex flex-col border-t pt-1.5">
           <Button variant="ghost" size="sm" className="w-full justify-start" asChild>
-            <Link href="/">
+            <Link href="/dashboard">
+              <LayoutDashboard /> Dashboard
+            </Link>
+          </Button>
+          <Button variant="ghost" size="sm" className="w-full justify-start" asChild>
+            <Link href="/buat-invoice">
               <FileText /> Buat Invoice
             </Link>
           </Button>
           <Button variant="ghost" size="sm" className="w-full justify-start" asChild>
-            <Link href="/purchase-request">
+            <Link href="/buat-pr">
               <ClipboardList /> Buat Purchase Request
             </Link>
           </Button>
           <Button variant="ghost" size="sm" className="w-full justify-start" asChild>
-            <Link href="/purchase-order">
+            <Link href="/buat-po">
               <Receipt /> Buat Purchase Order
             </Link>
           </Button>
@@ -83,7 +90,7 @@ export function UserMenu() {
             </Link>
           </Button>
           <Button variant="ghost" size="sm" className="w-full justify-start" asChild>
-            <Link href="/riwayat-dokumen">
+            <Link href="/riwayat">
               <Archive /> Riwayat Dokumen
             </Link>
           </Button>
@@ -95,6 +102,11 @@ export function UserMenu() {
           <Button variant="ghost" size="sm" className="w-full justify-start" asChild>
             <Link href="/profil">
               <UserRound /> Profil
+            </Link>
+          </Button>
+          <Button variant="ghost" size="sm" className="w-full justify-start" asChild>
+            <Link href="/pengaturan">
+              <Settings /> Pengaturan
             </Link>
           </Button>
           <Button

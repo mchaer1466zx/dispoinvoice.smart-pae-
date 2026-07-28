@@ -70,7 +70,7 @@ export default function PelangganPage() {
         <div className="flex items-start justify-between gap-4">
           <div className="flex flex-col gap-1">
             <Button variant="ghost" size="sm" className="w-fit" asChild>
-              <Link href="/">
+              <Link href="/dashboard">
                 <ArrowLeft /> Kembali ke Buat Invoice
               </Link>
             </Button>

@@ -33,7 +33,8 @@ export type PoDetail = {
 function generatePoNumber() {
   const today = new Date();
   const yyyy = today.getFullYear();
-  return `PO/${yyyy}/001`;
+  const mm = String(today.getMonth() + 1).padStart(2, "0");
+  return `PO/KSP/${yyyy}/${mm}/001`;
 }
 
 export function createDefaultPoDetail(): PoDetail {

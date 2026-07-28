@@ -2,7 +2,10 @@
 
 import type { PrDetail } from "@/components/pr/pr-detail-form";
 import { type PrItem } from "@/components/pr/pr-item-list-form";
-import { CbsDocument, type CbsItem } from "@/components/procurement/cbs-document";
+import {
+  CbsDocument,
+  buildCbsGroups,
+} from "@/components/procurement/cbs-document";
 import type { CompanyRecord } from "@/app/actions/companies";
 
 export function PrPreview({
@@ -14,16 +17,19 @@ export function PrPreview({
   items: PrItem[];
   company: CompanyRecord | null;
 }) {
-  const cbsItems: CbsItem[] = items.map((item, index) => ({
-    no: String(index + 1),
-    description: item.description || "-",
-    spec: item.spec || undefined,
-    qty: item.quantity,
-    unitPrice: item.estPrice,
-    amount: item.quantity * item.estPrice,
-  }));
+  const groups = buildCbsGroups(
+    items.map((item) => ({
+      group: item.group,
+      description: item.description || "-",
+      spec: item.spec || undefined,
+      qty: item.quantity,
+      unit: item.unit || undefined,
+      unitPrice: item.estPrice,
+      amount: item.quantity * item.estPrice,
+    }))
+  );
 
-  const subtotal = cbsItems.reduce((sum, item) => sum + item.amount, 0);
+  const subtotal = groups.reduce((sum, g) => sum + g.subtotal, 0);
 
   return (
     <div className="mx-auto w-full max-w-[210mm] overflow-x-auto rounded-lg border border-gray-200 bg-white">
@@ -36,7 +42,7 @@ export function PrPreview({
         partyName={prDetail.department}
         dateLabel="Tanggal Kebutuhan"
         date={prDetail.needDate}
-        items={cbsItems}
+        groups={groups}
         subtotal={subtotal}
         grandTotal={subtotal}
         notes={prDetail.notes}

@@ -6,6 +6,7 @@ import { purchaseRequests, prItems } from "@/db/schema";
 import { requireSessionUser } from "@/app/actions/auth";
 import { createNotification } from "@/lib/notify";
 import { recordAudit } from "@/lib/audit";
+import { validatePurchaseRequestInput } from "@/lib/pr-validation";
 
 export type PrStatus =
   | "draft"
@@ -23,9 +24,11 @@ export const PR_STATUS_LABELS: Record<PrStatus, string> = {
 };
 
 export type PurchaseRequestItemInput = {
+  group: string;
   description: string;
   spec: string;
   quantity: number;
+  unit: string;
   estPrice: number;
 };
 
@@ -49,11 +52,9 @@ export async function createPurchaseRequestAction(
 ): Promise<CreatePurchaseRequestResult> {
   const user = await requireSessionUser();
 
-  if (!input.prNumber.trim()) {
-    return { success: false, error: "Nomor PR wajib diisi." };
-  }
-  if (!input.items.some((item) => item.description.trim())) {
-    return { success: false, error: "Minimal satu item dengan deskripsi wajib diisi." };
+  const validationError = validatePurchaseRequestInput(input);
+  if (validationError) {
+    return { success: false, error: validationError };
   }
 
   try {
@@ -74,9 +75,11 @@ export async function createPurchaseRequestAction(
       await tx.insert(prItems).values(
         input.items.map((item) => ({
           prId: pr.id,
+          groupLabel: item.group || null,
           description: item.description,
           spec: item.spec || null,
           quantity: item.quantity,
+          unit: item.unit || null,
           estPrice: item.estPrice,
         }))
       );

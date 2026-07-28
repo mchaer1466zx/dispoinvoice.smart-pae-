@@ -11,8 +11,10 @@ import { generatePurchaseOrderNumberAction } from "@/app/actions/numbering";
 export type PoStatus = "draft" | "dikirim" | "selesai" | "dibatalkan";
 
 export type PurchaseOrderItemInput = {
+  group: string;
   description: string;
   quantity: number;
+  unit: string;
   price: number;
 };
 
@@ -30,8 +32,10 @@ export type PurchaseOrderInput = {
 
 export type PurchaseOrderItemRecord = {
   id: string;
+  group: string;
   description: string;
   quantity: number;
+  unit: string;
   price: number;
 };
 
@@ -75,10 +79,31 @@ const PO_COLUMNS = {
 
 const PO_ITEM_COLUMNS = {
   id: poItems.id,
+  groupLabel: poItems.groupLabel,
   description: poItems.description,
   quantity: poItems.quantity,
+  unit: poItems.unit,
   price: poItems.price,
 };
+
+/** Memetakan baris item DB (kolom groupLabel/unit nullable) ke PurchaseOrderItemRecord. */
+function toItemRecord(row: {
+  id: string;
+  groupLabel: string | null;
+  description: string;
+  quantity: number;
+  unit: string | null;
+  price: number;
+}): PurchaseOrderItemRecord {
+  return {
+    id: row.id,
+    group: row.groupLabel ?? "",
+    description: row.description,
+    quantity: row.quantity,
+    unit: row.unit ?? "",
+    price: row.price,
+  };
+}
 
 function validateInput(input: PurchaseOrderInput): string | null {
   if (!input.poNumber.trim()) {
@@ -116,7 +141,7 @@ export async function getPurchaseOrderAction(
     .from(poItems)
     .where(eq(poItems.poId, id));
 
-  return { ...po, items };
+  return { ...po, items: items.map(toItemRecord) };
 }
 
 /** Server Action untuk menyimpan purchase order baru beserta item-itemnya ke database. */
@@ -151,14 +176,16 @@ export async function createPurchaseOrderAction(
         .values(
           input.items.map((item) => ({
             poId: po.id,
+            groupLabel: item.group || null,
             description: item.description,
             quantity: item.quantity,
+            unit: item.unit || null,
             price: item.price,
           }))
         )
         .returning(PO_ITEM_COLUMNS);
 
-      return { ...po, items };
+      return { ...po, items: items.map(toItemRecord) };
     });
 
     await recordAudit({
@@ -211,14 +238,16 @@ export async function updatePurchaseOrderAction(
         .values(
           input.items.map((item) => ({
             poId: po.id,
+            groupLabel: item.group || null,
             description: item.description,
             quantity: item.quantity,
+            unit: item.unit || null,
             price: item.price,
           }))
         )
         .returning(PO_ITEM_COLUMNS);
 
-      return { ...po, items };
+      return { ...po, items: items.map(toItemRecord) };
     });
 
     if (!purchaseOrder) {
@@ -357,8 +386,10 @@ export async function duplicatePurchaseOrderAction(
         await tx.insert(poItems).values(
           items.map((item) => ({
             poId: created.id,
+            groupLabel: item.groupLabel,
             description: item.description,
             quantity: item.quantity,
+            unit: item.unit,
             price: item.price,
           }))
         );

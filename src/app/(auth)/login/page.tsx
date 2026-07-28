@@ -82,7 +82,7 @@ export default function LoginPage() {
         description: `Selamat datang kembali, ${result.user.name}.`,
       });
       const next = searchParams.get("next");
-      router.push(next && next.startsWith("/") ? next : "/");
+      router.push(next && next.startsWith("/") ? next : "/dashboard");
       router.refresh();
     } catch {
       toast.error("Terjadi kesalahan", {

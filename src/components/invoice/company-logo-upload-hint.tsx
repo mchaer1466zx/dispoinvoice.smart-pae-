@@ -10,7 +10,7 @@ export function CompanyLogoUploadHint() {
         <span>Logo perusahaan belum diunggah. Lengkapi agar dokumen terlihat profesional.</span>
       </div>
       <Button type="button" variant="outline" size="sm" asChild>
-        <Link href="/profil-perusahaan">Unggah Logo</Link>
+        <Link href="/pengaturan">Unggah Logo</Link>
       </Button>
     </div>
   );

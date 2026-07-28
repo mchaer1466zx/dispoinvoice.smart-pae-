@@ -24,7 +24,7 @@ export function DuplicateMemoButton({ memoId }: { memoId: string }) {
       toast.success("Memo diduplikasi", {
         description: "Salinan baru telah dibuat.",
       });
-      router.push(`/riwayat-dokumen/${result.memoId}`);
+      router.push(`/riwayat/${result.memoId}`);
     } else {
       toast.error("Gagal menduplikasi", { description: result.error });
     }

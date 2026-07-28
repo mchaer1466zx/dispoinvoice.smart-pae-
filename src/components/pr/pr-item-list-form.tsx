@@ -17,14 +17,18 @@ import { formatCurrency } from "@/lib/format";
 
 export type PrItem = {
   id: string;
+  group: string;
   description: string;
   spec: string;
   quantity: number;
+  unit: string;
   estPrice: number;
 };
 
 export function createDefaultPrItems(): PrItem[] {
-  return [{ id: "pr-item-0", description: "", spec: "", quantity: 1, estPrice: 0 }];
+  return [
+    { id: "pr-item-0", group: "", description: "", spec: "", quantity: 1, unit: "", estPrice: 0 },
+  ];
 }
 
 export function calculatePrItemsTotal(items: PrItem[]) {
@@ -44,7 +48,11 @@ export function PrItemListForm({
   function addItem() {
     const id = `pr-item-${nextId}`;
     setNextId((n) => n + 1);
-    onChange([...items, { id, description: "", spec: "", quantity: 1, estPrice: 0 }]);
+    const lastGroup = items[items.length - 1]?.group ?? "";
+    onChange([
+      ...items,
+      { id, group: lastGroup, description: "", spec: "", quantity: 1, unit: "", estPrice: 0 },
+    ]);
   }
 
   function removeItem(id: string) {
@@ -78,6 +86,18 @@ export function PrItemListForm({
             key={item.id}
             className="grid grid-cols-12 items-end gap-2 border-b pb-4 last:border-b-0 last:pb-0"
           >
+            <div className="col-span-12 grid gap-1.5">
+              <Label htmlFor={`${idPrefix}-group-${item.id}`}>
+                Kelompok (opsional, untuk tabel bertingkat)
+              </Label>
+              <Input
+                id={`${idPrefix}-group-${item.id}`}
+                placeholder="Misal: Persiapan Pekerjaan / Pekerjaan Mesin"
+                value={item.group}
+                onChange={(e) => updateItem(item.id, "group", e.target.value)}
+              />
+            </div>
+
             <div className="col-span-12 grid gap-1.5 sm:col-span-4">
               <Label htmlFor={`${idPrefix}-desc-${item.id}`}>
                 Deskripsi {index === 0 ? "" : `#${index + 1}`}
@@ -93,26 +113,37 @@ export function PrItemListForm({
               />
             </div>
 
-            <div className="col-span-12 grid gap-1.5 sm:col-span-3">
+            <div className="col-span-12 grid gap-1.5 sm:col-span-2">
               <Label htmlFor={`${idPrefix}-spec-${item.id}`}>Spesifikasi</Label>
               <Input
                 id={`${idPrefix}-spec-${item.id}`}
-                placeholder="Merek/ukuran/detail"
+                placeholder="Merek/ukuran"
                 value={item.spec}
                 onChange={(e) => updateItem(item.id, "spec", e.target.value)}
               />
             </div>
 
-            <div className="col-span-4 grid gap-1.5 sm:col-span-2">
-              <Label htmlFor={`${idPrefix}-qty-${item.id}`}>Jumlah</Label>
+            <div className="col-span-3 grid gap-1.5 sm:col-span-1">
+              <Label htmlFor={`${idPrefix}-qty-${item.id}`}>Jml</Label>
               <Input
                 id={`${idPrefix}-qty-${item.id}`}
                 type="number"
                 min={0}
+                step="0.1"
                 value={item.quantity}
                 onChange={(e) =>
                   updateItem(item.id, "quantity", Number(e.target.value) || 0)
                 }
+              />
+            </div>
+
+            <div className="col-span-3 grid gap-1.5 sm:col-span-1">
+              <Label htmlFor={`${idPrefix}-unit-${item.id}`}>Sat</Label>
+              <Input
+                id={`${idPrefix}-unit-${item.id}`}
+                placeholder="unit"
+                value={item.unit}
+                onChange={(e) => updateItem(item.id, "unit", e.target.value)}
               />
             </div>
 

@@ -13,6 +13,7 @@ export const BRAND = {
   website: "www.karyasangprabu.co.id",
   appName: "Sistem Pengadaan Digital",
   emailFrom: "PT Karya Sang Prabu <no-reply@karyasangprabu.co.id>",
+  logoPath: "/logo-ksp.png",
 } as const;
 
 /** Palet warna resmi dari kop surat PT Karya Sang Prabu. */
@@ -26,5 +27,6 @@ export const BRAND_COLORS = {
   white: "#FFFFFF",
   black: "#000000",
   yellowBlock: "#FFF3B0",
+  groupBg: "#F5F5F5",
   watermark: "rgba(212, 175, 55, 0.08)",
 } as const;

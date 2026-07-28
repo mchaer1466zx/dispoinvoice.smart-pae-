@@ -24,7 +24,7 @@ export function DuplicateInvoiceButton({ invoiceId }: { invoiceId: string }) {
       toast.success("Invoice diduplikasi", {
         description: "Salinan baru berstatus Draft telah dibuat.",
       });
-      router.push(`/riwayat-dokumen/${result.invoiceId}`);
+      router.push(`/riwayat/${result.invoiceId}`);
     } else {
       toast.error("Gagal menduplikasi", { description: result.error });
     }

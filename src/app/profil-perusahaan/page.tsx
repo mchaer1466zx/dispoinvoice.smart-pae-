@@ -1,104 +1,115 @@
-"use client";
-
+/* eslint-disable @next/next/no-img-element */
+import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowLeft, Building2, Check, MapPin } from "lucide-react";
+import { Globe, Mail, MapPin, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { AddCompanyDialog } from "@/components/perusahaan/add-company-dialog";
-import { EditCompanyDialog } from "@/components/perusahaan/edit-company-dialog";
-import { DeleteCompanyDialog } from "@/components/perusahaan/delete-company-dialog";
-import { CompanyLogoUpload } from "@/components/perusahaan/company-logo-upload";
-import { useCompany } from "@/lib/company-store";
+import { BRAND, BRAND_COLORS as C } from "@/lib/brand";
 
+export const metadata: Metadata = {
+  title: "Profil Perusahaan",
+  description: `Profil resmi ${BRAND.name} — ${BRAND.appName}.`,
+};
+
+/**
+ * Halaman PROFIL PUBLIK PT Karya Sang Prabu (bukan halaman login, bukan
+ * manajemen). Menampilkan identitas resmi lengkap dengan palet warna & logo
+ * besar. Dapat diakses tanpa login (lihat daftar public path di proxy.ts).
+ */
 export default function ProfilPerusahaanPage() {
-  const { companies, activeCompany, isSwitching, setActiveCompanyId } = useCompany();
+  const contacts = [
+    { icon: MapPin, label: "Alamat", value: BRAND.address },
+    { icon: Phone, label: "Telepon", value: BRAND.phone },
+    { icon: Mail, label: "Email", value: BRAND.email },
+    { icon: Globe, label: "Website", value: BRAND.website },
+  ];
 
   return (
-    <div className="flex flex-1 justify-center bg-zinc-50 px-4 py-10 dark:bg-black sm:px-8">
-      <main className="flex w-full max-w-2xl flex-col gap-6">
-        <div className="flex items-start justify-between gap-4">
-          <div className="flex flex-col gap-1">
-            <Button variant="ghost" size="sm" className="w-fit" asChild>
-              <Link href="/">
-                <ArrowLeft /> Kembali ke Buat Invoice
-              </Link>
-            </Button>
-            <h1 className="text-2xl font-semibold tracking-tight">
-              Kelola Perusahaan
-            </h1>
-            <p className="text-sm text-muted-foreground">
-              Semua perusahaan yang dapat dipilih sebagai penerbit invoice, PO,
-              dan memo.
-            </p>
-          </div>
-          <AddCompanyDialog />
+    <div className="flex flex-1 flex-col bg-zinc-50 dark:bg-black">
+      {/* Kop hijau dengan logo besar & tagline emas */}
+      <header
+        className="px-6 py-12 text-center sm:px-8"
+        style={{ background: C.green, color: C.white }}
+      >
+        <img
+          src={BRAND.logoPath}
+          alt={`Logo ${BRAND.name}`}
+          width={140}
+          height={140}
+          className="mx-auto h-32 w-32 object-contain sm:h-36 sm:w-36"
+        />
+        <h1
+          className="mt-5 text-3xl font-extrabold uppercase tracking-wide sm:text-4xl"
+          style={{ letterSpacing: "0.08em" }}
+        >
+          {BRAND.name}
+        </h1>
+        <p
+          className="mt-2 text-sm font-semibold uppercase sm:text-base"
+          style={{ color: C.gold, letterSpacing: "0.22em" }}
+        >
+          {BRAND.tagline}
+        </p>
+        {/* garis hijau-emas dengan simpul */}
+        <div className="relative mx-auto mt-6 max-w-md">
+          <div style={{ height: 3, background: C.gold }} />
+          <span
+            className="absolute left-1/2 -top-3 -translate-x-1/2 px-2 text-lg"
+            style={{ color: C.red, background: C.green }}
+          >
+            ∞
+          </span>
         </div>
+      </header>
 
-        {companies.length === 0 ? (
-          <Card>
-            <CardContent className="flex flex-col items-center gap-2 py-10 text-center text-muted-foreground">
-              <Building2 className="size-8" />
-              <p className="text-sm">Belum ada perusahaan terdaftar.</p>
-              <p className="text-sm">
-                Tambahkan perusahaan pertama agar bisa dipakai di dokumen.
-              </p>
-            </CardContent>
-          </Card>
-        ) : (
-          companies.map((company) => {
-            const isActive = company.id === activeCompany?.id;
-            return (
-              <Card key={company.id}>
-                <CardHeader className="flex items-start justify-between gap-4">
-                  <div>
-                    <CardTitle className="flex items-center gap-2">
-                      {company.name}
-                      {isActive ? <Badge variant="success">Aktif</Badge> : null}
-                    </CardTitle>
-                    <CardDescription className="mt-1 flex flex-col gap-0.5">
-                      {company.address ? (
-                        <span className="flex items-center gap-1.5">
-                          <MapPin className="size-3.5 shrink-0" />
-                          {company.address}
-                        </span>
-                      ) : null}
-                    </CardDescription>
-                  </div>
-                  <div className="flex shrink-0 gap-2">
-                    <EditCompanyDialog company={company} />
-                    <DeleteCompanyDialog company={company} />
-                  </div>
-                </CardHeader>
-                <CardContent className="flex flex-col gap-4">
-                  <CompanyLogoUpload
-                    companyId={company.id}
-                    companyName={company.name}
-                    logoUrl={company.logoUrl}
-                  />
-                  {!isActive ? (
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      className="w-fit"
-                      disabled={isSwitching}
-                      onClick={() => setActiveCompanyId(company.id)}
-                    >
-                      <Check /> Jadikan Perusahaan Aktif
-                    </Button>
-                  ) : null}
-                </CardContent>
-              </Card>
-            );
-          })
-        )}
+      <main className="mx-auto w-full max-w-2xl px-4 py-10 sm:px-8">
+        <section
+          className="rounded-xl border bg-white p-6 shadow-sm dark:bg-zinc-900"
+          style={{ borderColor: C.gold }}
+        >
+          <h2
+            className="text-lg font-bold"
+            style={{ color: C.green }}
+          >
+            {BRAND.appName}
+          </h2>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Platform pengadaan digital resmi {BRAND.name} untuk pengelolaan
+            Purchase Request, Purchase Order, invoice, dan memo secara rapi,
+            terlacak, dan berstandar dokumen perusahaan.
+          </p>
+
+          <dl className="mt-6 flex flex-col gap-4">
+            {contacts.map(({ icon: Icon, label, value }) => (
+              <div key={label} className="flex items-start gap-3">
+                <span
+                  className="mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-lg"
+                  style={{ background: C.green, color: C.white }}
+                >
+                  <Icon className="size-4" />
+                </span>
+                <div>
+                  <dt className="text-xs uppercase tracking-wide text-muted-foreground">
+                    {label}
+                  </dt>
+                  <dd className="text-sm font-medium">{value}</dd>
+                </div>
+              </div>
+            ))}
+          </dl>
+
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Button asChild style={{ background: C.green, color: C.white }}>
+              <Link href="/login">Masuk ke Sistem</Link>
+            </Button>
+            <Button variant="outline" asChild>
+              <Link href="/">Kembali ke Beranda</Link>
+            </Button>
+          </div>
+        </section>
+
+        <p className="mt-6 text-center text-xs text-muted-foreground">
+          © 2026 {BRAND.name} · {BRAND.appName}
+        </p>
       </main>
     </div>
   );

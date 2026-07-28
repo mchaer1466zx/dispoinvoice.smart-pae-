@@ -23,7 +23,7 @@ import {
 function notificationHref(item: NotificationRecord): string | null {
   if (!item.docId) return null;
   // Semua jenis dokumen bisa dibuka lewat halaman detail riwayat.
-  return `/riwayat-dokumen/${item.docId}`;
+  return `/riwayat/${item.docId}`;
 }
 
 export function NotificationBell() {

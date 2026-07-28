@@ -6,7 +6,7 @@ import type { SupplierRecord } from "@/app/actions/suppliers";
 import { calculateInvoiceTotals } from "@/lib/invoice-totals";
 import {
   CbsDocument,
-  type CbsItem,
+  buildCbsGroups,
   type CbsTotalRow,
 } from "@/components/procurement/cbs-document";
 import type { CompanyRecord } from "@/app/actions/companies";
@@ -28,13 +28,16 @@ export function PoPreview({
   items: PoItem[];
   company: CompanyRecord | null;
 }) {
-  const cbsItems: CbsItem[] = items.map((item, index) => ({
-    no: String(index + 1),
-    description: item.description || "-",
-    qty: item.quantity,
-    unitPrice: item.price,
-    amount: item.quantity * item.price,
-  }));
+  const groups = buildCbsGroups(
+    items.map((item) => ({
+      group: item.group,
+      description: item.description || "-",
+      qty: item.quantity,
+      unit: item.unit || undefined,
+      unitPrice: item.price,
+      amount: item.quantity * item.price,
+    }))
+  );
 
   const totals = calculateInvoiceTotals(items, poDetail.tax, poDetail.discount);
 
@@ -61,7 +64,7 @@ export function PoPreview({
         partyLines={[supplier?.address ?? "", supplier?.contactInfo ?? ""]}
         dateLabel="Tanggal Pemesanan"
         date={poDetail.orderDate}
-        items={cbsItems}
+        groups={groups}
         subtotal={totals.subtotal}
         extraRows={extraRows}
         grandTotal={totals.total}

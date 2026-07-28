@@ -10,7 +10,7 @@ import { BRAND } from "@/lib/brand";
 export function AppHeader() {
   const { activeCompany } = useCompany();
   const name = activeCompany?.name ?? BRAND.name;
-  const logoUrl = activeCompany?.logoUrl ?? null;
+  const logoUrl = activeCompany?.logoUrl ?? BRAND.logoPath;
 
   return (
     <header className="border-b-2 border-primary bg-white">

@@ -55,8 +55,10 @@ export function SavePoButton({
       supplierId,
       companyId: company?.id ?? null,
       items: items.map((item) => ({
+        group: item.group,
         description: item.description,
         quantity: item.quantity,
+        unit: item.unit,
         price: item.price,
       })),
     });
@@ -66,7 +68,7 @@ export function SavePoButton({
       toast.success("Purchase order berhasil disimpan", {
         description: `${poDetail.poNumber} telah disimpan ke riwayat dokumen.`,
       });
-      router.push(`/purchase-order/${result.purchaseOrder.id}`);
+      router.push(`/riwayat/${result.purchaseOrder.id}`);
     } else {
       toast.error("Gagal menyimpan purchase order", {
         description: result.error,
