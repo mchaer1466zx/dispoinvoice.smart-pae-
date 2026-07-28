@@ -5,7 +5,9 @@ import { headers } from "next/headers";
 import { Resend } from "resend";
 import { db } from "@/db";
 import { invoices } from "@/db/schema";
+import { getSessionUserAction } from "@/app/actions/auth";
 import { generateInvoicePdf } from "@/lib/pdf/generate-invoice-pdf";
+import { createNotification } from "@/lib/notify";
 
 export type GetInvoiceShareLinkResult =
   | { success: true; url: string }
@@ -92,6 +94,21 @@ export async function sendInvoiceEmailAction(
 
   if (error) {
     return { success: false, error: "Gagal mengirim email." };
+  }
+
+  // Catat notifikasi in-app "dokumen dibagikan" untuk pengguna yang berbagi.
+  // Selama audit trail (created_by) belum mengisi pemilik dokumen, penerima
+  // notifikasi = pengguna sesi yang melakukan aksi berbagi (fallback per spec).
+  const sessionUser = await getSessionUserAction();
+  if (sessionUser) {
+    await createNotification({
+      userId: sessionUser.id,
+      type: "doc_shared",
+      title: `Invoice ${invoiceNumber} dibagikan`,
+      body: `Dikirim ke ${input.recipientEmail}`,
+      docType: "invoice",
+      docId: input.invoiceId,
+    });
   }
 
   return { success: true };
