@@ -10,6 +10,7 @@ import {
   createDefaultPrItems,
 } from "@/components/pr/pr-item-list-form";
 import { PrPreview } from "@/components/pr/pr-preview";
+import { PoPreviewActions } from "@/components/po/po-preview-actions";
 import { SavePrButton } from "@/components/pr/save-pr-button";
 import { CompanyLogoUploadHint } from "@/components/invoice/company-logo-upload-hint";
 import {
@@ -72,7 +73,9 @@ export default function PurchaseRequestPage() {
           </CardHeader>
           <CardContent>
             {activeCompany?.logoUrl ? null : <CompanyLogoUploadHint />}
-            <PrPreview prDetail={prDetail} items={items} company={activeCompany} />
+            <PoPreviewActions filename={`${prDetail.prNumber}.pdf`}>
+              <PrPreview prDetail={prDetail} items={items} company={activeCompany} />
+            </PoPreviewActions>
           </CardContent>
         </Card>
       </main>
