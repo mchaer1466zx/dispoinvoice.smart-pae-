@@ -18,6 +18,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { BRAND } from "@/lib/brand";
+import { isAdminAction } from "@/app/actions/auth";
 
 export const metadata: Metadata = {
   title: "Dashboard",
@@ -71,10 +72,14 @@ const LINKS = [
     title: "Pengaturan",
     description: "Master data perusahaan penerbit & logo.",
     icon: Settings,
+    adminOnly: true,
   },
 ];
 
-export default function DashboardPage() {
+export default async function DashboardPage() {
+  const isAdmin = await isAdminAction();
+  const links = LINKS.filter((link) => !link.adminOnly || isAdmin);
+
   return (
     <div className="flex flex-1 justify-center bg-zinc-50 px-4 py-10 dark:bg-black sm:px-8">
       <main className="flex w-full max-w-4xl flex-col gap-6">
@@ -87,7 +92,7 @@ export default function DashboardPage() {
         </div>
 
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {LINKS.map(({ href, title, description, icon: Icon }) => (
+          {links.map(({ href, title, description, icon: Icon }) => (
             <Link key={href} href={href} className="group">
               <Card className="h-full transition-colors group-hover:border-primary">
                 <CardHeader>

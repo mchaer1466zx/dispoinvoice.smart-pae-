@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/card";
 import type { SupplierRecord } from "@/app/actions/suppliers";
 import { useCompany } from "@/lib/company-store";
+import { useAuth } from "@/lib/auth-store";
 import { generatePurchaseOrderNumberAction } from "@/app/actions/numbering";
 
 export default function PurchaseOrderPage() {
@@ -35,11 +36,22 @@ export default function PurchaseOrderPage() {
     null
   );
   const { activeCompany } = useCompany();
+  const { user } = useAuth();
+  const appliedDefaultCompany = useRef(false);
 
-  // Prefill nomor PO urut asli dari server (menggantikan placeholder).
+  // Terapkan "Perusahaan Default" akun sekali saat sesi termuat.
+  useEffect(() => {
+    if (!appliedDefaultCompany.current && user?.defaultCompany) {
+      appliedDefaultCompany.current = true;
+      setPoDetail((prev) => ({ ...prev, companyId: user.defaultCompany }));
+    }
+  }, [user?.defaultCompany]);
+
+  // Prefill/segarkan nomor PO sesuai perusahaan penerbit terpilih (mount & saat
+  // companyId berubah → prefix nomor ikut berganti instan).
   useEffect(() => {
     let active = true;
-    generatePurchaseOrderNumberAction()
+    generatePurchaseOrderNumberAction(poDetail.companyId)
       .then((poNumber) => {
         if (active) {
           setPoDetail((prev) => ({ ...prev, poNumber }));
@@ -51,7 +63,7 @@ export default function PurchaseOrderPage() {
     return () => {
       active = false;
     };
-  }, []);
+  }, [poDetail.companyId]);
 
   return (
     <div className="flex flex-1 justify-center bg-zinc-50 px-4 py-10 dark:bg-black sm:px-8">
@@ -104,7 +116,6 @@ export default function PurchaseOrderPage() {
                 poDetail={poDetail}
                 supplier={selectedSupplier}
                 items={items}
-                company={activeCompany}
               />
             </PoPreviewActions>
           </CardContent>

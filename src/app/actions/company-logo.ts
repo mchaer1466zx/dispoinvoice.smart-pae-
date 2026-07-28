@@ -4,7 +4,7 @@ import { eq, sql } from "drizzle-orm";
 import { db } from "@/db";
 import { companies } from "@/db/schema";
 import { validateAndOptimizeLogo } from "@/lib/optimize-logo";
-import { requireSessionUser } from "@/app/actions/auth";
+import { requireAdmin } from "@/app/actions/auth";
 
 const MAX_LOGO_SIZE_BYTES = 2 * 1024 * 1024;
 const ALLOWED_LOGO_TYPES = ["image/png", "image/jpeg", "image/webp", "image/svg+xml"];
@@ -29,7 +29,7 @@ export async function uploadCompanyLogoAction(
   companyId: string,
   formData: FormData
 ): Promise<UploadCompanyLogoResult> {
-  await requireSessionUser();
+  await requireAdmin();
   const file = formData.get("logo");
 
   if (!(file instanceof File) || file.size === 0) {
@@ -79,7 +79,7 @@ export type RemoveCompanyLogoResult =
 export async function removeCompanyLogoAction(
   companyId: string
 ): Promise<RemoveCompanyLogoResult> {
-  await requireSessionUser();
+  await requireAdmin();
   const [updated] = await db
     .update(companies)
     .set({ logoUrl: null, updatedAt: sql`(current_timestamp)` })

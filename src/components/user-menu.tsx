@@ -104,11 +104,13 @@ export function UserMenu() {
               <UserRound /> Profil
             </Link>
           </Button>
-          <Button variant="ghost" size="sm" className="w-full justify-start" asChild>
-            <Link href="/pengaturan">
-              <Settings /> Pengaturan
-            </Link>
-          </Button>
+          {user.role === "admin" ? (
+            <Button variant="ghost" size="sm" className="w-full justify-start" asChild>
+              <Link href="/pengaturan">
+                <Settings /> Pengaturan
+              </Link>
+            </Button>
+          ) : null}
           <Button
             variant="ghost"
             size="sm"

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -24,17 +24,29 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useCompany } from "@/lib/company-store";
+import { useAuth } from "@/lib/auth-store";
 import { generatePurchaseRequestNumberAction } from "@/app/actions/numbering";
 
 export default function PurchaseRequestPage() {
   const [prDetail, setPrDetail] = useState(createDefaultPrDetail);
   const [items, setItems] = useState(createDefaultPrItems);
   const { activeCompany } = useCompany();
+  const { user } = useAuth();
+  const appliedDefaultCompany = useRef(false);
 
-  // Prefill nomor PR urut asli dari server (menggantikan placeholder).
+  // Terapkan "Perusahaan Default" akun sekali saat sesi termuat.
+  useEffect(() => {
+    if (!appliedDefaultCompany.current && user?.defaultCompany) {
+      appliedDefaultCompany.current = true;
+      setPrDetail((prev) => ({ ...prev, companyId: user.defaultCompany }));
+    }
+  }, [user?.defaultCompany]);
+
+  // Prefill/segarkan nomor PR sesuai perusahaan penerbit terpilih. Berjalan saat
+  // mount & setiap companyId berubah → prefix nomor ikut berganti instan.
   useEffect(() => {
     let active = true;
-    generatePurchaseRequestNumberAction()
+    generatePurchaseRequestNumberAction(prDetail.companyId)
       .then((prNumber) => {
         if (active) {
           setPrDetail((prev) => ({ ...prev, prNumber }));
@@ -46,7 +58,7 @@ export default function PurchaseRequestPage() {
     return () => {
       active = false;
     };
-  }, []);
+  }, [prDetail.companyId]);
 
   return (
     <div className="flex flex-1 justify-center bg-zinc-50 px-4 py-10 dark:bg-black sm:px-8">
@@ -84,7 +96,7 @@ export default function PurchaseRequestPage() {
           <CardContent>
             {activeCompany?.logoUrl ? null : <CompanyLogoUploadHint />}
             <PoPreviewActions filename={`${prDetail.prNumber}.pdf`}>
-              <PrPreview prDetail={prDetail} items={items} company={activeCompany} />
+              <PrPreview prDetail={prDetail} items={items} />
             </PoPreviewActions>
           </CardContent>
         </Card>

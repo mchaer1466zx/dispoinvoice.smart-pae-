@@ -148,6 +148,20 @@
       "when": 1785266785719,
       "tag": "0020_faulty_otto_octavius",
       "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "6",
+      "when": 1785279688928,
+      "tag": "0021_busy_manta",
+      "breakpoints": true
+    },
+    {
+      "idx": 22,
+      "version": "6",
+      "when": 1785281208386,
+      "tag": "0022_wide_carnage",
+      "breakpoints": true
     }
   ]
 }

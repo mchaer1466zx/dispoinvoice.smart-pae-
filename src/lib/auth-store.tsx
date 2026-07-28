@@ -1,7 +1,8 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
-import { getSessionUserAction } from "@/app/actions/auth";
+import { getSessionUserAction, type UserRole } from "@/app/actions/auth";
+import type { CompanyId } from "@/config/company-themes";
 
 const STORAGE_KEY = "dispoinvoice:auth-user";
 
@@ -9,6 +10,8 @@ export type AuthUser = {
   id: string;
   name: string;
   email: string;
+  role: UserRole;
+  defaultCompany: CompanyId;
 };
 
 type AuthContextValue = {
@@ -18,6 +21,7 @@ type AuthContextValue = {
   register: (user: AuthUser) => void;
   logout: () => void;
   updateProfile: (patch: Partial<Pick<AuthUser, "name" | "email">>) => void;
+  updateDefaultCompany: (companyId: CompanyId) => void;
 };
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -54,7 +58,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         if (cancelled) return;
         persist(
           serverUser
-            ? { id: serverUser.id, name: serverUser.name, email: serverUser.email }
+            ? {
+                id: serverUser.id,
+                name: serverUser.name,
+                email: serverUser.email,
+                role: serverUser.role,
+                defaultCompany: serverUser.defaultCompany,
+              }
             : null
         );
       })
@@ -105,9 +115,28 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     });
   }
 
+  function updateDefaultCompany(companyId: CompanyId) {
+    setUser((current) => {
+      if (!current) return current;
+      const next = { ...current, defaultCompany: companyId };
+      if (typeof window !== "undefined") {
+        window.localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+      }
+      return next;
+    });
+  }
+
   return (
     <AuthContext.Provider
-      value={{ user, isLoading, login, register, logout, updateProfile }}
+      value={{
+        user,
+        isLoading,
+        login,
+        register,
+        logout,
+        updateProfile,
+        updateDefaultCompany,
+      }}
     >
       {children}
     </AuthContext.Provider>

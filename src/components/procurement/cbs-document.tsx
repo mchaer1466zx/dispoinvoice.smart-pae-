@@ -5,8 +5,12 @@
 import { Fragment } from "react";
 import { formatCurrency, formatDate } from "@/lib/format";
 import { terbilangRupiah } from "@/lib/terbilang";
-import { BRAND, BRAND_COLORS as C } from "@/lib/brand";
-import type { CompanyRecord } from "@/app/actions/companies";
+import {
+  getCompanyTheme,
+  type CompanyId,
+  type CompanyTheme,
+  type DividerOrnament,
+} from "@/config/company-themes";
 
 export type CbsItem = {
   description: string;
@@ -24,7 +28,8 @@ export type CbsTotalRow = { label: string; value: number };
 export type CbsDocumentProps = {
   docTitle: string;
   docNumber: string;
-  company: CompanyRecord | null;
+  /** Perusahaan penerbit; menentukan SELURUH identitas & tema visual dokumen. */
+  companyId: CompanyId;
   perihal?: string;
   partyLabel: string;
   partyName: string;
@@ -47,45 +52,114 @@ function fmtQty(qty: number): string {
   return Number.isInteger(qty) ? String(qty) : qty.toFixed(1).replace(".", ",");
 }
 
-const cell: React.CSSProperties = {
-  border: `0.5px solid ${C.text}`,
-  padding: "4px 6px",
-  verticalAlign: "top",
-};
-
-function InfoRow({ label, value }: { label: string; value: string }) {
+/** Ornamen tengah garis pemisah kop — beda tiap perusahaan (sesuai gambar kop). */
+function DividerMark({
+  type,
+  theme,
+}: {
+  type: DividerOrnament;
+  theme: CompanyTheme;
+}) {
+  const base: React.CSSProperties = {
+    position: "absolute",
+    left: "50%",
+    top: -7,
+    transform: "translateX(-50%)",
+    background: "#FFFFFF",
+    padding: "0 8px",
+    display: "flex",
+    alignItems: "center",
+    gap: 3,
+    lineHeight: 1,
+  };
+  if (type === "TWO_TONE_DOT") {
+    return (
+      <span style={base}>
+        <span
+          style={{
+            width: 9,
+            height: 9,
+            borderRadius: "50%",
+            background: theme.colors.primary,
+          }}
+        />
+        <span
+          style={{
+            width: 9,
+            height: 9,
+            borderRadius: "50%",
+            background: theme.colors.accent2 ?? theme.colors.accent,
+          }}
+        />
+      </span>
+    );
+  }
+  // SINFUL_KNOT (simpul merah) & INFINITY_LOOP (∞) memakai glyph tak-hingga.
+  const color = type === "SINFUL_KNOT" ? "#C0392B" : theme.colors.accent;
   return (
-    <>
-      <span style={{ color: C.gray }}>{label}</span>
-      <span style={{ fontWeight: 600 }}>: {value}</span>
-    </>
+    <span style={{ ...base, color, fontSize: 13, fontWeight: 700 }}>∞</span>
   );
 }
 
-function Signature({ role }: { role: string }) {
+/** Ornamen lengkung bertingkat pojok kanan bawah, warna dari theme.footerCurve. */
+function FooterCurve({ theme }: { theme: CompanyTheme }) {
+  const layers = theme.visuals.footerCurve.layers;
   return (
-    <div style={{ flex: 1, textAlign: "center", fontSize: 8.5 }}>
-      <p style={{ color: C.gray, marginBottom: 38 }}>{role}</p>
-      <div style={{ borderTop: `1px solid ${C.gold}`, margin: "0 10px" }} />
-      <p style={{ fontWeight: 700, marginTop: 3 }}>(............................)</p>
-      <p style={{ color: C.gray }}>Nama Terang · Jabatan</p>
-      <p style={{ color: C.gray }}>Tanggal : ..............</p>
+    <div
+      style={{
+        position: "absolute",
+        right: 0,
+        bottom: 0,
+        width: 210,
+        height: 100,
+        zIndex: 0,
+        pointerEvents: "none",
+      }}
+    >
+      {layers.map((color, i) => {
+        const inset = i * 11;
+        return (
+          <div
+            key={`${color}-${i}`}
+            style={{
+              position: "absolute",
+              right: -40 + inset,
+              bottom: -40 + inset,
+              width: 210 - inset * 2,
+              height: 125 - inset * 2,
+              borderTopLeftRadius: "100%",
+              background: color,
+            }}
+          />
+        );
+      })}
+      {/* tutup putih supaya tampak sebagai pita bertingkat */}
+      <div
+        style={{
+          position: "absolute",
+          right: -40 + layers.length * 11,
+          bottom: -40 + layers.length * 11,
+          width: 210 - layers.length * 22,
+          height: 125 - layers.length * 22,
+          borderTopLeftRadius: "100%",
+          background: "#FFFFFF",
+        }}
+      />
     </div>
   );
 }
 
 /**
- * Template dokumen procurement gaya CBS dengan identitas PT Karya Sang Prabu:
- * kop letterhead (logo + nama hijau + tagline emas + kontak), garis hijau-emas
- * dengan simpul merah, watermark logo samar, blok judul hitam, tabel bertingkat
- * (Romawi per kelompok + subtotal), blok total kuning, terbilang, catatan,
- * tanda tangan, ornamen sudut emas-hijau, dan footer. Semua angka dari pemanggil.
+ * Template dokumen procurement gaya CBS yang SEPENUHNYA bertema: seluruh
+ * identitas, palet, ornamen garis, watermark, blok judul, blok total, dan
+ * ornamen sudut dibaca dari COMPANY_THEMES[companyId]. Tidak ada identitas
+ * yang di-hardcode — ganti companyId → semua elemen visual berubah.
  */
 export function CbsDocument(props: CbsDocumentProps) {
   const {
     docTitle,
     docNumber,
-    company,
+    companyId,
     perihal,
     partyLabel,
     partyName,
@@ -102,11 +176,14 @@ export function CbsDocument(props: CbsDocumentProps) {
     bankInfo,
   } = props;
 
-  const name = company?.name ?? BRAND.name;
-  const address = company?.address ?? BRAND.address;
-  const phone = company?.phone ?? BRAND.phone;
-  const email = company?.email ?? BRAND.email;
-  const logoUrl = company?.logoUrl ?? BRAND.logoPath;
+  const theme = getCompanyTheme(companyId);
+  const c = theme.colors;
+
+  const cell: React.CSSProperties = {
+    border: `0.5px solid ${c.dark}`,
+    padding: "4px 6px",
+    verticalAlign: "top",
+  };
 
   const printedAt = new Intl.DateTimeFormat("id-ID", {
     dateStyle: "short",
@@ -124,7 +201,7 @@ export function CbsDocument(props: CbsDocumentProps) {
         padding: "14mm",
         margin: "0 auto",
         background: "#FFFFFF",
-        color: C.text,
+        color: c.dark,
         fontFamily: "Arial, Helvetica, sans-serif",
         fontSize: 9,
         boxSizing: "border-box",
@@ -144,51 +221,83 @@ export function CbsDocument(props: CbsDocumentProps) {
           pointerEvents: "none",
         }}
       >
-        {logoUrl ? (
-          <img
-            src={logoUrl}
-            alt=""
-            style={{ width: "55%", opacity: 0.08, objectFit: "contain" }}
-          />
-        ) : null}
-        <span
+        <img
+          src={theme.logoPath}
+          alt=""
           style={{
-            fontSize: 34,
-            fontWeight: 800,
-            color: C.gold,
-            opacity: 0.08,
-            letterSpacing: 2,
-            textAlign: "center",
+            width: `${theme.visuals.watermark.sizePercent}%`,
+            opacity: theme.visuals.watermark.opacity,
+            objectFit: "contain",
           }}
-        >
-          {name}
-        </span>
+        />
+        {theme.visuals.watermark.showText ? (
+          <span
+            style={{
+              marginTop: 8,
+              fontSize: 34,
+              fontWeight: 800,
+              color: c.watermark,
+              opacity: theme.visuals.watermark.opacity,
+              letterSpacing: 2,
+              textAlign: "center",
+            }}
+          >
+            {theme.fullName}
+          </span>
+        ) : null}
       </div>
 
       {/* [9] ORNAMEN SUDUT KANAN BAWAH */}
-      <div style={{ position: "absolute", right: 0, bottom: 0, width: 190, height: 90, zIndex: 0, pointerEvents: "none" }}>
-        <div style={{ position: "absolute", right: -40, bottom: -40, width: 200, height: 120, borderTopLeftRadius: "100%", background: C.green }} />
-        <div style={{ position: "absolute", right: -30, bottom: -30, width: 180, height: 100, borderTopLeftRadius: "100%", background: C.gold }} />
-        <div style={{ position: "absolute", right: -25, bottom: -25, width: 165, height: 88, borderTopLeftRadius: "100%", background: "#FFFFFF" }} />
-      </div>
+      <FooterCurve theme={theme} />
 
       <div style={{ position: "relative", zIndex: 1 }}>
         {/* [1] KOP SURAT */}
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12 }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "flex-start",
+            gap: 12,
+          }}
+        >
           <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
-            {logoUrl ? (
-              <img src={logoUrl} alt="Logo" style={{ height: 52, width: "auto", objectFit: "contain" }} />
-            ) : null}
+            <img
+              src={theme.logoPath}
+              alt={`Logo ${theme.fullName}`}
+              style={{ height: 54, width: "auto", objectFit: "contain" }}
+            />
             <div>
-              <p style={{ fontSize: 17, fontWeight: 800, color: C.green, letterSpacing: 1, textTransform: "uppercase" }}>
-                {name}
+              <p
+                style={{
+                  fontSize: 17,
+                  fontWeight: 800,
+                  color: c.primary,
+                  letterSpacing: 1,
+                  textTransform: "uppercase",
+                }}
+              >
+                {theme.fullName}
               </p>
-              <p style={{ fontSize: 9, fontWeight: 700, color: C.gold, letterSpacing: 2 }}>
-                {BRAND.tagline}
+              <p
+                style={{
+                  fontSize: 9,
+                  fontWeight: 700,
+                  color: c.accent,
+                  letterSpacing: 2,
+                }}
+              >
+                {theme.tagline}
               </p>
-              <p style={{ fontSize: 8, color: C.text, marginTop: 2 }}>📍 {address}</p>
-              <p style={{ fontSize: 8, color: C.text }}>
-                📞 {phone}{email ? `  ✉️ ${email}` : ""}  🌐 {BRAND.website}
+              {theme.subTagline ? (
+                <p style={{ fontSize: 7.5, color: c.muted, fontStyle: "italic" }}>
+                  {theme.subTagline}
+                </p>
+              ) : null}
+              <p style={{ fontSize: 8, color: c.dark, marginTop: 2 }}>
+                📍 {theme.address}
+              </p>
+              <p style={{ fontSize: 8, color: c.dark }}>
+                📞 {theme.phone} ✉️ {theme.email} 🌐 {theme.website}
               </p>
             </div>
           </div>
@@ -196,8 +305,8 @@ export function CbsDocument(props: CbsDocumentProps) {
           <div style={{ textAlign: "right" }}>
             <div
               style={{
-                background: C.black,
-                color: "#FFFFFF",
+                background: c.blockBg,
+                color: c.blockText,
                 fontWeight: 700,
                 fontSize: 15,
                 textAlign: "center",
@@ -211,54 +320,85 @@ export function CbsDocument(props: CbsDocumentProps) {
           </div>
         </div>
 
-        {/* garis hijau + emas + simpul merah */}
+        {/* garis pemisah bertema + ornamen tengah */}
         <div style={{ position: "relative", marginTop: 8 }}>
-          <div style={{ height: 2.5, background: C.green }} />
-          <div style={{ height: 1, background: C.gold, marginTop: 1 }} />
-          <span
+          <div
             style={{
-              position: "absolute",
-              left: "50%",
-              top: -6,
-              transform: "translateX(-50%)",
-              color: C.red,
-              fontSize: 12,
-              background: "#FFFFFF",
-              padding: "0 6px",
+              height: theme.visuals.divider.thicknessPx,
+              background: c.borderTop,
             }}
-          >
-            ∞
-          </span>
+          />
+          <div style={{ height: 1, background: c.borderBottom, marginTop: 1 }} />
+          <DividerMark type={theme.visuals.divider.centerOrnament} theme={theme} />
         </div>
 
         {/* [4] INFO DASAR */}
-        <div style={{ display: "flex", justifyContent: "space-between", gap: 24, marginTop: 12 }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            gap: 24,
+            marginTop: 12,
+          }}
+        >
           <div style={{ flex: 1 }}>
             {perihal ? <p style={{ fontWeight: 700 }}>HAL : {perihal}</p> : null}
-            <p style={{ color: C.gray, marginTop: 6 }}>{partyLabel} :</p>
+            <p style={{ color: c.muted, marginTop: 6 }}>{partyLabel} :</p>
             <p style={{ fontWeight: 700 }}>{partyName || "-"}</p>
             {partyLines.filter(Boolean).map((line, i) => (
-              <p key={i} style={{ color: C.gray }}>{line}</p>
+              <p key={i} style={{ color: c.muted }}>
+                {line}
+              </p>
             ))}
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "auto auto", columnGap: 8, rowGap: 3, alignSelf: "flex-start" }}>
-            <InfoRow label="Tanggal" value={formatDate(date)} />
-            <InfoRow label="Nomor" value={docNumber} />
-            <InfoRow label="Halaman" value="1 dari 1" />
-            {validity ? <InfoRow label="Jatuh Tempo" value={formatDate(validity)} /> : null}
-            {!validity ? <InfoRow label={dateLabel} value={formatDate(date)} /> : null}
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "auto auto",
+              columnGap: 8,
+              rowGap: 3,
+              alignSelf: "flex-start",
+            }}
+          >
+            <span style={{ color: c.muted }}>Tanggal</span>
+            <span style={{ fontWeight: 600 }}>: {formatDate(date)}</span>
+            <span style={{ color: c.muted }}>Nomor</span>
+            <span style={{ fontWeight: 600 }}>: {docNumber}</span>
+            <span style={{ color: c.muted }}>Halaman</span>
+            <span style={{ fontWeight: 600 }}>: 1 dari 1</span>
+            <span style={{ color: c.muted }}>{validity ? "Jatuh Tempo" : dateLabel}</span>
+            <span style={{ fontWeight: 600 }}>
+              : {formatDate(validity ?? date)}
+            </span>
           </div>
         </div>
 
         {/* [5] TABEL ITEM BERTINGKAT */}
-        <table style={{ width: "100%", borderCollapse: "collapse", marginTop: 12, fontSize: 8.5 }}>
+        <table
+          style={{
+            width: "100%",
+            borderCollapse: "collapse",
+            marginTop: 12,
+            fontSize: 8.5,
+          }}
+        >
           <thead>
-            <tr style={{ background: C.yellowBlock }}>
-              <th style={{ ...cell, fontWeight: 700, width: 24, textAlign: "center" }}>No</th>
-              <th style={{ ...cell, fontWeight: 700, textAlign: "left" }}>Deskripsi Pekerjaan / Barang</th>
-              <th style={{ ...cell, fontWeight: 700, width: 70, textAlign: "right" }}>Qty</th>
-              <th style={{ ...cell, fontWeight: 700, width: 100, textAlign: "right" }}>Harga Satuan</th>
-              <th style={{ ...cell, fontWeight: 700, width: 110, textAlign: "right" }}>Jumlah</th>
+            <tr style={{ background: c.totalBg }}>
+              <th style={{ ...cell, fontWeight: 700, width: 24, textAlign: "center" }}>
+                No
+              </th>
+              <th style={{ ...cell, fontWeight: 700, textAlign: "left" }}>
+                Deskripsi Pekerjaan / Barang
+              </th>
+              <th style={{ ...cell, fontWeight: 700, width: 70, textAlign: "right" }}>
+                Qty
+              </th>
+              <th style={{ ...cell, fontWeight: 700, width: 100, textAlign: "right" }}>
+                Harga Satuan
+              </th>
+              <th style={{ ...cell, fontWeight: 700, width: 110, textAlign: "right" }}>
+                Jumlah
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -268,29 +408,47 @@ export function CbsDocument(props: CbsDocumentProps) {
               return (
                 <Fragment key={`grp-${gi}`}>
                   {hasLabel ? (
-                    <tr style={{ background: C.groupBg }}>
-                      <td style={{ ...cell, fontWeight: 700, textAlign: "center" }}>{roman}</td>
+                    <tr style={{ background: "#F5F5F5" }}>
+                      <td style={{ ...cell, fontWeight: 700, textAlign: "center" }}>
+                        {roman}
+                      </td>
                       <td style={{ ...cell, fontWeight: 700 }}>{group.label}</td>
                       <td style={cell} />
                       <td style={cell} />
-                      <td style={{ ...cell, fontWeight: 700, textAlign: "right", color: C.gold }}>
+                      <td
+                        style={{
+                          ...cell,
+                          fontWeight: 700,
+                          textAlign: "right",
+                          color: c.accent,
+                        }}
+                      >
                         {formatCurrency(group.subtotal)}
                       </td>
                     </tr>
                   ) : null}
                   {group.items.map((item, ii) => (
                     <tr key={`g-${gi}-i-${ii}`}>
-                      <td style={{ ...cell, textAlign: "center" }}>{hasLabel ? "" : ii + 1}</td>
+                      <td style={{ ...cell, textAlign: "center" }}>
+                        {hasLabel ? "" : ii + 1}
+                      </td>
                       <td style={{ ...cell, paddingLeft: hasLabel ? 16 : 6 }}>
                         {hasLabel ? "- " : ""}
                         {item.description}
-                        {item.spec ? <span style={{ color: C.gray }}> ({item.spec})</span> : null}
+                        {item.spec ? (
+                          <span style={{ color: c.muted }}> ({item.spec})</span>
+                        ) : null}
                       </td>
                       <td style={{ ...cell, textAlign: "right" }}>
-                        {fmtQty(item.qty)}{item.unit ? ` ${item.unit}` : ""}
+                        {fmtQty(item.qty)}
+                        {item.unit ? ` ${item.unit}` : ""}
                       </td>
-                      <td style={{ ...cell, textAlign: "right" }}>{formatCurrency(item.unitPrice)}</td>
-                      <td style={{ ...cell, textAlign: "right" }}>{formatCurrency(item.amount)}</td>
+                      <td style={{ ...cell, textAlign: "right" }}>
+                        {formatCurrency(item.unitPrice)}
+                      </td>
+                      <td style={{ ...cell, textAlign: "right" }}>
+                        {formatCurrency(item.amount)}
+                      </td>
                     </tr>
                   ))}
                 </Fragment>
@@ -304,18 +462,39 @@ export function CbsDocument(props: CbsDocumentProps) {
           <table style={{ width: "45%", borderCollapse: "collapse", fontSize: 9 }}>
             <tbody>
               <tr>
-                <td style={{ padding: "4px 8px", color: C.gray }}>SUBTOTAL</td>
-                <td style={{ padding: "4px 8px", textAlign: "right", fontWeight: 600 }}>{formatCurrency(subtotal)}</td>
+                <td style={{ padding: "4px 8px", color: c.muted }}>SUBTOTAL</td>
+                <td style={{ padding: "4px 8px", textAlign: "right", fontWeight: 600 }}>
+                  {formatCurrency(subtotal)}
+                </td>
               </tr>
               {extraRows.map((row) => (
                 <tr key={row.label}>
-                  <td style={{ padding: "4px 8px", color: C.gray }}>{row.label}</td>
-                  <td style={{ padding: "4px 8px", textAlign: "right", fontWeight: 600 }}>{formatCurrency(row.value)}</td>
+                  <td style={{ padding: "4px 8px", color: c.muted }}>{row.label}</td>
+                  <td style={{ padding: "4px 8px", textAlign: "right", fontWeight: 600 }}>
+                    {formatCurrency(row.value)}
+                  </td>
                 </tr>
               ))}
-              <tr style={{ background: C.yellowBlock, borderTop: `2px solid ${C.red}`, borderBottom: `2px solid ${C.green}` }}>
-                <td style={{ padding: "7px 8px", fontWeight: 800, fontSize: 11 }}>GRAND TOTAL</td>
-                <td style={{ padding: "7px 8px", textAlign: "right", fontWeight: 800, fontSize: 11 }}>{formatCurrency(grandTotal)}</td>
+              <tr
+                style={{
+                  background: c.totalBg,
+                  borderTop: `2px solid ${c.primary}`,
+                  borderBottom: `2px solid ${c.accent}`,
+                }}
+              >
+                <td style={{ padding: "7px 8px", fontWeight: 800, fontSize: 11 }}>
+                  GRAND TOTAL
+                </td>
+                <td
+                  style={{
+                    padding: "7px 8px",
+                    textAlign: "right",
+                    fontWeight: 800,
+                    fontSize: 11,
+                  }}
+                >
+                  {formatCurrency(grandTotal)}
+                </td>
               </tr>
             </tbody>
           </table>
@@ -331,31 +510,59 @@ export function CbsDocument(props: CbsDocumentProps) {
             {notes ? (
               <>
                 <p style={{ fontWeight: 700, fontSize: 9 }}>CATATAN :</p>
-                <p style={{ color: C.gray, whiteSpace: "pre-line" }}>{notes}</p>
+                <p style={{ color: c.muted, whiteSpace: "pre-line" }}>{notes}</p>
               </>
             ) : null}
             {paymentTerms.length > 0 ? (
               <>
-                <p style={{ fontWeight: 700, fontSize: 9, marginTop: 6 }}>CARA PEMBAYARAN :</p>
-                <ul style={{ color: C.gray, paddingLeft: 16, listStyle: "disc" }}>
-                  {paymentTerms.map((t, i) => <li key={i}>{t}</li>)}
+                <p style={{ fontWeight: 700, fontSize: 9, marginTop: 6 }}>
+                  CARA PEMBAYARAN :
+                </p>
+                <ul style={{ color: c.muted, paddingLeft: 16, listStyle: "disc" }}>
+                  {paymentTerms.map((t, i) => (
+                    <li key={i}>{t}</li>
+                  ))}
                 </ul>
               </>
             ) : null}
-            {bankInfo ? <p style={{ color: C.gray, marginTop: 4 }}>{bankInfo}</p> : null}
+            {bankInfo ? (
+              <p style={{ color: c.muted, marginTop: 4 }}>{bankInfo}</p>
+            ) : null}
           </div>
         ) : null}
 
         {/* [8] TANDA TANGAN */}
         <div style={{ display: "flex", gap: 10, marginTop: 24 }}>
-          <Signature role="Pemohon / Pembuat" />
-          <Signature role="Mengetahui / Menyetujui" />
-          <Signature role="Penerima / Vendor" />
+          {["Pemohon / Pembuat", "Mengetahui / Menyetujui", "Penerima / Vendor"].map(
+            (role) => (
+              <div key={role} style={{ flex: 1, textAlign: "center", fontSize: 8.5 }}>
+                <p style={{ color: c.muted, marginBottom: 38 }}>{role}</p>
+                <div style={{ borderTop: `1px solid ${c.accent}`, margin: "0 10px" }} />
+                <p style={{ fontWeight: 700, marginTop: 3 }}>
+                  (............................)
+                </p>
+                <p style={{ color: c.muted }}>Nama Terang · Jabatan</p>
+                <p style={{ color: c.muted }}>Tanggal : ..............</p>
+              </div>
+            )
+          )}
         </div>
 
         {/* [10] FOOTER */}
-        <div style={{ display: "flex", justifyContent: "space-between", marginTop: 18, paddingTop: 6, borderTop: `0.5px solid ${C.text}`, fontSize: 7.5, color: C.gray }}>
-          <span>© {new Date().getFullYear()} {name} · {BRAND.appName}</span>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            marginTop: 18,
+            paddingTop: 6,
+            borderTop: `0.5px solid ${c.dark}`,
+            fontSize: 7.5,
+            color: c.muted,
+          }}
+        >
+          <span>
+            © {new Date().getFullYear()} {theme.fullName} · Sistem Pengadaan Digital
+          </span>
           <span>Halaman 1 dari 1 · Dicetak {printedAt}</span>
         </div>
       </div>

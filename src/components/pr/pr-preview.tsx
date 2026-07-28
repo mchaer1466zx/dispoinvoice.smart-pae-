@@ -6,16 +6,13 @@ import {
   CbsDocument,
   buildCbsGroups,
 } from "@/components/procurement/cbs-document";
-import type { CompanyRecord } from "@/app/actions/companies";
 
 export function PrPreview({
   prDetail,
   items,
-  company,
 }: {
   prDetail: PrDetail;
   items: PrItem[];
-  company: CompanyRecord | null;
 }) {
   const groups = buildCbsGroups(
     items.map((item) => ({
@@ -36,7 +33,7 @@ export function PrPreview({
       <CbsDocument
         docTitle="PURCHASE REQUEST"
         docNumber={prDetail.prNumber}
-        company={company}
+        companyId={prDetail.companyId}
         perihal="Usulan / Permintaan Pembelian"
         partyLabel="Departemen Peminta"
         partyName={prDetail.department}
