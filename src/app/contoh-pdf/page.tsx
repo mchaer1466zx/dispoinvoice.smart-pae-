@@ -20,10 +20,11 @@ import {
 import { useCompany } from "@/lib/company-store";
 
 /**
- * Contoh dokumen PO "Pengadaan & Instalasi Cold Storage" dengan angka tetap
- * yang cocok persis: Subtotal Rp195.000.000, PPN 11% Rp21.450.000, Grand
- * Total Rp216.450.000 (Dua Ratus Enam Belas Juta Empat Ratus Lima Puluh Ribu
- * Rupiah). Dipakai sebagai referensi tampilan tabel bertingkat (Romawi).
+ * Contoh dokumen PO "Pembuatan Cold Storage 3x5m" (vendor PT Cipta Bahari
+ * Sejuk) dengan angka tetap yang cocok persis: Subtotal Rp195.000.000, PPN
+ * 11% Rp21.450.000, Grand Total Rp216.450.000 (Dua Ratus Enam Belas Juta
+ * Empat Ratus Lima Puluh Ribu Rupiah). Setiap kelompok di-foot tepat ke
+ * subtotalnya. Dipakai sebagai referensi tampilan tabel bertingkat (Romawi).
  */
 const EXAMPLE_GROUPS: CbsGroup[] = [
   {
@@ -31,75 +32,129 @@ const EXAMPLE_GROUPS: CbsGroup[] = [
     subtotal: 5_000_000,
     items: [
       {
-        description: "Mobilisasi & demobilisasi alat kerja",
+        description: "Transportasi Teknisi",
         qty: 1,
-        unit: "ls",
-        unitPrice: 3_000_000,
-        amount: 3_000_000,
-      },
-      {
-        description: "Pembersihan & persiapan lokasi ruang",
-        qty: 1,
-        unit: "ls",
+        unit: "lot",
         unitPrice: 2_000_000,
         amount: 2_000_000,
       },
+      {
+        description: "Alat Bantu & Tools",
+        qty: 1,
+        unit: "lot",
+        unitPrice: 1_500_000,
+        amount: 1_500_000,
+      },
+      {
+        description: "Expedisi",
+        qty: 1,
+        unit: "lot",
+        unitPrice: 1_500_000,
+        amount: 1_500_000,
+      },
     ],
   },
   {
-    label: "Pekerjaan Ruangan Cold Storage",
+    label: "Pekerjaan Ruangan 3x5m",
     subtotal: 87_310_000,
     items: [
       {
-        description: "Panel insulasi PU ketebalan 100 mm",
-        spec: "sandwich panel, food grade",
-        qty: 120,
+        description: "Dinding & Atap Panel PU B2 10cm",
+        spec: "anti-bakar, dencity 42-45kg/m³",
+        qty: 86.4,
         unit: "m²",
-        unitPrice: 450_000,
-        amount: 54_000_000,
+        unitPrice: 800_000,
+        amount: 69_120_000,
       },
       {
-        description: "Pintu cold storage sliding berinsulasi",
-        spec: "lengkap frame & heater",
-        qty: 2,
+        description: "Lantai PU Slab 10cm",
+        qty: 18,
+        unit: "m²",
+        unitPrice: 500_000,
+        amount: 9_000_000,
+      },
+      {
+        description: "Pintu Swing 1x2 berinsulasi",
+        qty: 1,
         unit: "unit",
-        unitPrice: 12_500_000,
-        amount: 25_000_000,
+        unitPrice: 3_500_000,
+        amount: 3_500_000,
       },
       {
-        description: "Lantai epoxy anti-slip",
-        qty: 60,
-        unit: "m²",
-        unitPrice: 138_500,
-        amount: 8_310_000,
+        description: "Accessories, Lampu LED, Ventilator & Kabel",
+        qty: 1,
+        unit: "lot",
+        unitPrice: 2_000_000,
+        amount: 2_000_000,
+      },
+      {
+        description: "Jasa Pemasangan Panel & Pintu",
+        qty: 1,
+        unit: "lot",
+        unitPrice: 3_690_000,
+        amount: 3_690_000,
       },
     ],
   },
   {
-    label: "Pekerjaan Mesin Refrigerasi",
+    label: "Pekerjaan Mesin Baru",
     subtotal: 102_690_000,
     items: [
       {
-        description: "Condensing unit suhu -20°C",
-        spec: "kompresor semi-hermetic",
+        description: "Evaporator XMK",
         qty: 1,
         unit: "unit",
-        unitPrice: 68_000_000,
-        amount: 68_000_000,
+        unitPrice: 28_000_000,
+        amount: 28_000_000,
       },
       {
-        description: "Evaporator ceiling type",
-        qty: 2,
-        unit: "unit",
-        unitPrice: 13_345_000,
-        amount: 26_690_000,
-      },
-      {
-        description: "Instalasi pipa, refrigeran & panel kontrol",
+        description: "Mesin WCUC 04 (Condensing Unit)",
         qty: 1,
-        unit: "ls",
-        unitPrice: 8_000_000,
-        amount: 8_000_000,
+        unit: "unit",
+        unitPrice: 35_000_000,
+        amount: 35_000_000,
+      },
+      {
+        description: "Panel Kontrol 380/220 Volt",
+        qty: 1,
+        unit: "unit",
+        unitPrice: 4_500_000,
+        amount: 4_500_000,
+      },
+      {
+        description: "Pipa Tembaga, Isolasi & Kabel Kontrol",
+        qty: 1,
+        unit: "lot",
+        unitPrice: 5_700_000,
+        amount: 5_700_000,
+      },
+      {
+        description: "Freon R404A, Oli & Expansi",
+        qty: 1,
+        unit: "lot",
+        unitPrice: 3_640_000,
+        amount: 3_640_000,
+      },
+      {
+        description: "Support Mesin & Evaporator",
+        qty: 1,
+        unit: "lot",
+        unitPrice: 1_250_000,
+        amount: 1_250_000,
+      },
+      {
+        description: "Jasa Pasang Mesin",
+        qty: 1,
+        unit: "lot",
+        unitPrice: 15_000_000,
+        amount: 15_000_000,
+      },
+      {
+        description: "Commissioning & Test Run",
+        qty: 1,
+        unit: "lot",
+        unitPrice: 9_600_000,
+        amount: 9_600_000,
       },
     ],
   },
@@ -111,11 +166,16 @@ const EXAMPLE_EXTRA_ROWS: CbsTotalRow[] = [
 ];
 const EXAMPLE_GRAND_TOTAL = 216_450_000;
 
+const EXAMPLE_NOTES =
+  "Harga belum termasuk pekerjaan sipil. Perubahan di luar penawaran = addendum. Garansi 12 bulan sejak serah terima. Suhu target -18°C s/d -20°C.";
+
 const EXAMPLE_PAYMENT_TERMS = [
   "50% Uang Muka (DP) setelah PO disetujui",
-  "40% Setelah material siap kirim / pekerjaan 80% selesai",
-  "10% Pelunasan setelah pekerjaan selesai 100% & QC lulus",
+  "40% Setelah material kirim",
+  "10% Pelunasan setelah selesai 100% & QC lulus",
 ];
+
+const EXAMPLE_BANK_INFO = "BCA · a/n AKHMAD NASROJIKIN · No. 047 0571 390";
 
 export default function ContohPdfPage() {
   const { activeCompany } = useCompany();
@@ -152,23 +212,22 @@ export default function ContohPdfPage() {
             <PoPreviewActions filename="Contoh-PO-Cold-Storage.pdf">
               <CbsDocument
                 docTitle="PURCHASE ORDER"
-                docNumber="PO/KSP/2026/07/001"
+                docNumber="PO/KSP/2026/07/009"
                 company={activeCompany}
-                perihal="Pengadaan & Instalasi Cold Storage"
-                partyLabel="Kepada Pemasok"
-                partyName="CV Sumber Dingin Sejahtera"
-                partyLines={[
-                  "Jl. Industri Raya No. 12, Bekasi",
-                  "0812-3456-7890",
-                ]}
+                perihal="Pekerjaan Panel PU B2 (Anti-Bakar) + Mesin Pendingin Ruang 3x5m"
+                partyLabel="Kepada Yth (Vendor)"
+                partyName="PT CIPTA BAHARI SEJUK (CBS)"
+                partyLines={["Telp 021 5239 2994 / 0858 6727 4424"]}
                 dateLabel="Tanggal Pemesanan"
-                date="2026-07-28"
+                date="2026-07-29"
+                validity="2026-08-19"
                 groups={EXAMPLE_GROUPS}
                 subtotal={EXAMPLE_SUBTOTAL}
                 extraRows={EXAMPLE_EXTRA_ROWS}
                 grandTotal={EXAMPLE_GRAND_TOTAL}
-                notes="Garansi mesin 1 tahun. Termasuk uji coba & training operator."
+                notes={EXAMPLE_NOTES}
                 paymentTerms={EXAMPLE_PAYMENT_TERMS}
+                bankInfo={EXAMPLE_BANK_INFO}
               />
             </PoPreviewActions>
           </CardContent>
