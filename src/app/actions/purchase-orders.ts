@@ -4,6 +4,7 @@ import { asc, eq } from "drizzle-orm";
 import { db } from "@/db";
 import { purchaseOrders, poItems } from "@/db/schema";
 import { requireSessionUser } from "@/app/actions/auth";
+import { createNotification } from "@/lib/notify";
 
 export type PoStatus = "draft" | "dikirim" | "selesai";
 
@@ -208,6 +209,68 @@ export async function updatePurchaseOrderAction(
   } catch {
     return { success: false, error: "Gagal mengubah purchase order." };
   }
+}
+
+const PO_STATUS_LABELS: Record<PoStatus, string> = {
+  draft: "Draft",
+  dikirim: "Dikirim",
+  selesai: "Selesai",
+};
+
+export type UpdatePurchaseOrderStatusResult =
+  | { success: true }
+  | { success: false; error: string };
+
+/**
+ * Server Action untuk mengubah status purchase order (mis. draft → selesai).
+ * Memicu notifikasi in-app `po_status` HANYA bila status benar-benar berubah,
+ * mengikuti pola updateInvoiceStatusAction. Kegagalan notifikasi tidak
+ * memengaruhi hasil pembaruan status.
+ */
+export async function updatePurchaseOrderStatusAction(
+  poId: string,
+  newStatus: PoStatus
+): Promise<UpdatePurchaseOrderStatusResult> {
+  const user = await requireSessionUser();
+
+  const [po] = await db
+    .select({
+      id: purchaseOrders.id,
+      poNumber: purchaseOrders.poNumber,
+      status: purchaseOrders.status,
+      userId: purchaseOrders.userId,
+    })
+    .from(purchaseOrders)
+    .where(eq(purchaseOrders.id, poId))
+    .limit(1);
+
+  if (!po) {
+    return { success: false, error: "Purchase order tidak ditemukan." };
+  }
+
+  // Tidak ada perubahan → sukses tanpa notifikasi.
+  if (po.status === newStatus) {
+    return { success: true };
+  }
+
+  try {
+    await db
+      .update(purchaseOrders)
+      .set({ status: newStatus })
+      .where(eq(purchaseOrders.id, poId));
+  } catch {
+    return { success: false, error: "Gagal memperbarui status purchase order." };
+  }
+
+  await createNotification({
+    userId: po.userId ?? user.id,
+    type: "po_status",
+    title: `PO ${po.poNumber} → ${PO_STATUS_LABELS[newStatus]}`,
+    docType: "po",
+    docId: po.id,
+  });
+
+  return { success: true };
 }
 
 /** Server Action untuk menghapus purchase order; item terkait ikut terhapus (cascade). */
