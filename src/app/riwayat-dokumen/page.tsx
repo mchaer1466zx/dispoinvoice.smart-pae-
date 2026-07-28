@@ -1,8 +1,8 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, FileText, Search } from "lucide-react";
+import { ArrowLeft, FileText, Loader2, Search } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,11 +17,11 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from "@/components/ui/input-group";
+import { DOCUMENT_TYPE_LABELS, type DocumentType } from "@/lib/mock-data";
 import {
-  DOCUMENT_TYPE_LABELS,
-  MOCK_DOCUMENTS,
-  type DocumentType,
-} from "@/lib/mock-data";
+  listDocumentsAction,
+  type DocumentSummary,
+} from "@/app/actions/documents";
 import { formatDate } from "@/lib/format";
 import { cn } from "@/lib/utils";
 
@@ -41,12 +41,31 @@ const TYPE_FILTERS: { value: DocumentType | "semua"; label: string }[] = [
 ];
 
 export default function RiwayatDokumenPage() {
+  const [documents, setDocuments] = useState<DocumentSummary[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [typeFilter, setTypeFilter] = useState<DocumentType | "semua">("semua");
 
+  useEffect(() => {
+    let active = true;
+    listDocumentsAction()
+      .then((data) => {
+        if (active) setDocuments(data);
+      })
+      .catch(() => {
+        // Biarkan daftar kosong bila gagal memuat.
+      })
+      .finally(() => {
+        if (active) setIsLoading(false);
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
+
   const filteredDocuments = useMemo(() => {
     const query = search.trim().toLowerCase();
-    return MOCK_DOCUMENTS.filter((doc) => {
+    return documents.filter((doc) => {
       if (typeFilter !== "semua" && doc.type !== typeFilter) return false;
       if (!query) return true;
       return (
@@ -54,7 +73,7 @@ export default function RiwayatDokumenPage() {
         doc.partyName.toLowerCase().includes(query)
       );
     });
-  }, [search, typeFilter]);
+  }, [documents, search, typeFilter]);
 
   return (
     <div className="flex flex-1 justify-center bg-zinc-50 px-4 py-10 dark:bg-black sm:px-8">
@@ -75,7 +94,7 @@ export default function RiwayatDokumenPage() {
           <CardHeader>
             <CardTitle>Daftar Dokumen</CardTitle>
             <CardDescription>
-              {filteredDocuments.length} dari {MOCK_DOCUMENTS.length} dokumen
+              {filteredDocuments.length} dari {documents.length} dokumen
               ditampilkan.
             </CardDescription>
           </CardHeader>
@@ -109,7 +128,12 @@ export default function RiwayatDokumenPage() {
               ))}
             </div>
 
-            {MOCK_DOCUMENTS.length === 0 ? (
+            {isLoading ? (
+              <div className="flex flex-col items-center gap-2 py-10 text-center text-muted-foreground">
+                <Loader2 className="size-8 animate-spin" />
+                <p className="text-sm">Memuat dokumen…</p>
+              </div>
+            ) : documents.length === 0 ? (
               <div className="flex flex-col items-center gap-2 py-10 text-center text-muted-foreground">
                 <FileText className="size-8" />
                 <p className="text-sm">Belum ada dokumen tersimpan.</p>
@@ -122,7 +146,7 @@ export default function RiwayatDokumenPage() {
             ) : (
               filteredDocuments.map((doc) => (
                 <Link
-                  key={doc.id}
+                  key={`${doc.type}-${doc.id}`}
                   href={`/riwayat-dokumen/${doc.id}`}
                   className="flex flex-col gap-3 rounded-lg border p-4 transition-colors hover:bg-muted/50 sm:flex-row sm:items-center sm:justify-between"
                 >

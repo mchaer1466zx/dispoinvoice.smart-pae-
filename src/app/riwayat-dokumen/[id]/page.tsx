@@ -1,8 +1,9 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Download, FileX2, Printer } from "lucide-react";
+import { ArrowLeft, Download, FileX2, Loader2, Printer } from "lucide-react";
 import { usePDF, Margin } from "react-to-pdf";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -13,7 +14,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { DOCUMENT_TYPE_LABELS, MOCK_DOCUMENTS } from "@/lib/mock-data";
+import { InvoiceStatusControl } from "@/components/invoice/invoice-status-control";
+import { DOCUMENT_TYPE_LABELS } from "@/lib/mock-data";
+import {
+  getDocumentAction,
+  type DocumentDetail,
+} from "@/app/actions/documents";
+import type { InvoiceStatus } from "@/app/actions/invoices";
 import { formatCurrency, formatDate } from "@/lib/format";
 
 const STATUS_VARIANTS: Record<string, "secondary" | "success" | "outline"> = {
@@ -50,12 +57,44 @@ function BackLink() {
 
 export default function DocumentDetailPage() {
   const params = useParams<{ id: string }>();
-  const doc = MOCK_DOCUMENTS.find((d) => d.id === params.id);
+  const [doc, setDoc] = useState<DocumentDetail | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    let active = true;
+    getDocumentAction(params.id)
+      .then((data) => {
+        if (active) setDoc(data);
+      })
+      .catch(() => {
+        // Biarkan doc null bila gagal memuat → tampil "tidak ditemukan".
+      })
+      .finally(() => {
+        if (active) setIsLoading(false);
+      });
+    return () => {
+      active = false;
+    };
+  }, [params.id]);
 
   const { targetRef, toPDF } = usePDF({
     filename: `${doc?.number ?? "dokumen"}.pdf`,
     page: { format: "a4", margin: Margin.MEDIUM },
   });
+
+  if (isLoading) {
+    return (
+      <PageShell>
+        <BackLink />
+        <Card>
+          <CardContent className="flex flex-col items-center gap-3 py-10 text-center">
+            <Loader2 className="size-8 animate-spin text-muted-foreground" />
+            <p className="text-sm text-muted-foreground">Memuat dokumen…</p>
+          </CardContent>
+        </Card>
+      </PageShell>
+    );
+  }
 
   if (!doc) {
     return (
@@ -89,6 +128,20 @@ export default function DocumentDetailPage() {
           </Button>
         </div>
       </div>
+
+      {doc.type === "invoice" ? (
+        <Card className="print:hidden">
+          <CardContent className="pt-6">
+            <InvoiceStatusControl
+              invoiceId={doc.id}
+              currentStatus={doc.status}
+              onChanged={(status: InvoiceStatus) =>
+                setDoc((prev) => (prev ? { ...prev, status } : prev))
+              }
+            />
+          </CardContent>
+        </Card>
+      ) : null}
 
       <Card ref={targetRef} id="document-printable">
         <CardHeader>
