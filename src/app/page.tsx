@@ -31,6 +31,9 @@ export default function BuatInvoicePage() {
   );
   const [billingInfo, setBillingInfo] = useState(createDefaultBillingInfo);
   const [items, setItems] = useState(createDefaultItems);
+  // Id invoice yang tersimpan; jadi acuan tombol "Bagikan". Direset ke null
+  // setiap kali isi invoice diubah, supaya yang dibagikan selalu versi tersimpan.
+  const [savedInvoiceId, setSavedInvoiceId] = useState<string | null>(null);
   const { activeCompany } = useCompany();
 
   return (
@@ -47,24 +50,43 @@ export default function BuatInvoicePage() {
             </p>
           </div>
           <div className="flex gap-2">
-            <ShareInvoiceDialog invoiceNumber={billingInfo.invoiceNumber} />
+            <ShareInvoiceDialog
+              invoiceNumber={billingInfo.invoiceNumber}
+              invoiceId={savedInvoiceId}
+            />
             <SaveInvoiceButton
               billingInfo={billingInfo}
               customer={selectedCustomer}
               items={items}
               companyId={activeCompany?.id ?? null}
+              onSaved={setSavedInvoiceId}
             />
           </div>
         </div>
 
-        <BillingInfoForm value={billingInfo} onChange={setBillingInfo} />
+        <BillingInfoForm
+          value={billingInfo}
+          onChange={(next) => {
+            setBillingInfo(next);
+            setSavedInvoiceId(null);
+          }}
+        />
 
         <CustomerPicker
           selected={selectedCustomer}
-          onSelectedChange={setSelectedCustomer}
+          onSelectedChange={(next) => {
+            setSelectedCustomer(next);
+            setSavedInvoiceId(null);
+          }}
         />
 
-        <ItemListForm items={items} onChange={setItems} />
+        <ItemListForm
+          items={items}
+          onChange={(next) => {
+            setItems(next);
+            setSavedInvoiceId(null);
+          }}
+        />
 
         <Card>
           <CardHeader>

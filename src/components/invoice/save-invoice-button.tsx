@@ -14,11 +14,13 @@ export function SaveInvoiceButton({
   customer,
   items,
   companyId,
+  onSaved,
 }: {
   billingInfo: BillingInfo;
   customer: Customer | null;
   items: InvoiceItem[];
   companyId: string | null;
+  onSaved?: (invoiceId: string) => void;
 }) {
   const [saving, setSaving] = useState(false);
 
@@ -41,6 +43,7 @@ export function SaveInvoiceButton({
     setSaving(false);
 
     if (result.success) {
+      onSaved?.(result.invoiceId);
       toast.success("Invoice berhasil disimpan", {
         description: `${billingInfo.invoiceNumber} telah disimpan ke riwayat dokumen.`,
       });
