@@ -49,6 +49,8 @@ export function SavePoButton({
       poNumber: poDetail.poNumber,
       orderDate: poDetail.orderDate,
       status: poDetail.status,
+      tax: poDetail.tax,
+      discount: poDetail.discount,
       notes: poDetail.notes,
       supplierId,
       companyId: company?.id ?? null,

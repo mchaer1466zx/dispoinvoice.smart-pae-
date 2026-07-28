@@ -100,6 +100,8 @@ export const purchaseOrders = sqliteTable(
       .notNull()
       .default("draft"),
     orderDate: text("order_date").notNull(),
+    tax: real("tax").notNull().default(0),
+    discount: real("discount").notNull().default(0),
     notes: text("notes"),
     createdAt: text("created_at")
       .notNull()

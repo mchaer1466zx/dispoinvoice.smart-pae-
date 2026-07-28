@@ -18,6 +18,8 @@ export type PurchaseOrderInput = {
   poNumber: string;
   orderDate: string;
   status: PoStatus;
+  tax: number;
+  discount: number;
   notes: string;
   supplierId: string | null;
   companyId: string | null;
@@ -36,6 +38,8 @@ export type PurchaseOrderRecord = {
   poNumber: string;
   orderDate: string;
   status: PoStatus;
+  tax: number;
+  discount: number;
   notes: string | null;
   supplierId: string | null;
   companyId: string | null;
@@ -59,6 +63,8 @@ const PO_COLUMNS = {
   poNumber: purchaseOrders.poNumber,
   orderDate: purchaseOrders.orderDate,
   status: purchaseOrders.status,
+  tax: purchaseOrders.tax,
+  discount: purchaseOrders.discount,
   notes: purchaseOrders.notes,
   supplierId: purchaseOrders.supplierId,
   companyId: purchaseOrders.companyId,
@@ -130,6 +136,8 @@ export async function createPurchaseOrderAction(
           poNumber: input.poNumber,
           orderDate: input.orderDate,
           status: input.status,
+          tax: input.tax,
+          discount: input.discount,
           notes: input.notes || null,
           supplierId: input.supplierId,
           companyId: input.companyId,
@@ -176,6 +184,8 @@ export async function updatePurchaseOrderAction(
           poNumber: input.poNumber,
           orderDate: input.orderDate,
           status: input.status,
+          tax: input.tax,
+          discount: input.discount,
           notes: input.notes || null,
           supplierId: input.supplierId,
           companyId: input.companyId,

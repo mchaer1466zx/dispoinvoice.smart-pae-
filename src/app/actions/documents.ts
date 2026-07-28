@@ -233,6 +233,8 @@ export async function getDocumentAction(id: string): Promise<DocumentDetail | nu
         quantity: item.quantity,
         price: item.price,
       })),
+      tax: po.tax,
+      discount: po.discount,
       notes: po.notes ?? undefined,
     };
   }
