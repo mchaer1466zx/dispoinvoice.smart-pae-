@@ -26,11 +26,13 @@ export type BillingInfo = {
   notes: string;
 };
 
+// Placeholder sementara sebelum nomor urut asli diambil dari server
+// (generateInvoiceNumberAction). Format mengikuti PRD: INV/[TAHUN]/[BULAN]/[URUT].
 function generateInvoiceNumber() {
   const today = new Date();
   const yyyy = today.getFullYear();
   const mm = String(today.getMonth() + 1).padStart(2, "0");
-  return `INV-${yyyy}${mm}-0001`;
+  return `INV/${yyyy}/${mm}/001`;
 }
 
 export function createDefaultBillingInfo(): BillingInfo {

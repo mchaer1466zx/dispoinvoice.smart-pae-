@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   BillingInfoForm,
   createDefaultBillingInfo,
@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/card";
 import type { Customer } from "@/lib/mock-data";
 import { useCompany } from "@/lib/company-store";
+import { generateInvoiceNumberAction } from "@/app/actions/numbering";
 
 export default function BuatInvoicePage() {
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(
@@ -35,6 +36,24 @@ export default function BuatInvoicePage() {
   // setiap kali isi invoice diubah, supaya yang dibagikan selalu versi tersimpan.
   const [savedInvoiceId, setSavedInvoiceId] = useState<string | null>(null);
   const { activeCompany } = useCompany();
+
+  // Prefill nomor invoice urut asli dari server (menggantikan placeholder).
+  // setState dipanggil di dalam callback promise agar sesuai aturan efek.
+  useEffect(() => {
+    let active = true;
+    generateInvoiceNumberAction()
+      .then((invoiceNumber) => {
+        if (active) {
+          setBillingInfo((prev) => ({ ...prev, invoiceNumber }));
+        }
+      })
+      .catch(() => {
+        // Pakai placeholder bila gagal mengambil nomor dari server.
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
 
   return (
     <div className="flex flex-1 justify-center bg-zinc-50 px-4 py-10 dark:bg-black sm:px-8">
