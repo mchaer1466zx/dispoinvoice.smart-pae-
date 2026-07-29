@@ -9,6 +9,7 @@ import {
   FileText,
   LayoutDashboard,
   LogOut,
+  PackageCheck,
   Receipt,
   ScrollText,
   Settings,
@@ -82,6 +83,11 @@ export function UserMenu() {
           <Button variant="ghost" size="sm" className="w-full justify-start" asChild>
             <Link href="/buat-po">
               <Receipt /> Buat Purchase Order
+            </Link>
+          </Button>
+          <Button variant="ghost" size="sm" className="w-full justify-start" asChild>
+            <Link href="/buat-grn">
+              <PackageCheck /> Buat Goods Receipt
             </Link>
           </Button>
           <Button variant="ghost" size="sm" className="w-full justify-start" asChild>

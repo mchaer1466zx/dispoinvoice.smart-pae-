@@ -59,7 +59,7 @@ export const MOCK_CUSTOMERS: Customer[] = [
   },
 ];
 
-export type DocumentType = "invoice" | "po" | "memo" | "pr";
+export type DocumentType = "invoice" | "po" | "grn" | "memo" | "pr";
 
 export type DocumentLineItem = {
   description: string;
@@ -85,6 +85,7 @@ export type DocumentSummary = {
 export const DOCUMENT_TYPE_LABELS: Record<DocumentType, string> = {
   invoice: "Invoice",
   po: "Purchase Order",
+  grn: "Goods Receipt (GRN)",
   memo: "Memo Disposisi",
   pr: "Purchase Request",
 };

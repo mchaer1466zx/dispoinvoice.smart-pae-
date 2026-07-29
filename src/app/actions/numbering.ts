@@ -2,7 +2,12 @@
 
 import { like } from "drizzle-orm";
 import { db } from "@/db";
-import { invoices, purchaseOrders, purchaseRequests } from "@/db/schema";
+import {
+  goodsReceipts,
+  invoices,
+  purchaseOrders,
+  purchaseRequests,
+} from "@/db/schema";
 import {
   buildDocPrefix,
   getCompanyTheme,
@@ -60,6 +65,26 @@ export async function generatePurchaseOrderNumberAction(
 
   const seq = nextSequence(
     rows.map((row) => row.poNumber),
+    prefix
+  );
+  return `${prefix}${String(seq).padStart(3, "0")}`;
+}
+
+/**
+ * Server Action nomor Goods Receipt Note berikutnya, format dari tema
+ * perusahaan (mis. GRN/KSP/YYYY/MM/XXX). Urut per bulan & per perusahaan.
+ */
+export async function generateGoodsReceiptNumberAction(
+  companyId?: CompanyId
+): Promise<string> {
+  const prefix = currentPrefix(getCompanyTheme(companyId).docFormat.grn);
+  const rows = await db
+    .select({ grnNumber: goodsReceipts.grnNumber })
+    .from(goodsReceipts)
+    .where(like(goodsReceipts.grnNumber, `${prefix}%`));
+
+  const seq = nextSequence(
+    rows.map((row) => row.grnNumber),
     prefix
   );
   return `${prefix}${String(seq).padStart(3, "0")}`;

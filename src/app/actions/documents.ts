@@ -5,6 +5,8 @@ import { db } from "@/db";
 import { requireSessionUser } from "@/app/actions/auth";
 import {
   customers,
+  goodsReceipts,
+  grnItems,
   invoiceItems,
   invoices,
   memos,
@@ -15,7 +17,7 @@ import {
   suppliers,
 } from "@/db/schema";
 
-export type DocumentType = "invoice" | "po" | "memo" | "pr";
+export type DocumentType = "invoice" | "po" | "grn" | "memo" | "pr";
 
 export type DocumentSummary = {
   id: string;
@@ -100,6 +102,39 @@ export async function listDocumentsAction(
       ...rows.map((row) => ({
         id: row.id,
         type: "po" as const,
+        number: row.number,
+        partyName: row.partyName ?? "-",
+        date: row.date,
+        status: row.status,
+      }))
+    );
+  }
+
+  if (!params.type || params.type === "grn") {
+    const rows = await db
+      .select({
+        id: goodsReceipts.id,
+        number: goodsReceipts.grnNumber,
+        partyName: suppliers.name,
+        date: goodsReceipts.receiptDate,
+        status: goodsReceipts.status,
+      })
+      .from(goodsReceipts)
+      .leftJoin(suppliers, eq(goodsReceipts.supplierId, suppliers.id))
+      .where(
+        query
+          ? or(
+              like(goodsReceipts.grnNumber, `%${query}%`),
+              like(suppliers.name, `%${query}%`)
+            )
+          : undefined
+      )
+      .orderBy(desc(goodsReceipts.receiptDate));
+
+    results.push(
+      ...rows.map((row) => ({
+        id: row.id,
+        type: "grn" as const,
         number: row.number,
         partyName: row.partyName ?? "-",
         date: row.date,
@@ -268,6 +303,41 @@ export async function getDocumentAction(id: string): Promise<DocumentDetail | nu
       tax: po.tax,
       discount: po.discount,
       notes: po.notes ?? undefined,
+    };
+  }
+
+  const [grn] = await db
+    .select()
+    .from(goodsReceipts)
+    .where(eq(goodsReceipts.id, id))
+    .limit(1);
+
+  if (grn) {
+    const items = await db.select().from(grnItems).where(eq(grnItems.grnId, id));
+
+    const supplier = grn.supplierId
+      ? ((
+          await db
+            .select({ name: suppliers.name })
+            .from(suppliers)
+            .where(eq(suppliers.id, grn.supplierId))
+            .limit(1)
+        )[0] ?? null)
+      : null;
+
+    return {
+      id: grn.id,
+      type: "grn",
+      number: grn.grnNumber,
+      partyName: supplier?.name ?? "-",
+      date: grn.receiptDate,
+      status: grn.status,
+      items: items.map((item) => ({
+        description: item.description,
+        quantity: item.quantity,
+        price: item.price,
+      })),
+      notes: grn.notes ?? undefined,
     };
   }
 

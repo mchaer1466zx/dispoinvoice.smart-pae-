@@ -201,6 +201,56 @@ export const poItems = sqliteTable("po_items", {
   price: real("price").notNull(),
 });
 
+/**
+ * Goods Receipt Note (GRN) / Bukti Penerimaan Barang — mengikuti pola PO:
+ * mencatat barang yang diterima dari pemasok, opsional merujuk nomor PO asal.
+ */
+export const goodsReceipts = sqliteTable(
+  "goods_receipts",
+  {
+    id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),
+    userId: text("user_id"),
+    companyId: text("company_id").references(() => companies.id, {
+      onDelete: "set null",
+    }),
+    supplierId: text("supplier_id").references(() => suppliers.id, {
+      onDelete: "set null",
+    }),
+    grnNumber: text("grn_number").notNull(),
+    status: text("status", {
+      enum: ["draft", "diterima", "sebagian", "ditolak", "dibatalkan"],
+    })
+      .notNull()
+      .default("draft"),
+    receiptDate: text("receipt_date").notNull(),
+    // Nomor PO yang menjadi dasar penerimaan (opsional, teks bebas).
+    poReference: text("po_reference"),
+    // GRN sumber bila dokumen ini hasil "Duplikat" (Copy as New).
+    parentId: text("parent_id"),
+    notes: text("notes"),
+    createdAt: text("created_at")
+      .notNull()
+      .default(sql`(current_timestamp)`),
+  },
+  (table) => [
+    index("goods_receipts_user_id_idx").on(table.userId),
+    index("goods_receipts_status_idx").on(table.status),
+    index("goods_receipts_receipt_date_idx").on(table.receiptDate),
+  ]
+);
+
+export const grnItems = sqliteTable("grn_items", {
+  id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),
+  grnId: text("grn_id")
+    .notNull()
+    .references(() => goodsReceipts.id, { onDelete: "cascade" }),
+  groupLabel: text("group_label"),
+  description: text("description").notNull(),
+  quantity: real("quantity").notNull(),
+  unit: text("unit"),
+  price: real("price").notNull().default(0),
+});
+
 export const memos = sqliteTable(
   "memos",
   {
@@ -300,6 +350,7 @@ export const notifications = sqliteTable(
       enum: [
         "invoice_status",
         "po_status",
+        "grn_status",
         "memo_status",
         "pr_status",
         "doc_shared",
@@ -309,7 +360,7 @@ export const notifications = sqliteTable(
     }).notNull(),
     title: text("title").notNull(),
     body: text("body"),
-    docType: text("doc_type", { enum: ["invoice", "po", "memo", "pr"] }),
+    docType: text("doc_type", { enum: ["invoice", "po", "grn", "memo", "pr"] }),
     docId: text("doc_id"),
     isRead: integer("is_read", { mode: "boolean" }).notNull().default(false),
     dedupeKey: text("dedupe_key"),
