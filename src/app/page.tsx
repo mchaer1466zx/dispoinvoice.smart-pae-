@@ -17,7 +17,7 @@ export default function LandingPage() {
     >
       <img
         src={BRAND.logoPath}
-        alt={`Logo ${BRAND.name}`}
+        alt={`Logo ${BRAND.groupName}`}
         width={150}
         height={150}
         className="h-36 w-36 object-contain sm:h-40 sm:w-40"
@@ -26,13 +26,13 @@ export default function LandingPage() {
         className="mt-6 text-3xl font-extrabold uppercase sm:text-5xl"
         style={{ letterSpacing: "0.06em" }}
       >
-        {BRAND.name}
+        {BRAND.groupName}
       </h1>
       <p
         className="mt-3 text-sm font-semibold uppercase sm:text-lg"
         style={{ color: C.gold, letterSpacing: "0.24em" }}
       >
-        {BRAND.tagline}
+        {BRAND.groupTagline}
       </p>
 
       <div className="relative mx-auto mt-6 w-40">
@@ -73,7 +73,7 @@ export default function LandingPage() {
       </div>
 
       <p className="mt-12 text-xs text-white/60">
-        © 2026 {BRAND.name} · {BRAND.appName}
+        © 2026 {BRAND.groupName} · {BRAND.appName}
       </p>
     </div>
   );

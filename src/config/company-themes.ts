@@ -67,7 +67,7 @@ export const COMPANY_THEMES: Record<CompanyId, CompanyTheme> = {
     tagline: "QUALITY • INTERGRITY • EXCELLENCE",
     address:
       "Jl. Pertanian Raya No. 64, Lebak Bulus, Cilandak, Jakarta Selatan 12440",
-    phone: "021 29862350",
+    phone: "021 2784 1924",
     email: "info@karyasangprabu.co.id",
     website: "www.karyasangprabu.co.id",
     docFormat: {
@@ -113,7 +113,7 @@ export const COMPANY_THEMES: Record<CompanyId, CompanyTheme> = {
     subTagline: "Global Commodity Sourcing, Trading & Distribution",
     address:
       "Jl. Pertanian Raya No 64, Lebak Bulus, Cilandak, Jakarta Selatan 12440",
-    phone: "(021) 27841924",
+    phone: "021 2784 1924",
     email: "ptprimaandalasenergi@gmail.com",
     website: "www.primaandalasenergi.co.id",
     docFormat: {
@@ -160,7 +160,7 @@ export const COMPANY_THEMES: Record<CompanyId, CompanyTheme> = {
       "Connecting Markets, Delivering Value • Global Commodity Sourcing, Trading & Distribution",
     address:
       "Jl. Pertanian Raya No. 64, Lebak Bulus, Cilandak, Jakarta Selatan 12440",
-    phone: "(021) 29862350",
+    phone: "021 2784 1924",
     email: "info@prabuunggulbersama.co.id",
     website: "www.prabuunggulbersama.co.id",
     docFormat: {
