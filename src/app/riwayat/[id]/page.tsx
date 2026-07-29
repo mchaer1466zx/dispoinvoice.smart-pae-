@@ -43,6 +43,7 @@ import type { RfqStatus } from "@/app/actions/rfqs";
 import type { QuotationStatus } from "@/app/actions/quotations";
 import type { SupplierInvoiceStatus } from "@/app/actions/supplier-invoices";
 import { CancelDocumentButton } from "@/components/cancel-document-button";
+import { ConvertDocumentButton } from "@/components/convert-document-button";
 import { DocumentAuditPanel } from "@/components/document-audit-panel";
 import { DocumentAttachments } from "@/components/document-attachments";
 import { calculateInvoiceTotals } from "@/lib/invoice-totals";
@@ -182,6 +183,15 @@ export default function DocumentDetailPage() {
               id={doc.id}
               onCancelled={handleCancelled}
             />
+          ) : null}
+          {!isCancelled && doc.type === "rfq" ? (
+            <ConvertDocumentButton kind="rfq" id={doc.id} />
+          ) : null}
+          {!isCancelled && doc.type === "pr" ? (
+            <ConvertDocumentButton kind="pr" id={doc.id} />
+          ) : null}
+          {!isCancelled && doc.type === "quotation" ? (
+            <ConvertDocumentButton kind="quotation" id={doc.id} />
           ) : null}
           {doc.type === "invoice" ? (
             <DuplicateInvoiceButton invoiceId={doc.id} />
