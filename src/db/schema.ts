@@ -251,6 +251,110 @@ export const grnItems = sqliteTable("grn_items", {
   price: real("price").notNull().default(0),
 });
 
+/**
+ * Request for Quotation (RFQ) / Permintaan Penawaran — mengikuti pola PO:
+ * permintaan penawaran harga ke pemasok. Harga item opsional (diisi vendor).
+ */
+export const rfqs = sqliteTable(
+  "rfqs",
+  {
+    id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),
+    userId: text("user_id"),
+    companyId: text("company_id").references(() => companies.id, {
+      onDelete: "set null",
+    }),
+    supplierId: text("supplier_id").references(() => suppliers.id, {
+      onDelete: "set null",
+    }),
+    rfqNumber: text("rfq_number").notNull(),
+    status: text("status", {
+      enum: ["draft", "terkirim", "dijawab", "ditutup", "dibatalkan"],
+    })
+      .notNull()
+      .default("draft"),
+    requestDate: text("request_date").notNull(),
+    // Batas akhir vendor memasukkan penawaran (opsional).
+    deadline: text("deadline"),
+    // RFQ sumber bila dokumen ini hasil "Duplikat" (Copy as New).
+    parentId: text("parent_id"),
+    notes: text("notes"),
+    createdAt: text("created_at")
+      .notNull()
+      .default(sql`(current_timestamp)`),
+  },
+  (table) => [
+    index("rfqs_user_id_idx").on(table.userId),
+    index("rfqs_status_idx").on(table.status),
+    index("rfqs_request_date_idx").on(table.requestDate),
+  ]
+);
+
+export const rfqItems = sqliteTable("rfq_items", {
+  id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),
+  rfqId: text("rfq_id")
+    .notNull()
+    .references(() => rfqs.id, { onDelete: "cascade" }),
+  groupLabel: text("group_label"),
+  description: text("description").notNull(),
+  quantity: real("quantity").notNull(),
+  unit: text("unit"),
+  price: real("price").notNull().default(0),
+});
+
+/**
+ * Quotation / Surat Penawaran — dokumen penawaran harga yang DITERBITKAN
+ * perusahaan kepada pelanggan/klien. Mengikuti pola PO namun pihaknya
+ * pelanggan (customer) dan punya masa berlaku (validUntil).
+ */
+export const quotations = sqliteTable(
+  "quotations",
+  {
+    id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),
+    userId: text("user_id"),
+    companyId: text("company_id").references(() => companies.id, {
+      onDelete: "set null",
+    }),
+    customerId: text("customer_id").references(() => customers.id, {
+      onDelete: "set null",
+    }),
+    quotationNumber: text("quotation_number").notNull(),
+    status: text("status", {
+      enum: ["draft", "terkirim", "diterima", "ditolak", "dibatalkan"],
+    })
+      .notNull()
+      .default("draft"),
+    quotationDate: text("quotation_date").notNull(),
+    // Masa berlaku penawaran (opsional).
+    validUntil: text("valid_until"),
+    tax: real("tax").notNull().default(0),
+    discount: real("discount").notNull().default(0),
+    // Quotation sumber bila dokumen ini hasil "Duplikat" (Copy as New).
+    parentId: text("parent_id"),
+    notes: text("notes"),
+    createdAt: text("created_at")
+      .notNull()
+      .default(sql`(current_timestamp)`),
+  },
+  (table) => [
+    index("quotations_user_id_idx").on(table.userId),
+    index("quotations_status_idx").on(table.status),
+    index("quotations_quotation_date_idx").on(table.quotationDate),
+  ]
+);
+
+export const quotationItems = sqliteTable("quotation_items", {
+  id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),
+  quotationId: text("quotation_id")
+    .notNull()
+    .references(() => quotations.id, { onDelete: "cascade" }),
+  groupLabel: text("group_label"),
+  description: text("description").notNull(),
+  spec: text("spec"),
+  quantity: real("quantity").notNull(),
+  unit: text("unit"),
+  price: real("price").notNull().default(0),
+});
+
 export const memos = sqliteTable(
   "memos",
   {
@@ -351,6 +455,8 @@ export const notifications = sqliteTable(
         "invoice_status",
         "po_status",
         "grn_status",
+        "rfq_status",
+        "quotation_status",
         "memo_status",
         "pr_status",
         "doc_shared",
@@ -360,7 +466,9 @@ export const notifications = sqliteTable(
     }).notNull(),
     title: text("title").notNull(),
     body: text("body"),
-    docType: text("doc_type", { enum: ["invoice", "po", "grn", "memo", "pr"] }),
+    docType: text("doc_type", {
+      enum: ["invoice", "po", "grn", "rfq", "quotation", "memo", "pr"],
+    }),
     docId: text("doc_id"),
     isRead: integer("is_read", { mode: "boolean" }).notNull().default(false),
     dedupeKey: text("dedupe_key"),
