@@ -14,10 +14,12 @@ import {
   prItems,
   purchaseOrders,
   purchaseRequests,
+  rfqs,
+  rfqItems,
   suppliers,
 } from "@/db/schema";
 
-export type DocumentType = "invoice" | "po" | "grn" | "memo" | "pr";
+export type DocumentType = "invoice" | "po" | "grn" | "rfq" | "memo" | "pr";
 
 export type DocumentSummary = {
   id: string;
@@ -135,6 +137,39 @@ export async function listDocumentsAction(
       ...rows.map((row) => ({
         id: row.id,
         type: "grn" as const,
+        number: row.number,
+        partyName: row.partyName ?? "-",
+        date: row.date,
+        status: row.status,
+      }))
+    );
+  }
+
+  if (!params.type || params.type === "rfq") {
+    const rows = await db
+      .select({
+        id: rfqs.id,
+        number: rfqs.rfqNumber,
+        partyName: suppliers.name,
+        date: rfqs.requestDate,
+        status: rfqs.status,
+      })
+      .from(rfqs)
+      .leftJoin(suppliers, eq(rfqs.supplierId, suppliers.id))
+      .where(
+        query
+          ? or(
+              like(rfqs.rfqNumber, `%${query}%`),
+              like(suppliers.name, `%${query}%`)
+            )
+          : undefined
+      )
+      .orderBy(desc(rfqs.requestDate));
+
+    results.push(
+      ...rows.map((row) => ({
+        id: row.id,
+        type: "rfq" as const,
         number: row.number,
         partyName: row.partyName ?? "-",
         date: row.date,
@@ -338,6 +373,37 @@ export async function getDocumentAction(id: string): Promise<DocumentDetail | nu
         price: item.price,
       })),
       notes: grn.notes ?? undefined,
+    };
+  }
+
+  const [rfq] = await db.select().from(rfqs).where(eq(rfqs.id, id)).limit(1);
+
+  if (rfq) {
+    const items = await db.select().from(rfqItems).where(eq(rfqItems.rfqId, id));
+
+    const supplier = rfq.supplierId
+      ? ((
+          await db
+            .select({ name: suppliers.name })
+            .from(suppliers)
+            .where(eq(suppliers.id, rfq.supplierId))
+            .limit(1)
+        )[0] ?? null)
+      : null;
+
+    return {
+      id: rfq.id,
+      type: "rfq",
+      number: rfq.rfqNumber,
+      partyName: supplier?.name ?? "-",
+      date: rfq.requestDate,
+      status: rfq.status,
+      items: items.map((item) => ({
+        description: item.description,
+        quantity: item.quantity,
+        price: item.price,
+      })),
+      notes: rfq.notes ?? undefined,
     };
   }
 

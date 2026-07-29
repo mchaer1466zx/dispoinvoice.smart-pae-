@@ -7,6 +7,7 @@ import {
   invoices,
   purchaseOrders,
   purchaseRequests,
+  rfqs,
 } from "@/db/schema";
 import {
   buildDocPrefix,
@@ -85,6 +86,26 @@ export async function generateGoodsReceiptNumberAction(
 
   const seq = nextSequence(
     rows.map((row) => row.grnNumber),
+    prefix
+  );
+  return `${prefix}${String(seq).padStart(3, "0")}`;
+}
+
+/**
+ * Server Action nomor Request for Quotation berikutnya, format dari tema
+ * perusahaan (mis. RFQ/KSP/YYYY/MM/XXX). Urut per bulan & per perusahaan.
+ */
+export async function generateRfqNumberAction(
+  companyId?: CompanyId
+): Promise<string> {
+  const prefix = currentPrefix(getCompanyTheme(companyId).docFormat.rfq);
+  const rows = await db
+    .select({ rfqNumber: rfqs.rfqNumber })
+    .from(rfqs)
+    .where(like(rfqs.rfqNumber, `${prefix}%`));
+
+  const seq = nextSequence(
+    rows.map((row) => row.rfqNumber),
     prefix
   );
   return `${prefix}${String(seq).padStart(3, "0")}`;

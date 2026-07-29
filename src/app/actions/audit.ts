@@ -9,12 +9,13 @@ import {
   memos,
   purchaseOrders,
   purchaseRequests,
+  rfqs,
   users,
 } from "@/db/schema";
 import { requireSessionUser } from "@/app/actions/auth";
 import { recordAudit } from "@/lib/audit";
 
-export type DocKind = "invoice" | "po" | "grn" | "memo" | "pr";
+export type DocKind = "invoice" | "po" | "grn" | "rfq" | "memo" | "pr";
 
 export type CancelDocumentResult =
   | { success: true }
@@ -65,6 +66,13 @@ export async function cancelDocumentAction(
       .where(eq(goodsReceipts.id, id))
       .limit(1);
     currentStatus = row?.status;
+  } else if (kind === "rfq") {
+    const [row] = await db
+      .select({ status: rfqs.status })
+      .from(rfqs)
+      .where(eq(rfqs.id, id))
+      .limit(1);
+    currentStatus = row?.status;
   } else {
     const [row] = await db
       .select({ status: memos.status })
@@ -102,6 +110,8 @@ export async function cancelDocumentAction(
         .update(goodsReceipts)
         .set({ status: "dibatalkan" })
         .where(eq(goodsReceipts.id, id));
+    } else if (kind === "rfq") {
+      await db.update(rfqs).set({ status: "dibatalkan" }).where(eq(rfqs.id, id));
     } else {
       await db.update(memos).set({ status: "dibatalkan" }).where(eq(memos.id, id));
     }

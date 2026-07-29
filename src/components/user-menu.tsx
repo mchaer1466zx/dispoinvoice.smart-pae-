@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import {
   Archive,
   ClipboardList,
+  FileQuestion,
   FileText,
   LayoutDashboard,
   LogOut,
@@ -78,6 +79,11 @@ export function UserMenu() {
           <Button variant="ghost" size="sm" className="w-full justify-start" asChild>
             <Link href="/buat-pr">
               <ClipboardList /> Buat Purchase Request
+            </Link>
+          </Button>
+          <Button variant="ghost" size="sm" className="w-full justify-start" asChild>
+            <Link href="/buat-rfq">
+              <FileQuestion /> Buat RFQ
             </Link>
           </Button>
           <Button variant="ghost" size="sm" className="w-full justify-start" asChild>

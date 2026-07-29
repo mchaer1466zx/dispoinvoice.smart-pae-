@@ -169,6 +169,13 @@
       "when": 1785281822427,
       "tag": "0023_lumpy_wong",
       "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "6",
+      "when": 1785296600455,
+      "tag": "0024_greedy_mikhail_rasputin",
+      "breakpoints": true
     }
   ]
 }

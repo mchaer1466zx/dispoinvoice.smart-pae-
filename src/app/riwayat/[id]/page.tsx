@@ -23,6 +23,8 @@ import { DuplicateMemoButton } from "@/components/memo/duplicate-memo-button";
 import { PurchaseRequestStatusControl } from "@/components/pr/pr-status-control";
 import { GoodsReceiptStatusControl } from "@/components/grn/grn-status-control";
 import { DuplicateGoodsReceiptButton } from "@/components/grn/duplicate-grn-button";
+import { RfqStatusControl } from "@/components/rfq/rfq-status-control";
+import { DuplicateRfqButton } from "@/components/rfq/duplicate-rfq-button";
 import { DOCUMENT_TYPE_LABELS } from "@/lib/mock-data";
 import {
   getDocumentAction,
@@ -33,6 +35,7 @@ import type { PoStatus } from "@/app/actions/purchase-orders";
 import type { MemoStatus } from "@/app/actions/memos";
 import type { PrStatus } from "@/app/actions/purchase-requests";
 import type { GrnStatus } from "@/app/actions/goods-receipts";
+import type { RfqStatus } from "@/app/actions/rfqs";
 import { CancelDocumentButton } from "@/components/cancel-document-button";
 import { DocumentAuditPanel } from "@/components/document-audit-panel";
 import { DocumentAttachments } from "@/components/document-attachments";
@@ -49,10 +52,12 @@ const STATUS_VARIANTS: Record<
   dibaca: "secondary",
   menunggu_approval: "secondary",
   sebagian: "secondary",
+  dijawab: "secondary",
   lunas: "success",
   selesai: "success",
   disetujui: "success",
   diterima: "success",
+  ditutup: "success",
   ditolak: "destructive",
   dibatalkan: "destructive",
 };
@@ -61,6 +66,7 @@ const PARTY_LABELS = {
   invoice: "Ditagih Kepada",
   po: "Kepada Pemasok",
   grn: "Diterima Dari Pemasok",
+  rfq: "Kepada Pemasok",
   memo: "Kepada",
   pr: "Departemen Peminta",
 } as const;
@@ -179,6 +185,7 @@ export default function DocumentDetailPage() {
           {doc.type === "grn" ? (
             <DuplicateGoodsReceiptButton grnId={doc.id} />
           ) : null}
+          {doc.type === "rfq" ? <DuplicateRfqButton rfqId={doc.id} /> : null}
           <Button type="button" variant="outline" onClick={() => window.print()}>
             <Printer /> Cetak
           </Button>
@@ -255,6 +262,21 @@ export default function DocumentDetailPage() {
               grnId={doc.id}
               currentStatus={doc.status}
               onChanged={(status: GrnStatus) => {
+                setDoc((prev) => (prev ? { ...prev, status } : prev));
+                setAuditReloadToken((token) => token + 1);
+              }}
+            />
+          </CardContent>
+        </Card>
+      ) : null}
+
+      {doc.type === "rfq" && !isCancelled ? (
+        <Card className="print:hidden">
+          <CardContent className="pt-6">
+            <RfqStatusControl
+              rfqId={doc.id}
+              currentStatus={doc.status}
+              onChanged={(status: RfqStatus) => {
                 setDoc((prev) => (prev ? { ...prev, status } : prev));
                 setAuditReloadToken((token) => token + 1);
               }}

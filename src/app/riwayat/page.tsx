@@ -37,6 +37,7 @@ const STATUS_VARIANTS: Record<string, "secondary" | "success" | "outline"> = {
 const TYPE_FILTERS: { value: DocumentType | "semua"; label: string }[] = [
   { value: "semua", label: "Semua" },
   { value: "pr", label: DOCUMENT_TYPE_LABELS.pr },
+  { value: "rfq", label: DOCUMENT_TYPE_LABELS.rfq },
   { value: "po", label: DOCUMENT_TYPE_LABELS.po },
   { value: "grn", label: DOCUMENT_TYPE_LABELS.grn },
   { value: "invoice", label: DOCUMENT_TYPE_LABELS.invoice },

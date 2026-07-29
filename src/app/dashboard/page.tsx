@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import {
   ClipboardList,
+  FileQuestion,
   FileText,
   History,
   PackageCheck,
@@ -31,6 +32,12 @@ const LINKS = [
     title: "Buat Purchase Request",
     description: "Ajukan permintaan pembelian dari departemen.",
     icon: ClipboardList,
+  },
+  {
+    href: "/buat-rfq",
+    title: "Buat RFQ (Permintaan Penawaran)",
+    description: "Minta penawaran harga ke pemasok.",
+    icon: FileQuestion,
   },
   {
     href: "/buat-po",
