@@ -42,6 +42,7 @@ const TYPE_FILTERS: { value: DocumentType | "semua"; label: string }[] = [
   { value: "grn", label: DOCUMENT_TYPE_LABELS.grn },
   { value: "quotation", label: DOCUMENT_TYPE_LABELS.quotation },
   { value: "invoice", label: DOCUMENT_TYPE_LABELS.invoice },
+  { value: "supplier_invoice", label: DOCUMENT_TYPE_LABELS.supplier_invoice },
   { value: "memo", label: DOCUMENT_TYPE_LABELS.memo },
 ];
 

@@ -355,6 +355,61 @@ export const quotationItems = sqliteTable("quotation_items", {
   price: real("price").notNull().default(0),
 });
 
+/**
+ * Supplier Invoice / Tagihan Pemasok — tagihan MASUK dari pemasok (accounts
+ * payable). Mengikuti pola PO: pihaknya pemasok, punya jatuh tempo & pelacakan
+ * pembayaran, opsional merujuk nomor PO & nomor invoice asli pemasok.
+ */
+export const supplierInvoices = sqliteTable(
+  "supplier_invoices",
+  {
+    id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),
+    userId: text("user_id"),
+    companyId: text("company_id").references(() => companies.id, {
+      onDelete: "set null",
+    }),
+    supplierId: text("supplier_id").references(() => suppliers.id, {
+      onDelete: "set null",
+    }),
+    invoiceNumber: text("invoice_number").notNull(),
+    // Nomor invoice asli dari pemasok (opsional).
+    supplierRef: text("supplier_ref"),
+    // Nomor PO yang menjadi dasar tagihan (opsional).
+    poReference: text("po_reference"),
+    status: text("status", {
+      enum: ["draft", "belum_dibayar", "dibayar_sebagian", "lunas", "dibatalkan"],
+    })
+      .notNull()
+      .default("draft"),
+    invoiceDate: text("invoice_date").notNull(),
+    dueDate: text("due_date"),
+    tax: real("tax").notNull().default(0),
+    discount: real("discount").notNull().default(0),
+    parentId: text("parent_id"),
+    notes: text("notes"),
+    createdAt: text("created_at")
+      .notNull()
+      .default(sql`(current_timestamp)`),
+  },
+  (table) => [
+    index("supplier_invoices_user_id_idx").on(table.userId),
+    index("supplier_invoices_status_idx").on(table.status),
+    index("supplier_invoices_invoice_date_idx").on(table.invoiceDate),
+  ]
+);
+
+export const supplierInvoiceItems = sqliteTable("supplier_invoice_items", {
+  id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),
+  supplierInvoiceId: text("supplier_invoice_id")
+    .notNull()
+    .references(() => supplierInvoices.id, { onDelete: "cascade" }),
+  groupLabel: text("group_label"),
+  description: text("description").notNull(),
+  quantity: real("quantity").notNull(),
+  unit: text("unit"),
+  price: real("price").notNull().default(0),
+});
+
 export const memos = sqliteTable(
   "memos",
   {
@@ -457,6 +512,7 @@ export const notifications = sqliteTable(
         "grn_status",
         "rfq_status",
         "quotation_status",
+        "supplier_invoice_status",
         "memo_status",
         "pr_status",
         "doc_shared",
@@ -467,7 +523,16 @@ export const notifications = sqliteTable(
     title: text("title").notNull(),
     body: text("body"),
     docType: text("doc_type", {
-      enum: ["invoice", "po", "grn", "rfq", "quotation", "memo", "pr"],
+      enum: [
+        "invoice",
+        "po",
+        "grn",
+        "rfq",
+        "quotation",
+        "supplier_invoice",
+        "memo",
+        "pr",
+      ],
     }),
     docId: text("doc_id"),
     isRead: integer("is_read", { mode: "boolean" }).notNull().default(false),

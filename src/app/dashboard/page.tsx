@@ -7,11 +7,12 @@ import {
   FileText,
   History,
   PackageCheck,
+  Receipt,
+  ReceiptText,
   Settings,
   ShoppingCart,
   StickyNote,
   Users,
-  Receipt,
 } from "lucide-react";
 import {
   Card,
@@ -63,6 +64,12 @@ const LINKS = [
     title: "Buat Invoice",
     description: "Susun dan cetak invoice pelanggan.",
     icon: Receipt,
+  },
+  {
+    href: "/buat-tagihan",
+    title: "Buat Tagihan Pemasok",
+    description: "Catat tagihan masuk dari pemasok & lacak pembayaran.",
+    icon: ReceiptText,
   },
   {
     href: "/memo",

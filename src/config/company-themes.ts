@@ -21,7 +21,7 @@ export interface CompanyTheme {
   email: string;
   website: string;
   // Format nomor dokumen otomatis, contoh: PR/KSP/YYYY/MM/XXX
-  docFormat: { pr: string; po: string; grn: string; rfq: string; quotation: string; invoice: string };
+  docFormat: { pr: string; po: string; grn: string; rfq: string; quotation: string; supplierInvoice: string; invoice: string };
   // PALET WARNA RESMI (diambil dari gambar kop surat)
   colors: {
     primary: string; // Warna utama nama perusahaan
@@ -76,6 +76,7 @@ export const COMPANY_THEMES: Record<CompanyId, CompanyTheme> = {
       grn: "GRN/KSP/YYYY/MM/XXX",
       rfq: "RFQ/KSP/YYYY/MM/XXX",
       quotation: "QUO/KSP/YYYY/MM/XXX",
+      supplierInvoice: "BILL/KSP/YYYY/MM/XXX",
       invoice: "INV/KSP/YYYY/MM/XXX",
     },
     colors: {
@@ -121,6 +122,7 @@ export const COMPANY_THEMES: Record<CompanyId, CompanyTheme> = {
       grn: "GRN/PAE/YYYY/MM/XXX",
       rfq: "RFQ/PAE/YYYY/MM/XXX",
       quotation: "QUO/PAE/YYYY/MM/XXX",
+      supplierInvoice: "BILL/PAE/YYYY/MM/XXX",
       invoice: "INV/PAE/YYYY/MM/XXX",
     },
     colors: {
@@ -167,6 +169,7 @@ export const COMPANY_THEMES: Record<CompanyId, CompanyTheme> = {
       grn: "GRN/PUB/YYYY/MM/XXX",
       rfq: "RFQ/PUB/YYYY/MM/XXX",
       quotation: "QUO/PUB/YYYY/MM/XXX",
+      supplierInvoice: "BILL/PUB/YYYY/MM/XXX",
       invoice: "INV/PUB/YYYY/MM/XXX",
     },
     colors: {

@@ -65,6 +65,7 @@ export type DocumentType =
   | "grn"
   | "rfq"
   | "quotation"
+  | "supplier_invoice"
   | "memo"
   | "pr";
 
@@ -95,6 +96,7 @@ export const DOCUMENT_TYPE_LABELS: Record<DocumentType, string> = {
   grn: "Goods Receipt (GRN)",
   rfq: "Request for Quotation (RFQ)",
   quotation: "Quotation (Penawaran)",
+  supplier_invoice: "Tagihan Pemasok",
   memo: "Memo Disposisi",
   pr: "Purchase Request",
 };

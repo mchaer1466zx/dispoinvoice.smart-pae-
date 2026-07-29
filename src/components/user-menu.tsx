@@ -13,6 +13,7 @@ import {
   LogOut,
   PackageCheck,
   Receipt,
+  ReceiptText,
   ScrollText,
   Settings,
   Users,
@@ -80,6 +81,11 @@ export function UserMenu() {
           <Button variant="ghost" size="sm" className="w-full justify-start" asChild>
             <Link href="/buat-invoice">
               <FileText /> Buat Invoice
+            </Link>
+          </Button>
+          <Button variant="ghost" size="sm" className="w-full justify-start" asChild>
+            <Link href="/buat-tagihan">
+              <ReceiptText /> Buat Tagihan Pemasok
             </Link>
           </Button>
           <Button variant="ghost" size="sm" className="w-full justify-start" asChild>
