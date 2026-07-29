@@ -13,6 +13,7 @@ const PUBLIC_PATHS = [
 const PUBLIC_PREFIXES = [
   "/verify/",
   "/po/publik/",
+  "/memo/publik/",
   "/api/invoices/",
   "/api/purchase-orders/",
   "/api/memos/",
