@@ -1,11 +1,11 @@
-/* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
 import { ArrowRight, Building2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { BRAND, BRAND_COLORS as C } from "@/lib/brand";
 
 /**
- * Landing page publik: logo + nama PT KSP + tagline + tombol "Masuk ke Sistem".
+ * Landing page publik: headline grup + tagline + tombol "Masuk ke Sistem".
+ * Logo grup belum ditetapkan, jadi halaman depan tampil tanpa logo.
  * Halaman ini publik (lihat proxy.ts). Pengguna yang sudah login diarahkan ke
  * /dashboard oleh alur login.
  */
@@ -15,15 +15,8 @@ export default function LandingPage() {
       className="flex flex-1 flex-col items-center justify-center px-6 py-16 text-center"
       style={{ background: C.green, color: C.white }}
     >
-      <img
-        src={BRAND.logoPath}
-        alt={`Logo ${BRAND.groupName}`}
-        width={150}
-        height={150}
-        className="h-36 w-36 object-contain sm:h-40 sm:w-40"
-      />
       <h1
-        className="mt-6 text-3xl font-extrabold uppercase sm:text-5xl"
+        className="text-3xl font-extrabold uppercase sm:text-5xl"
         style={{ letterSpacing: "0.06em" }}
       >
         {BRAND.groupName}

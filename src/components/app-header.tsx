@@ -10,7 +10,9 @@ import { BRAND } from "@/lib/brand";
 export function AppHeader() {
   const { activeCompany } = useCompany();
   const name = activeCompany?.name ?? BRAND.groupName;
-  const logoUrl = activeCompany?.logoUrl ?? BRAND.logoPath;
+  // Logo grup belum ditetapkan: tampilkan logo hanya bila perusahaan aktif
+  // punya logonya sendiri; jangan pakai logo KSP sebagai lambang grup.
+  const logoUrl = activeCompany?.logoUrl ?? null;
 
   return (
     <header className="border-b-2 border-primary bg-white">
