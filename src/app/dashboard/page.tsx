@@ -4,6 +4,7 @@ import {
   BadgeDollarSign,
   ClipboardList,
   FileQuestion,
+  FileSpreadsheet,
   FileText,
   History,
   PackageCheck,
@@ -14,6 +15,7 @@ import {
   StickyNote,
   Users,
 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -24,6 +26,8 @@ import {
 import { BRAND } from "@/lib/brand";
 import { isAdminAction } from "@/app/actions/auth";
 import { getDashboardSummaryAction } from "@/app/actions/dashboard";
+import { getMonthlyTrendAction } from "@/app/actions/reports";
+import { TrendChart } from "@/components/dashboard/trend-chart";
 import { formatCurrency } from "@/lib/format";
 
 export const metadata: Metadata = {
@@ -92,6 +96,12 @@ const LINKS = [
     icon: Users,
   },
   {
+    href: "/laporan",
+    title: "Laporan & Export Excel",
+    description: "Rekap seluruh dokumen + nilai, ekspor ke Excel.",
+    icon: FileSpreadsheet,
+  },
+  {
     href: "/contoh-pdf",
     title: "Contoh Dokumen PDF",
     description: "Lihat contoh format PDF gaya resmi perusahaan.",
@@ -107,9 +117,10 @@ const LINKS = [
 ];
 
 export default async function DashboardPage() {
-  const [isAdmin, summary] = await Promise.all([
+  const [isAdmin, summary, trend] = await Promise.all([
     isAdminAction(),
     getDashboardSummaryAction(),
+    getMonthlyTrendAction(),
   ]);
   const links = LINKS.filter((link) => !link.adminOnly || isAdmin);
 
@@ -176,6 +187,26 @@ export default async function DashboardPage() {
             </Card>
           ))}
         </div>
+
+        {/* Tren dokumen 6 bulan */}
+        <Card>
+          <CardHeader className="flex-row items-center justify-between gap-3 pb-2">
+            <div>
+              <CardTitle className="text-base">Tren Dokumen</CardTitle>
+              <CardDescription>
+                Jumlah dokumen dibuat per bulan (6 bulan terakhir).
+              </CardDescription>
+            </div>
+            <Button variant="outline" size="sm" asChild>
+              <Link href="/laporan">
+                <FileSpreadsheet /> Laporan &amp; Export
+              </Link>
+            </Button>
+          </CardHeader>
+          <CardContent>
+            <TrendChart points={trend} />
+          </CardContent>
+        </Card>
 
         {/* Jumlah dokumen per jenis */}
         <Card>
