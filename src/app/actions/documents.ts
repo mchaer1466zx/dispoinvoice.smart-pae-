@@ -18,6 +18,8 @@ import {
   quotationItems,
   rfqs,
   rfqItems,
+  supplierInvoices,
+  supplierInvoiceItems,
   suppliers,
 } from "@/db/schema";
 
@@ -27,6 +29,7 @@ export type DocumentType =
   | "grn"
   | "rfq"
   | "quotation"
+  | "supplier_invoice"
   | "memo"
   | "pr";
 
@@ -146,6 +149,39 @@ export async function listDocumentsAction(
       ...rows.map((row) => ({
         id: row.id,
         type: "grn" as const,
+        number: row.number,
+        partyName: row.partyName ?? "-",
+        date: row.date,
+        status: row.status,
+      }))
+    );
+  }
+
+  if (!params.type || params.type === "supplier_invoice") {
+    const rows = await db
+      .select({
+        id: supplierInvoices.id,
+        number: supplierInvoices.invoiceNumber,
+        partyName: suppliers.name,
+        date: supplierInvoices.invoiceDate,
+        status: supplierInvoices.status,
+      })
+      .from(supplierInvoices)
+      .leftJoin(suppliers, eq(supplierInvoices.supplierId, suppliers.id))
+      .where(
+        query
+          ? or(
+              like(supplierInvoices.invoiceNumber, `%${query}%`),
+              like(suppliers.name, `%${query}%`)
+            )
+          : undefined
+      )
+      .orderBy(desc(supplierInvoices.invoiceDate));
+
+    results.push(
+      ...rows.map((row) => ({
+        id: row.id,
+        type: "supplier_invoice" as const,
         number: row.number,
         partyName: row.partyName ?? "-",
         date: row.date,
@@ -415,6 +451,46 @@ export async function getDocumentAction(id: string): Promise<DocumentDetail | nu
         price: item.price,
       })),
       notes: grn.notes ?? undefined,
+    };
+  }
+
+  const [supplierInvoice] = await db
+    .select()
+    .from(supplierInvoices)
+    .where(eq(supplierInvoices.id, id))
+    .limit(1);
+
+  if (supplierInvoice) {
+    const items = await db
+      .select()
+      .from(supplierInvoiceItems)
+      .where(eq(supplierInvoiceItems.supplierInvoiceId, id));
+
+    const supplier = supplierInvoice.supplierId
+      ? ((
+          await db
+            .select({ name: suppliers.name })
+            .from(suppliers)
+            .where(eq(suppliers.id, supplierInvoice.supplierId))
+            .limit(1)
+        )[0] ?? null)
+      : null;
+
+    return {
+      id: supplierInvoice.id,
+      type: "supplier_invoice",
+      number: supplierInvoice.invoiceNumber,
+      partyName: supplier?.name ?? "-",
+      date: supplierInvoice.invoiceDate,
+      status: supplierInvoice.status,
+      items: items.map((item) => ({
+        description: item.description,
+        quantity: item.quantity,
+        price: item.price,
+      })),
+      tax: supplierInvoice.tax,
+      discount: supplierInvoice.discount,
+      notes: supplierInvoice.notes ?? undefined,
     };
   }
 

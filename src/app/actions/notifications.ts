@@ -10,7 +10,16 @@ export type NotificationRecord = {
   type: string;
   title: string;
   body: string | null;
-  docType: "invoice" | "po" | "grn" | "rfq" | "quotation" | "memo" | "pr" | null;
+  docType:
+    | "invoice"
+    | "po"
+    | "grn"
+    | "rfq"
+    | "quotation"
+    | "supplier_invoice"
+    | "memo"
+    | "pr"
+    | null;
   docId: string | null;
   isRead: boolean;
   createdAt: string;

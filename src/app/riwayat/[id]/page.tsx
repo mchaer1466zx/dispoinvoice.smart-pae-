@@ -27,6 +27,8 @@ import { RfqStatusControl } from "@/components/rfq/rfq-status-control";
 import { DuplicateRfqButton } from "@/components/rfq/duplicate-rfq-button";
 import { QuotationStatusControl } from "@/components/quotation/quotation-status-control";
 import { DuplicateQuotationButton } from "@/components/quotation/duplicate-quotation-button";
+import { SupplierInvoiceStatusControl } from "@/components/supplier-invoice/supplier-invoice-status-control";
+import { DuplicateSupplierInvoiceButton } from "@/components/supplier-invoice/duplicate-supplier-invoice-button";
 import { DOCUMENT_TYPE_LABELS } from "@/lib/mock-data";
 import {
   getDocumentAction,
@@ -39,6 +41,7 @@ import type { PrStatus } from "@/app/actions/purchase-requests";
 import type { GrnStatus } from "@/app/actions/goods-receipts";
 import type { RfqStatus } from "@/app/actions/rfqs";
 import type { QuotationStatus } from "@/app/actions/quotations";
+import type { SupplierInvoiceStatus } from "@/app/actions/supplier-invoices";
 import { CancelDocumentButton } from "@/components/cancel-document-button";
 import { DocumentAuditPanel } from "@/components/document-audit-panel";
 import { DocumentAttachments } from "@/components/document-attachments";
@@ -56,6 +59,8 @@ const STATUS_VARIANTS: Record<
   menunggu_approval: "secondary",
   sebagian: "secondary",
   dijawab: "secondary",
+  belum_dibayar: "outline",
+  dibayar_sebagian: "secondary",
   lunas: "success",
   selesai: "success",
   disetujui: "success",
@@ -71,6 +76,7 @@ const PARTY_LABELS = {
   grn: "Diterima Dari Pemasok",
   rfq: "Kepada Pemasok",
   quotation: "Kepada Pelanggan",
+  supplier_invoice: "Tagihan Dari Pemasok",
   memo: "Kepada",
   pr: "Departemen Peminta",
 } as const;
@@ -193,6 +199,9 @@ export default function DocumentDetailPage() {
           {doc.type === "quotation" ? (
             <DuplicateQuotationButton quotationId={doc.id} />
           ) : null}
+          {doc.type === "supplier_invoice" ? (
+            <DuplicateSupplierInvoiceButton supplierInvoiceId={doc.id} />
+          ) : null}
           <Button type="button" variant="outline" onClick={() => window.print()}>
             <Printer /> Cetak
           </Button>
@@ -299,6 +308,21 @@ export default function DocumentDetailPage() {
               quotationId={doc.id}
               currentStatus={doc.status}
               onChanged={(status: QuotationStatus) => {
+                setDoc((prev) => (prev ? { ...prev, status } : prev));
+                setAuditReloadToken((token) => token + 1);
+              }}
+            />
+          </CardContent>
+        </Card>
+      ) : null}
+
+      {doc.type === "supplier_invoice" && !isCancelled ? (
+        <Card className="print:hidden">
+          <CardContent className="pt-6">
+            <SupplierInvoiceStatusControl
+              supplierInvoiceId={doc.id}
+              currentStatus={doc.status}
+              onChanged={(status: SupplierInvoiceStatus) => {
                 setDoc((prev) => (prev ? { ...prev, status } : prev));
                 setAuditReloadToken((token) => token + 1);
               }}

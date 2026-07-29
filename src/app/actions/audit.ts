@@ -11,6 +11,7 @@ import {
   purchaseRequests,
   quotations,
   rfqs,
+  supplierInvoices,
   users,
 } from "@/db/schema";
 import { requireSessionUser } from "@/app/actions/auth";
@@ -22,6 +23,7 @@ export type DocKind =
   | "grn"
   | "rfq"
   | "quotation"
+  | "supplier_invoice"
   | "memo"
   | "pr";
 
@@ -88,6 +90,13 @@ export async function cancelDocumentAction(
       .where(eq(quotations.id, id))
       .limit(1);
     currentStatus = row?.status;
+  } else if (kind === "supplier_invoice") {
+    const [row] = await db
+      .select({ status: supplierInvoices.status })
+      .from(supplierInvoices)
+      .where(eq(supplierInvoices.id, id))
+      .limit(1);
+    currentStatus = row?.status;
   } else {
     const [row] = await db
       .select({ status: memos.status })
@@ -132,6 +141,11 @@ export async function cancelDocumentAction(
         .update(quotations)
         .set({ status: "dibatalkan" })
         .where(eq(quotations.id, id));
+    } else if (kind === "supplier_invoice") {
+      await db
+        .update(supplierInvoices)
+        .set({ status: "dibatalkan" })
+        .where(eq(supplierInvoices.id, id));
     } else {
       await db.update(memos).set({ status: "dibatalkan" }).where(eq(memos.id, id));
     }

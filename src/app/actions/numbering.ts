@@ -9,6 +9,7 @@ import {
   purchaseRequests,
   quotations,
   rfqs,
+  supplierInvoices,
 } from "@/db/schema";
 import {
   buildDocPrefix,
@@ -87,6 +88,28 @@ export async function generateGoodsReceiptNumberAction(
 
   const seq = nextSequence(
     rows.map((row) => row.grnNumber),
+    prefix
+  );
+  return `${prefix}${String(seq).padStart(3, "0")}`;
+}
+
+/**
+ * Server Action nomor Supplier Invoice (Tagihan Pemasok) berikutnya, format
+ * dari tema perusahaan (mis. BILL/KSP/YYYY/MM/XXX). Urut per bulan & perusahaan.
+ */
+export async function generateSupplierInvoiceNumberAction(
+  companyId?: CompanyId
+): Promise<string> {
+  const prefix = currentPrefix(
+    getCompanyTheme(companyId).docFormat.supplierInvoice
+  );
+  const rows = await db
+    .select({ invoiceNumber: supplierInvoices.invoiceNumber })
+    .from(supplierInvoices)
+    .where(like(supplierInvoices.invoiceNumber, `${prefix}%`));
+
+  const seq = nextSequence(
+    rows.map((row) => row.invoiceNumber),
     prefix
   );
   return `${prefix}${String(seq).padStart(3, "0")}`;

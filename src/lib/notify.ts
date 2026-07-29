@@ -10,6 +10,7 @@ export type NotifyInput = {
     | "grn_status"
     | "rfq_status"
     | "quotation_status"
+    | "supplier_invoice_status"
     | "memo_status"
     | "pr_status"
     | "doc_shared"
@@ -17,7 +18,15 @@ export type NotifyInput = {
     | "invoice_overdue";
   title: string;
   body?: string;
-  docType?: "invoice" | "po" | "grn" | "rfq" | "quotation" | "memo" | "pr";
+  docType?:
+    | "invoice"
+    | "po"
+    | "grn"
+    | "rfq"
+    | "quotation"
+    | "supplier_invoice"
+    | "memo"
+    | "pr";
   docId?: string;
   dedupeKey?: string;
 };
