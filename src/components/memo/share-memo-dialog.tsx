@@ -21,7 +21,15 @@ export function ShareMemoDialog({ recipientName }: { recipientName: string }) {
   const [open, setOpen] = useState(false);
   const [email, setEmail] = useState("");
 
-  const shareLink = `https://karyasangprabu.co.id/memo/${idPrefix.replace(/[^a-zA-Z0-9]/g, "")}`;
+  // Basis tautan mengikuti domain aplikasi yang sedang berjalan (mis.
+  // https://prima.prabu.group) — tidak lagi di-hardcode ke domain tertentu.
+  // Lazy initializer aman SSR: window hanya dibaca di klien.
+  const [origin] = useState(() =>
+    typeof window !== "undefined" ? window.location.origin : ""
+  );
+
+  const memoSlug = idPrefix.replace(/[^a-zA-Z0-9]/g, "");
+  const shareLink = origin ? `${origin}/memo/${memoSlug}` : "";
 
   function handleSendEmail() {
     if (!email.trim()) return;
