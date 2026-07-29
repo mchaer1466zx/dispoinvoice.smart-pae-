@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import { setActiveCompanyAction, type CompanyRecord } from "@/app/actions/companies";
 
 type CompanyContextValue = {
@@ -32,10 +33,20 @@ export function CompanyProvider({
   const [optimisticActiveId, setOptimisticActiveId] = useState(activeCompany?.id ?? null);
 
   function setActiveCompanyId(id: string) {
+    const previousId = optimisticActiveId;
     setOptimisticActiveId(id);
     startTransition(async () => {
-      await setActiveCompanyAction(id);
-      router.refresh();
+      try {
+        await setActiveCompanyAction(id);
+        router.refresh();
+      } catch {
+        // Jangan sampai kegagalan ganti perusahaan membuat seluruh halaman
+        // error ("This page couldn't load"). Kembalikan pilihan & beri tahu.
+        setOptimisticActiveId(previousId);
+        toast.error("Gagal mengganti perusahaan aktif", {
+          description: "Coba lagi sebentar, atau muat ulang halaman.",
+        });
+      }
     });
   }
 

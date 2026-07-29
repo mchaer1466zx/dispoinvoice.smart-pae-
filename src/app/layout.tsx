@@ -19,11 +19,11 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Sistem Pengadaan Digital · PT KARYA SANG PRABU",
-    template: "%s · PT KSP",
+    default: "Sistem Pengadaan Digital · PRIMA PRABU GROUP",
+    template: "%s · Prima Prabu Group",
   },
   description:
-    "Sistem Pengadaan Digital PT Karya Sang Prabu — Purchase Request, Purchase Order, invoice, dan memo.",
+    "Sistem Pengadaan Digital Prima Prabu Group — Purchase Request, Purchase Order, penawaran, invoice, dan tagihan.",
 };
 
 export default async function RootLayout({
