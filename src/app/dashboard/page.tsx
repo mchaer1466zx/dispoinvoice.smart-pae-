@@ -23,6 +23,8 @@ import {
 } from "@/components/ui/card";
 import { BRAND } from "@/lib/brand";
 import { isAdminAction } from "@/app/actions/auth";
+import { getDashboardSummaryAction } from "@/app/actions/dashboard";
+import { formatCurrency } from "@/lib/format";
 
 export const metadata: Metadata = {
   title: "Dashboard",
@@ -105,8 +107,49 @@ const LINKS = [
 ];
 
 export default async function DashboardPage() {
-  const isAdmin = await isAdminAction();
+  const [isAdmin, summary] = await Promise.all([
+    isAdminAction(),
+    getDashboardSummaryAction(),
+  ]);
   const links = LINKS.filter((link) => !link.adminOnly || isAdmin);
+
+  const stats = [
+    {
+      label: "Piutang (invoice belum lunas)",
+      value: formatCurrency(summary.piutang.total),
+      sub: `${summary.piutang.count} dokumen`,
+      accent: "text-emerald-600",
+    },
+    {
+      label: "Hutang (tagihan pemasok belum lunas)",
+      value: formatCurrency(summary.hutang.total),
+      sub: `${summary.hutang.count} dokumen`,
+      accent: "text-rose-600",
+    },
+    {
+      label: "PR menunggu approval",
+      value: String(summary.prMenungguApproval),
+      sub: "perlu ditinjau",
+      accent: "text-amber-600",
+    },
+    {
+      label: "Penawaran diterima",
+      value: String(summary.quotationDiterima),
+      sub: "siap ditindaklanjuti",
+      accent: "text-sky-600",
+    },
+  ];
+
+  const countItems: { label: string; value: number }[] = [
+    { label: "RFQ", value: summary.counts.rfq },
+    { label: "PR", value: summary.counts.pr },
+    { label: "PO", value: summary.counts.po },
+    { label: "GRN", value: summary.counts.grn },
+    { label: "Penawaran", value: summary.counts.quotation },
+    { label: "Invoice", value: summary.counts.invoice },
+    { label: "Tagihan Pemasok", value: summary.counts.supplierInvoice },
+    { label: "Memo", value: summary.counts.memo },
+  ];
 
   return (
     <div className="flex flex-1 justify-center bg-zinc-50 px-4 py-10 dark:bg-black sm:px-8">
@@ -118,6 +161,37 @@ export default async function DashboardPage() {
             mulai bekerja.
           </p>
         </div>
+
+        {/* Ringkasan angka */}
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {stats.map((s) => (
+            <Card key={s.label}>
+              <CardHeader className="pb-2">
+                <CardDescription className="text-xs">{s.label}</CardDescription>
+                <CardTitle className={`text-xl ${s.accent}`}>{s.value}</CardTitle>
+              </CardHeader>
+              <CardContent className="pt-0 text-xs text-muted-foreground">
+                {s.sub}
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+
+        {/* Jumlah dokumen per jenis */}
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base">Jumlah Dokumen</CardTitle>
+            <CardDescription>Total dokumen tersimpan per jenis.</CardDescription>
+          </CardHeader>
+          <CardContent className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+            {countItems.map((c) => (
+              <div key={c.label} className="rounded-lg border p-3">
+                <p className="text-2xl font-semibold">{c.value}</p>
+                <p className="text-xs text-muted-foreground">{c.label}</p>
+              </div>
+            ))}
+          </CardContent>
+        </Card>
 
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {links.map(({ href, title, description, icon: Icon }) => (
