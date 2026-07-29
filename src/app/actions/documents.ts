@@ -14,12 +14,21 @@ import {
   prItems,
   purchaseOrders,
   purchaseRequests,
+  quotations,
+  quotationItems,
   rfqs,
   rfqItems,
   suppliers,
 } from "@/db/schema";
 
-export type DocumentType = "invoice" | "po" | "grn" | "rfq" | "memo" | "pr";
+export type DocumentType =
+  | "invoice"
+  | "po"
+  | "grn"
+  | "rfq"
+  | "quotation"
+  | "memo"
+  | "pr";
 
 export type DocumentSummary = {
   id: string;
@@ -137,6 +146,39 @@ export async function listDocumentsAction(
       ...rows.map((row) => ({
         id: row.id,
         type: "grn" as const,
+        number: row.number,
+        partyName: row.partyName ?? "-",
+        date: row.date,
+        status: row.status,
+      }))
+    );
+  }
+
+  if (!params.type || params.type === "quotation") {
+    const rows = await db
+      .select({
+        id: quotations.id,
+        number: quotations.quotationNumber,
+        partyName: customers.name,
+        date: quotations.quotationDate,
+        status: quotations.status,
+      })
+      .from(quotations)
+      .leftJoin(customers, eq(quotations.customerId, customers.id))
+      .where(
+        query
+          ? or(
+              like(quotations.quotationNumber, `%${query}%`),
+              like(customers.name, `%${query}%`)
+            )
+          : undefined
+      )
+      .orderBy(desc(quotations.quotationDate));
+
+    results.push(
+      ...rows.map((row) => ({
+        id: row.id,
+        type: "quotation" as const,
         number: row.number,
         partyName: row.partyName ?? "-",
         date: row.date,
@@ -373,6 +415,48 @@ export async function getDocumentAction(id: string): Promise<DocumentDetail | nu
         price: item.price,
       })),
       notes: grn.notes ?? undefined,
+    };
+  }
+
+  const [quotation] = await db
+    .select()
+    .from(quotations)
+    .where(eq(quotations.id, id))
+    .limit(1);
+
+  if (quotation) {
+    const items = await db
+      .select()
+      .from(quotationItems)
+      .where(eq(quotationItems.quotationId, id));
+
+    const customer = quotation.customerId
+      ? ((
+          await db
+            .select({ name: customers.name })
+            .from(customers)
+            .where(eq(customers.id, quotation.customerId))
+            .limit(1)
+        )[0] ?? null)
+      : null;
+
+    return {
+      id: quotation.id,
+      type: "quotation",
+      number: quotation.quotationNumber,
+      partyName: customer?.name ?? "-",
+      date: quotation.quotationDate,
+      status: quotation.status,
+      items: items.map((item) => ({
+        description: item.spec
+          ? `${item.description} (${item.spec})`
+          : item.description,
+        quantity: item.quantity,
+        price: item.price,
+      })),
+      tax: quotation.tax,
+      discount: quotation.discount,
+      notes: quotation.notes ?? undefined,
     };
   }
 

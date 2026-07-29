@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import {
+  BadgeDollarSign,
   ClipboardList,
   FileQuestion,
   FileText,
@@ -50,6 +51,12 @@ const LINKS = [
     title: "Buat Goods Receipt (GRN)",
     description: "Catat barang yang diterima dari pemasok.",
     icon: PackageCheck,
+  },
+  {
+    href: "/buat-quotation",
+    title: "Buat Penawaran (Quotation)",
+    description: "Terbitkan penawaran harga ke pelanggan.",
+    icon: BadgeDollarSign,
   },
   {
     href: "/buat-invoice",

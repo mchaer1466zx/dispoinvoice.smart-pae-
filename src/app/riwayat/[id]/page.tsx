@@ -25,6 +25,8 @@ import { GoodsReceiptStatusControl } from "@/components/grn/grn-status-control";
 import { DuplicateGoodsReceiptButton } from "@/components/grn/duplicate-grn-button";
 import { RfqStatusControl } from "@/components/rfq/rfq-status-control";
 import { DuplicateRfqButton } from "@/components/rfq/duplicate-rfq-button";
+import { QuotationStatusControl } from "@/components/quotation/quotation-status-control";
+import { DuplicateQuotationButton } from "@/components/quotation/duplicate-quotation-button";
 import { DOCUMENT_TYPE_LABELS } from "@/lib/mock-data";
 import {
   getDocumentAction,
@@ -36,6 +38,7 @@ import type { MemoStatus } from "@/app/actions/memos";
 import type { PrStatus } from "@/app/actions/purchase-requests";
 import type { GrnStatus } from "@/app/actions/goods-receipts";
 import type { RfqStatus } from "@/app/actions/rfqs";
+import type { QuotationStatus } from "@/app/actions/quotations";
 import { CancelDocumentButton } from "@/components/cancel-document-button";
 import { DocumentAuditPanel } from "@/components/document-audit-panel";
 import { DocumentAttachments } from "@/components/document-attachments";
@@ -67,6 +70,7 @@ const PARTY_LABELS = {
   po: "Kepada Pemasok",
   grn: "Diterima Dari Pemasok",
   rfq: "Kepada Pemasok",
+  quotation: "Kepada Pelanggan",
   memo: "Kepada",
   pr: "Departemen Peminta",
 } as const;
@@ -186,6 +190,9 @@ export default function DocumentDetailPage() {
             <DuplicateGoodsReceiptButton grnId={doc.id} />
           ) : null}
           {doc.type === "rfq" ? <DuplicateRfqButton rfqId={doc.id} /> : null}
+          {doc.type === "quotation" ? (
+            <DuplicateQuotationButton quotationId={doc.id} />
+          ) : null}
           <Button type="button" variant="outline" onClick={() => window.print()}>
             <Printer /> Cetak
           </Button>
@@ -277,6 +284,21 @@ export default function DocumentDetailPage() {
               rfqId={doc.id}
               currentStatus={doc.status}
               onChanged={(status: RfqStatus) => {
+                setDoc((prev) => (prev ? { ...prev, status } : prev));
+                setAuditReloadToken((token) => token + 1);
+              }}
+            />
+          </CardContent>
+        </Card>
+      ) : null}
+
+      {doc.type === "quotation" && !isCancelled ? (
+        <Card className="print:hidden">
+          <CardContent className="pt-6">
+            <QuotationStatusControl
+              quotationId={doc.id}
+              currentStatus={doc.status}
+              onChanged={(status: QuotationStatus) => {
                 setDoc((prev) => (prev ? { ...prev, status } : prev));
                 setAuditReloadToken((token) => token + 1);
               }}

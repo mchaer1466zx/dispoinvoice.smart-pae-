@@ -7,6 +7,7 @@ import {
   invoices,
   purchaseOrders,
   purchaseRequests,
+  quotations,
   rfqs,
 } from "@/db/schema";
 import {
@@ -86,6 +87,26 @@ export async function generateGoodsReceiptNumberAction(
 
   const seq = nextSequence(
     rows.map((row) => row.grnNumber),
+    prefix
+  );
+  return `${prefix}${String(seq).padStart(3, "0")}`;
+}
+
+/**
+ * Server Action nomor Quotation (Surat Penawaran) berikutnya, format dari tema
+ * perusahaan (mis. QUO/KSP/YYYY/MM/XXX). Urut per bulan & per perusahaan.
+ */
+export async function generateQuotationNumberAction(
+  companyId?: CompanyId
+): Promise<string> {
+  const prefix = currentPrefix(getCompanyTheme(companyId).docFormat.quotation);
+  const rows = await db
+    .select({ quotationNumber: quotations.quotationNumber })
+    .from(quotations)
+    .where(like(quotations.quotationNumber, `${prefix}%`));
+
+  const seq = nextSequence(
+    rows.map((row) => row.quotationNumber),
     prefix
   );
   return `${prefix}${String(seq).padStart(3, "0")}`;
