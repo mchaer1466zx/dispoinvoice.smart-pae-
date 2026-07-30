@@ -68,7 +68,7 @@ export const COMPANY_THEMES: Record<CompanyId, CompanyTheme> = {
     address:
       "Jl. Pertanian Raya No. 64, Lebak Bulus, Cilandak, Jakarta Selatan 12440",
     phone: "021 2784 1924",
-    email: "info@karyasangprabu.co.id",
+    email: "ptkaryasangprabu@gmail.com",
     website: "www.karyasangprabu.co.id",
     docFormat: {
       pr: "PR/KSP/YYYY/MM/XXX",
