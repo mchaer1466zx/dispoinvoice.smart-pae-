@@ -36,9 +36,19 @@ const PRODUCTS = [
     desc: "Siomay lembut, isian padat, matang kukus.",
   },
   {
+    img: "/sang-prabu/daging-ayam.jpg",
+    name: "Daging Ayam",
+    desc: "Frozen · halal · higienis — sehat & bergizi.",
+  },
+  {
+    img: "/sang-prabu/daging-sapi.jpg",
+    name: "Daging Sapi",
+    desc: "Frozen · halal · higienis — sehat & bergizi.",
+  },
+  {
     img: "/sang-prabu/karkas.jpg",
     name: "Daging Karkas Halal",
-    desc: "Ayam & sapi karkas, dipotong higienis.",
+    desc: "Karkas ayam beku, potong higienis, siap distribusi.",
   },
 ] as const;
 
@@ -172,7 +182,7 @@ export default function LandingPage() {
             </div>
           </Reveal>
 
-          <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {PRODUCTS.map((p, i) => (
               <Reveal key={p.name} delayMs={i * 80}>
                 <article className="group h-full overflow-hidden rounded-2xl border border-[#e6e0d2] bg-white shadow-sm transition-[transform,box-shadow] duration-300 ease-out hover:-translate-y-1 hover:shadow-md">
