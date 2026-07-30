@@ -10,6 +10,7 @@ import {
   AtSign,
   Mail,
   MapPin,
+  MessageCircle,
   Phone,
   ShieldCheck,
   Sparkles,
@@ -34,10 +35,15 @@ export const metadata: Metadata = {
 const KONTAK = {
   alamat: "Jl. Pertanian Raya No. 64, Lebak Bulus, Cilandak, Jakarta Selatan 12440",
   telepon: "(021) 2784 1924",
+  whatsapp: "0889 3663 031",
   email: "ptkaryasangprabu@gmail.com",
   website: "www.karyasangprabu.com",
   instagram: "@karyasangprabu.group",
 };
+
+const WA_URL = `https://wa.me/628893663031?text=${encodeURIComponent(
+  "Halo SANG PRABU, saya tertarik menjadi mitra/distributor. Boleh info produk & kerja samanya?",
+)}`;
 
 const PERJALANAN = [
   { th: "2000", d: "Awal pengembangan resep makanan olahan premium." },
@@ -601,6 +607,11 @@ export default function ProfilPerusahaanPage() {
             <dl className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               <Contact icon={MapPin} label="Kantor Pusat" value={KONTAK.alamat} />
               <Contact icon={Phone} label="Telepon" value={KONTAK.telepon} />
+              <Contact
+                icon={MessageCircle}
+                label="WhatsApp"
+                value={KONTAK.whatsapp}
+              />
               <Contact icon={Mail} label="Email" value={KONTAK.email} />
               <Contact icon={Globe} label="Website" value={KONTAK.website} />
               <Contact icon={AtSign} label="Instagram" value={KONTAK.instagram} />
@@ -612,6 +623,15 @@ export default function ProfilPerusahaanPage() {
               <Button
                 asChild
                 className="bg-gold text-[#3a2c05] hover:bg-gold-bright"
+              >
+                <a href={WA_URL} target="_blank" rel="noopener noreferrer">
+                  <MessageCircle /> Hubungi via WhatsApp
+                </a>
+              </Button>
+              <Button
+                asChild
+                variant="outline"
+                className="border-white/25 bg-transparent text-white hover:bg-white/10 hover:text-white"
               >
                 <Link href="/">
                   <ArrowLeft /> Kembali ke Beranda

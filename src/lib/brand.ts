@@ -9,7 +9,7 @@ export const BRAND = {
   tagline: "QUALITY • INTERGRITY • EXCELLENCE",
   address: "Jl. Pertanian Raya No. 64, Lebak Bulus, Cilandak, Jakarta Selatan 12440",
   phone: "021 29862350",
-  email: "info@karyasangprabu.co.id",
+  email: "ptkaryasangprabu@gmail.com",
   website: "www.karyasangprabu.co.id",
   appName: "Sistem Pengadaan Digital",
   emailFrom: "PT Karya Sang Prabu <no-reply@karyasangprabu.co.id>",

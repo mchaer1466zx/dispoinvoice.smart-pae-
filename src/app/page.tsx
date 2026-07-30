@@ -65,6 +65,11 @@ const VALUES = [
   },
 ] as const;
 
+// Kontak WhatsApp untuk ajakan kemitraan (0889 3663 031 → format internasional).
+const WA_URL = `https://wa.me/628893663031?text=${encodeURIComponent(
+  "Halo SANG PRABU, saya tertarik menjadi mitra/distributor. Boleh info produk & kerja samanya?",
+)}`;
+
 export default function LandingPage() {
   return (
     <div className="flex flex-1 flex-col scroll-smooth bg-[#fbf8f1] font-jakarta text-[#23271f]">
@@ -243,12 +248,11 @@ export default function LandingPage() {
             <div className="mt-7">
               <Button
                 asChild
-                variant="outline"
-                className="border-primary/25 text-primary transition-colors duration-200 ease-out hover:bg-primary/5"
+                className="bg-primary text-white transition-colors duration-200 ease-out hover:bg-primary/90"
               >
-                <Link href="/profil-perusahaan">
+                <a href={WA_URL} target="_blank" rel="noopener noreferrer">
                   <Store /> Jadi Mitra / Distributor
-                </Link>
+                </a>
               </Button>
             </div>
           </Reveal>
