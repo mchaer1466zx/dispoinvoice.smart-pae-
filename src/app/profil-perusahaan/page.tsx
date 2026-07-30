@@ -166,9 +166,9 @@ export default function ProfilPerusahaanPage() {
           <Reveal>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="/sang-prabu/emblem-dark.png"
+              src="/sang-prabu/emblem.png"
               alt="Lambang Sang Prabu"
-              className="mx-auto h-20 w-20 rounded-full object-cover ring-1 ring-gold/40 sm:h-24 sm:w-24"
+              className="mx-auto h-24 w-auto object-contain drop-shadow-[0_4px_16px_rgba(201,162,76,0.28)] sm:h-28"
             />
           </Reveal>
           <Reveal delayMs={90} className="mt-6">
