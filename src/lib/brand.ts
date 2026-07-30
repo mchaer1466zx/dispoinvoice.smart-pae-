@@ -17,6 +17,12 @@ export const BRAND = {
   // Identitas GRUP (payung PT KSP, PAE, PUB) untuk headline halaman depan.
   groupName: "PRIMA PRABU GROUP",
   groupTagline: "INTERGRITY • COMMITMENT • EXCELLENCE",
+  // Perusahaan anggota grup — ditampilkan sebagai penegas kredibilitas di depan.
+  groupMembers: [
+    "PT Karya Sang Prabu",
+    "PT Prima Andalas Energi",
+    "PT Prabu Unggul Bersama",
+  ],
 } as const;
 
 /** Palet warna resmi dari kop surat PT Karya Sang Prabu. */
