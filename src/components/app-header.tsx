@@ -15,8 +15,8 @@ export function AppHeader() {
   const logoUrl = activeCompany?.logoUrl ?? null;
 
   return (
-    <header className="border-b-2 border-primary bg-white">
-      <div className="mx-auto flex max-w-4xl items-center justify-between gap-3 px-4 py-3 sm:px-8">
+    <header className="border-b-2 border-primary bg-white shadow-[0_2px_0_0_var(--gold)] dark:bg-card">
+      <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-3 sm:px-8">
         <Link href="/" className="flex items-center gap-3">
           {logoUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
@@ -25,10 +25,10 @@ export function AppHeader() {
               alt={`Logo ${name}`}
               width={36}
               height={36}
-              className="h-9 w-9 rounded-md object-contain"
+              className="h-9 w-9 rounded-md object-contain ring-1 ring-gold/30"
             />
           ) : null}
-          <span className="text-sm font-bold uppercase leading-tight tracking-tight text-foreground sm:text-base">
+          <span className="font-display text-[1.0625rem] font-semibold leading-[1.15] tracking-[-0.01em] text-foreground sm:text-xl">
             {name}
           </span>
         </Link>
