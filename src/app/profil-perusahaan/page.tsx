@@ -94,9 +94,19 @@ const PRODUK = [
     items: ["Otak-otak Ikan", "Otak-otak Premium"],
   },
   {
+    img: "/sang-prabu/daging-ayam.jpg",
+    kat: "Daging Ayam",
+    items: ["Frozen & halal", "Higienis, sehat & bergizi", "Karkas / potongan", "Retail & HORECA"],
+  },
+  {
+    img: "/sang-prabu/daging-sapi.jpg",
+    kat: "Daging Sapi",
+    items: ["Frozen & halal", "Higienis, sehat & bergizi", "Potongan pilihan", "Retail & HORECA"],
+  },
+  {
     img: "/sang-prabu/karkas.jpg",
-    kat: "Inovasi & Karkas",
-    items: ["Ayam Marinasi", "Nugget Premium", "Daging Karkas Halal", "OEM / Private Label"],
+    kat: "Inovasi & OEM",
+    items: ["Ayam Marinasi", "Nugget Premium", "OEM / Private Label", "Daging Karkas Halal"],
   },
 ];
 
@@ -148,6 +158,12 @@ const ROADMAP = [
   { th: "2028", d: "Distribusi Pulau Jawa dan penambahan kapasitas produksi." },
   { th: "2029", d: "Distribusi nasional serta pengembangan OEM & private label." },
   { th: "2030–2032", d: "Ekspansi ekspor, lini produk baru, dan penguatan merek nasional." },
+];
+
+const GALERI = [
+  { img: "/sang-prabu/sapi-farm.jpg", cap: "Peternakan mitra" },
+  { img: "/sang-prabu/ayam-proses.jpg", cap: "Rumah potong halal" },
+  { img: "/sang-prabu/butcher.jpg", cap: "Daging segar berkualitas" },
 ];
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
@@ -353,7 +369,7 @@ export default function ProfilPerusahaanPage() {
               Cita rasa autentik, mutu terjaga
             </h2>
           </Reveal>
-          <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {PRODUK.map((p, i) => (
               <Reveal key={p.kat} delayMs={i * 70}>
                 <article className="h-full overflow-hidden rounded-2xl border border-[#e6e0d2] bg-white shadow-sm">
@@ -394,6 +410,35 @@ export default function ProfilPerusahaanPage() {
                   <Building2 className="mt-0.5 size-4 shrink-0 text-gold" />
                   <p className="text-[14px] leading-[1.6] text-[#4a4f46]">{b}</p>
                 </div>
+              </Reveal>
+            ))}
+          </div>
+        </Section>
+        {/* ===== BAHAN BAKU & PROSES ===== */}
+        <Section>
+          <Reveal>
+            <SectionLabel>Bahan Baku &amp; Proses</SectionLabel>
+            <h2 className="mt-3 font-display text-[1.75rem] font-semibold leading-[1.15] tracking-[-0.015em] text-primary sm:text-[2.25rem]">
+              Dari peternakan ke meja
+            </h2>
+          </Reveal>
+          <div className="mt-8 grid gap-5 sm:grid-cols-3">
+            {GALERI.map((g, i) => (
+              <Reveal key={g.cap} delayMs={i * 80}>
+                <figure className="overflow-hidden rounded-2xl border border-[#e6e0d2] bg-white shadow-sm">
+                  <div className="aspect-[4/3] overflow-hidden">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={g.img}
+                      alt={g.cap}
+                      loading="lazy"
+                      className="h-full w-full object-cover"
+                    />
+                  </div>
+                  <figcaption className="px-4 py-3 font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
+                    {g.cap}
+                  </figcaption>
+                </figure>
               </Reveal>
             ))}
           </div>
