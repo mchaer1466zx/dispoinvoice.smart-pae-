@@ -1,6 +1,7 @@
 import Link from "next/link";
 import {
   ArrowRight,
+  FileText,
   Leaf,
   ShieldCheck,
   Snowflake,
@@ -305,6 +306,18 @@ export default function LandingPage() {
                   {m}
                 </div>
               ))}
+            </div>
+          </Reveal>
+          <Reveal delayMs={200}>
+            <div className="mt-8 flex justify-center">
+              <Button
+                asChild
+                className="bg-gold text-[#3a2c05] transition-colors duration-200 ease-out hover:bg-gold-bright"
+              >
+                <Link href="/company-profile">
+                  <FileText /> Lihat Company Profile
+                </Link>
+              </Button>
             </div>
           </Reveal>
         </div>

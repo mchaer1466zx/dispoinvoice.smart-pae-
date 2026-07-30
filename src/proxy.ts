@@ -8,6 +8,7 @@ const PUBLIC_PATHS = [
   "/daftar",
   "/reset-password",
   "/profil-perusahaan",
+  "/company-profile",
 ];
 
 const PUBLIC_PREFIXES = [

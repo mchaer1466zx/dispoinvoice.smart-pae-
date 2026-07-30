@@ -6,6 +6,7 @@ import {
   Building2,
   CheckCircle2,
   Factory,
+  FileText,
   Globe,
   AtSign,
   Mail,
@@ -668,6 +669,14 @@ export default function ProfilPerusahaanPage() {
               <Button
                 asChild
                 className="bg-gold text-[#3a2c05] hover:bg-gold-bright"
+              >
+                <Link href="/company-profile">
+                  <FileText /> Company Profile
+                </Link>
+              </Button>
+              <Button
+                asChild
+                className="bg-white/10 text-white ring-1 ring-inset ring-white/25 hover:bg-white/15"
               >
                 <a href={WA_URL} target="_blank" rel="noopener noreferrer">
                   <MessageCircle /> Hubungi via WhatsApp
