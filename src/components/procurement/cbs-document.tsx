@@ -44,9 +44,17 @@ export type CbsDocumentProps = {
   notes?: string;
   paymentTerms?: string[];
   bankInfo?: string;
+  /** Penandatangan dokumen: peran + nama + jabatan (bisa diisi dari form). */
+  signers?: { role: string; name?: string; jabatan?: string }[];
 };
 
 const ROMAN = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
+
+const DEFAULT_SIGNER_ROLES = [
+  "Pemohon / Pembuat",
+  "Mengetahui / Menyetujui",
+  "Penerima / Vendor",
+];
 
 function fmtQty(qty: number): string {
   return Number.isInteger(qty) ? String(qty) : qty.toFixed(1).replace(".", ",");
@@ -174,7 +182,13 @@ export function CbsDocument(props: CbsDocumentProps) {
     notes,
     paymentTerms = [],
     bankInfo,
+    signers,
   } = props;
+
+  const signBlocks =
+    signers && signers.length > 0
+      ? signers
+      : DEFAULT_SIGNER_ROLES.map((role) => ({ role, name: "", jabatan: "" }));
 
   const theme = getCompanyTheme(companyId);
   const c = theme.colors;
@@ -533,19 +547,19 @@ export function CbsDocument(props: CbsDocumentProps) {
 
         {/* [8] TANDA TANGAN */}
         <div style={{ display: "flex", gap: 10, marginTop: 24 }}>
-          {["Pemohon / Pembuat", "Mengetahui / Menyetujui", "Penerima / Vendor"].map(
-            (role) => (
-              <div key={role} style={{ flex: 1, textAlign: "center", fontSize: 8.5 }}>
-                <p style={{ color: c.muted, marginBottom: 38 }}>{role}</p>
-                <div style={{ borderTop: `1px solid ${c.accent}`, margin: "0 10px" }} />
-                <p style={{ fontWeight: 700, marginTop: 3 }}>
-                  (............................)
-                </p>
-                <p style={{ color: c.muted }}>Nama Terang · Jabatan</p>
-                <p style={{ color: c.muted }}>Tanggal : ..............</p>
-              </div>
-            )
-          )}
+          {signBlocks.map((s, i) => (
+            <div key={`${s.role}-${i}`} style={{ flex: 1, textAlign: "center", fontSize: 8.5 }}>
+              <p style={{ color: c.muted, marginBottom: 38 }}>{s.role}</p>
+              <div style={{ borderTop: `1px solid ${c.accent}`, margin: "0 10px" }} />
+              <p style={{ fontWeight: 700, marginTop: 3 }}>
+                {s.name?.trim() ? s.name.trim() : "(............................)"}
+              </p>
+              <p style={{ color: c.muted }}>
+                {s.jabatan?.trim() ? s.jabatan.trim() : "Nama Terang · Jabatan"}
+              </p>
+              <p style={{ color: c.muted }}>Tanggal : ..............</p>
+            </div>
+          ))}
         </div>
 
         {/* [10] FOOTER */}

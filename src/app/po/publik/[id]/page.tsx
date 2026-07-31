@@ -46,11 +46,20 @@ export default async function PublicPoPreviewPage({
           poDetail={{
             companyId: companyIdFromDocNumber(po.poNumber),
             poNumber: po.poNumber,
+            numberCategory: "",
             orderDate: po.orderDate,
             status: po.status,
             tax: po.tax,
             discount: po.discount,
             notes: po.notes ?? "",
+            paymentTerms: [
+              "50% Uang Muka (DP) setelah PO disetujui",
+              "40% Setelah material siap kirim / pekerjaan 80% selesai",
+              "10% Pelunasan setelah pekerjaan selesai 100% & QC lulus",
+            ].join("\n"),
+            signerPemohon: { name: "", jabatan: "" },
+            signerMenyetujui: { name: "", jabatan: "" },
+            signerPenerima: { name: "", jabatan: "" },
           }}
           supplier={po.supplier}
           items={po.items}

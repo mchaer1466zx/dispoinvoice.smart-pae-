@@ -10,12 +10,6 @@ import {
   type CbsTotalRow,
 } from "@/components/procurement/cbs-document";
 
-const DEFAULT_PAYMENT_TERMS = [
-  "50% Uang Muka (DP) setelah PO disetujui",
-  "40% Setelah material siap kirim / pekerjaan 80% selesai",
-  "10% Pelunasan setelah pekerjaan selesai 100% & QC lulus",
-];
-
 export function PoPreview({
   poDetail,
   supplier,
@@ -66,7 +60,27 @@ export function PoPreview({
         extraRows={extraRows}
         grandTotal={totals.total}
         notes={poDetail.notes}
-        paymentTerms={DEFAULT_PAYMENT_TERMS}
+        paymentTerms={poDetail.paymentTerms
+          .split("\n")
+          .map((line) => line.trim())
+          .filter(Boolean)}
+        signers={[
+          {
+            role: "Pemohon / Pembuat",
+            name: poDetail.signerPemohon.name,
+            jabatan: poDetail.signerPemohon.jabatan,
+          },
+          {
+            role: "Mengetahui / Menyetujui",
+            name: poDetail.signerMenyetujui.name,
+            jabatan: poDetail.signerMenyetujui.jabatan,
+          },
+          {
+            role: "Penerima / Vendor",
+            name: poDetail.signerPenerima.name,
+            jabatan: poDetail.signerPenerima.jabatan,
+          },
+        ]}
       />
     </div>
   );

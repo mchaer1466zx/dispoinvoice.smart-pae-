@@ -21,35 +21,76 @@ export const PO_STATUS_OPTIONS = [
   { value: "selesai", label: "Selesai" },
 ] as const;
 
+const ROMAN = [
+  "I", "II", "III", "IV", "V", "VI",
+  "VII", "VIII", "IX", "X", "XI", "XII",
+];
+
+const DEFAULT_PAYMENT_TERMS = [
+  "50% Uang Muka (DP) setelah PO disetujui",
+  "40% Setelah material siap kirim / pekerjaan 80% selesai",
+  "10% Pelunasan setelah pekerjaan selesai 100% & QC lulus",
+].join("\n");
+
+export type PoSigner = { name: string; jabatan: string };
+
 export type PoDetail = {
   companyId: CompanyId;
   poNumber: string;
+  numberCategory: string;
   orderDate: string;
   status: PoStatus;
   tax: number;
   discount: number;
   notes: string;
+  paymentTerms: string;
+  signerPemohon: PoSigner;
+  signerMenyetujui: PoSigner;
+  signerPenerima: PoSigner;
 };
 
-// Placeholder sementara sebelum nomor urut asli diambil dari server
-// (generatePurchaseOrderNumberAction). Format mengikuti PRD: PO/[TAHUN]/[URUT].
-function generatePoNumber() {
-  const today = new Date();
-  const yyyy = today.getFullYear();
-  const mm = String(today.getMonth() + 1).padStart(2, "0");
-  return `PO/KSP/${yyyy}/${mm}/001`;
+/** Ambil nomor urut (angka terakhir) dari sebuah nomor dokumen. */
+export function extractSeq(poNumber: string): number {
+  const m = poNumber.match(/(\d+)\s*$/);
+  const n = m ? Number.parseInt(m[1], 10) : NaN;
+  return Number.isNaN(n) || n < 1 ? 1 : n;
+}
+
+/**
+ * Susun nomor PO sederhana:
+ * PO/<KODE>[-<KATEGORI>]/<TAHUN>/<BULAN ROMAWI>/<URUT>
+ * contoh: PO/KSP-NOTARIS/2026/VII/001
+ */
+export function buildPoNumber(
+  companyId: CompanyId,
+  category: string,
+  seq: number,
+  date = new Date(),
+): string {
+  const cat = category.trim()
+    ? `-${category.trim().toUpperCase().replace(/\s+/g, "-")}`
+    : "";
+  const roman = ROMAN[date.getMonth()] ?? String(date.getMonth() + 1);
+  return `PO/${companyId}${cat}/${date.getFullYear()}/${roman}/${String(
+    seq,
+  ).padStart(3, "0")}`;
 }
 
 export function createDefaultPoDetail(): PoDetail {
   const today = new Date().toISOString().slice(0, 10);
   return {
     companyId: DEFAULT_COMPANY,
-    poNumber: generatePoNumber(),
+    poNumber: buildPoNumber(DEFAULT_COMPANY, "", 1),
+    numberCategory: "",
     orderDate: today,
     status: "draft",
     tax: 0,
     discount: 0,
     notes: "",
+    paymentTerms: DEFAULT_PAYMENT_TERMS,
+    signerPemohon: { name: "", jabatan: "" },
+    signerMenyetujui: { name: "", jabatan: "" },
+    signerPenerima: { name: "", jabatan: "" },
   };
 }
 
@@ -92,7 +133,35 @@ export function PoDetailForm({
           />
           {!value.poNumber.trim() ? (
             <p className="text-sm text-destructive">Nomor PO wajib diisi.</p>
-          ) : null}
+          ) : (
+            <p className="text-xs text-muted-foreground">
+              Format: PO/{value.companyId}[-KATEGORI]/tahun/bulan-romawi/urut
+            </p>
+          )}
+        </div>
+
+        <div className="grid gap-1.5">
+          <Label htmlFor={`${idPrefix}-po-cat`}>Kategori Nomor (opsional)</Label>
+          <Input
+            id={`${idPrefix}-po-cat`}
+            placeholder="mis. NOTARIS"
+            value={value.numberCategory}
+            onChange={(e) => {
+              const category = e.target.value;
+              onChange({
+                ...value,
+                numberCategory: category,
+                poNumber: buildPoNumber(
+                  value.companyId,
+                  category,
+                  extractSeq(value.poNumber),
+                ),
+              });
+            }}
+          />
+          <p className="text-xs text-muted-foreground">
+            Disisipkan ke nomor → mis. PO/{value.companyId}-NOTARIS/…
+          </p>
         </div>
 
         <div className="grid gap-1.5">
@@ -156,6 +225,63 @@ export function PoDetailForm({
             onChange={(e) => updateField("notes", e.target.value)}
             rows={3}
           />
+        </div>
+
+        <div className="grid gap-1.5 sm:col-span-2">
+          <Label htmlFor={`${idPrefix}-pay`}>Cara Pembayaran</Label>
+          <Textarea
+            id={`${idPrefix}-pay`}
+            placeholder="Satu poin per baris"
+            value={value.paymentTerms}
+            onChange={(e) => updateField("paymentTerms", e.target.value)}
+            rows={3}
+          />
+          <p className="text-xs text-muted-foreground">
+            Satu baris = satu poin; muncul sebagai daftar di dokumen.
+          </p>
+        </div>
+
+        <div className="grid gap-2.5 sm:col-span-2">
+          <Label>Penandatangan</Label>
+          <p className="-mt-1 text-xs text-muted-foreground">
+            Nama &amp; jabatan yang tampil di kolom tanda tangan dokumen.
+          </p>
+          {(
+            [
+              ["signerPemohon", "Pemohon / Pembuat"],
+              ["signerMenyetujui", "Mengetahui / Menyetujui"],
+              ["signerPenerima", "Penerima / Vendor"],
+            ] as const
+          ).map(([key, label]) => (
+            <div
+              key={key}
+              className="grid gap-2 sm:grid-cols-[170px_1fr_1fr] sm:items-center"
+            >
+              <span className="text-sm font-medium text-muted-foreground">
+                {label}
+              </span>
+              <Input
+                placeholder="Nama terang"
+                value={value[key].name}
+                onChange={(e) =>
+                  onChange({
+                    ...value,
+                    [key]: { ...value[key], name: e.target.value },
+                  })
+                }
+              />
+              <Input
+                placeholder="Jabatan"
+                value={value[key].jabatan}
+                onChange={(e) =>
+                  onChange({
+                    ...value,
+                    [key]: { ...value[key], jabatan: e.target.value },
+                  })
+                }
+              />
+            </div>
+          ))}
         </div>
       </CardContent>
     </Card>

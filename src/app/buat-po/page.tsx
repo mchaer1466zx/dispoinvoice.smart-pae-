@@ -7,6 +7,8 @@ import { Button } from "@/components/ui/button";
 import {
   PoDetailForm,
   createDefaultPoDetail,
+  buildPoNumber,
+  extractSeq,
 } from "@/components/po/po-detail-form";
 import {
   PoItemListForm,
@@ -52,9 +54,16 @@ export default function PurchaseOrderPage() {
   useEffect(() => {
     let active = true;
     generatePurchaseOrderNumberAction(poDetail.companyId)
-      .then((poNumber) => {
+      .then((serverNumber) => {
         if (active) {
-          setPoDetail((prev) => ({ ...prev, poNumber }));
+          setPoDetail((prev) => ({
+            ...prev,
+            poNumber: buildPoNumber(
+              prev.companyId,
+              prev.numberCategory,
+              extractSeq(serverNumber),
+            ),
+          }));
         }
       })
       .catch(() => {
