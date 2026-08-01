@@ -50,7 +50,7 @@ export function PoPreview({
         docNumber={poDetail.poNumber}
         companyId={poDetail.companyId}
         perihal="Pesanan Pembelian Barang/Jasa"
-        partyLabel="Kepada Pemasok"
+        partyLabel="Kepada"
         partyName={supplier?.name ?? ""}
         partyLines={[supplier?.address ?? "", supplier?.contactInfo ?? ""]}
         dateLabel="Tanggal Pemesanan"
