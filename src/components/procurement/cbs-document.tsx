@@ -44,17 +44,13 @@ export type CbsDocumentProps = {
   notes?: string;
   paymentTerms?: string[];
   bankInfo?: string;
-  /** Penandatangan dokumen: peran + nama + jabatan (bisa diisi dari form). */
+  /** Isi/berita dokumen (narasi bebas, bisa diedit) — tampil sebelum tanda tangan. */
+  bodyText?: string;
+  /** Penandatangan dokumen: peran + nama + jabatan (cukup satu). */
   signers?: { role: string; name?: string; jabatan?: string }[];
 };
 
 const ROMAN = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
-
-const DEFAULT_SIGNER_ROLES = [
-  "Pemohon / Pembuat",
-  "Mengetahui / Menyetujui",
-  "Penerima / Vendor",
-];
 
 function fmtQty(qty: number): string {
   return Number.isInteger(qty) ? String(qty) : qty.toFixed(1).replace(".", ",");
@@ -182,13 +178,15 @@ export function CbsDocument(props: CbsDocumentProps) {
     notes,
     paymentTerms = [],
     bankInfo,
+    bodyText,
     signers,
   } = props;
 
-  const signBlocks =
-    signers && signers.length > 0
-      ? signers
-      : DEFAULT_SIGNER_ROLES.map((role) => ({ role, name: "", jabatan: "" }));
+  const signer = (signers && signers[0]) ?? {
+    role: "Disetujui Oleh,",
+    name: "",
+    jabatan: "",
+  };
 
   const theme = getCompanyTheme(companyId);
   const c = theme.colors;
@@ -518,6 +516,20 @@ export function CbsDocument(props: CbsDocumentProps) {
           Terbilang : {terbilangRupiah(grandTotal)}
         </p>
 
+        {/* [6b] BERITA / ISI DOKUMEN (bebas, bisa diedit) */}
+        {bodyText?.trim() ? (
+          <div
+            style={{
+              marginTop: 12,
+              fontSize: 8.5,
+              lineHeight: 1.55,
+              whiteSpace: "pre-line",
+            }}
+          >
+            {bodyText}
+          </div>
+        ) : null}
+
         {/* [7] CATATAN & PEMBAYARAN */}
         {notes || paymentTerms.length > 0 || bankInfo ? (
           <div style={{ marginTop: 14, fontSize: 8 }}>
@@ -545,20 +557,23 @@ export function CbsDocument(props: CbsDocumentProps) {
           </div>
         ) : null}
 
-        {/* [8] TANDA TANGAN */}
-        <div style={{ display: "flex", gap: 10, marginTop: 24 }}>
-          {signBlocks.map((s, i) => (
-            <div key={`${s.role}-${i}`} style={{ flex: 1, textAlign: "center", fontSize: 8.5 }}>
-              <p style={{ color: c.muted, marginBottom: 38 }}>{s.role}</p>
-              <div style={{ borderTop: `1px solid ${c.accent}`, margin: "0 10px" }} />
-              <p style={{ fontWeight: 700, marginTop: 3 }}>
-                {s.name?.trim() ? s.name.trim() : "(............................)"}
-              </p>
-              <p style={{ color: c.muted }}>
-                {s.jabatan?.trim() ? s.jabatan.trim() : "Jabatan"}
-              </p>
-            </div>
-          ))}
+        {/* [8] TANDA TANGAN — satu kolom (Nama & Jabatan) */}
+        <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 24 }}>
+          <div style={{ width: "48%", textAlign: "center", fontSize: 8.5 }}>
+            <p style={{ color: c.muted }}>{signer.role || "Disetujui Oleh,"}</p>
+            <p style={{ fontWeight: 700, marginTop: 2 }}>{theme.fullName}</p>
+            <div style={{ height: 42 }} />
+            <div style={{ borderTop: `1px solid ${c.accent}`, margin: "0 20px" }} />
+            <p style={{ fontWeight: 700, marginTop: 3 }}>
+              {signer.name?.trim()
+                ? signer.name.trim()
+                : "(............................)"}
+            </p>
+            <p style={{ color: c.muted }}>
+              Jabatan:{" "}
+              {signer.jabatan?.trim() ? signer.jabatan.trim() : "..............."}
+            </p>
+          </div>
         </div>
 
         {/* [10] FOOTER */}

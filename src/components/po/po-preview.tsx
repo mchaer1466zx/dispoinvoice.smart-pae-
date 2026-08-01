@@ -60,25 +60,16 @@ export function PoPreview({
         extraRows={extraRows}
         grandTotal={totals.total}
         notes={poDetail.notes}
+        bodyText={poDetail.berita}
         paymentTerms={poDetail.paymentTerms
           .split("\n")
           .map((line) => line.trim())
           .filter(Boolean)}
         signers={[
           {
-            role: "Pemohon / Pembuat",
-            name: poDetail.signerPemohon.name,
-            jabatan: poDetail.signerPemohon.jabatan,
-          },
-          {
-            role: "Mengetahui / Menyetujui",
-            name: poDetail.signerMenyetujui.name,
-            jabatan: poDetail.signerMenyetujui.jabatan,
-          },
-          {
-            role: "Penerima / Vendor",
-            name: poDetail.signerPenerima.name,
-            jabatan: poDetail.signerPenerima.jabatan,
+            role: "Disetujui Oleh,",
+            name: poDetail.signer.name,
+            jabatan: poDetail.signer.jabatan,
           },
         ]}
       />

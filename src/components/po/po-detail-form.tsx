@@ -43,10 +43,11 @@ export type PoDetail = {
   tax: number;
   discount: number;
   notes: string;
+  /** Berita / isi surat (narasi bebas, muncul di dokumen). */
+  berita: string;
   paymentTerms: string;
-  signerPemohon: PoSigner;
-  signerMenyetujui: PoSigner;
-  signerPenerima: PoSigner;
+  /** Penandatangan tunggal (Nama + Jabatan). */
+  signer: PoSigner;
 };
 
 /** Ambil nomor urut (angka terakhir) dari sebuah nomor dokumen. */
@@ -87,10 +88,9 @@ export function createDefaultPoDetail(): PoDetail {
     tax: 0,
     discount: 0,
     notes: "",
+    berita: "",
     paymentTerms: DEFAULT_PAYMENT_TERMS,
-    signerPemohon: { name: "", jabatan: "" },
-    signerMenyetujui: { name: "", jabatan: "" },
-    signerPenerima: { name: "", jabatan: "" },
+    signer: { name: "", jabatan: "" },
   };
 }
 
@@ -241,47 +241,48 @@ export function PoDetailForm({
           </p>
         </div>
 
+        <div className="grid gap-1.5 sm:col-span-2">
+          <Label htmlFor={`${idPrefix}-berita`}>Berita / Isi Dokumen</Label>
+          <Textarea
+            id={`${idPrefix}-berita`}
+            placeholder="Narasi/keterangan yang tampil di dokumen (mis. ruang lingkup pekerjaan, ketentuan pelaksanaan, dsb.)"
+            value={value.berita}
+            onChange={(e) => updateField("berita", e.target.value)}
+            rows={6}
+          />
+          <p className="text-xs text-muted-foreground">
+            Ditampilkan apa adanya (baris tetap dipertahankan). Kosongkan bila
+            tidak perlu.
+          </p>
+        </div>
+
         <div className="grid gap-2.5 sm:col-span-2">
           <Label>Penandatangan</Label>
           <p className="-mt-1 text-xs text-muted-foreground">
-            Nama &amp; jabatan yang tampil di kolom tanda tangan dokumen.
+            Satu kolom tanda tangan — nama &amp; jabatan yang tampil di dokumen.
           </p>
-          {(
-            [
-              ["signerPemohon", "Pemohon / Pembuat"],
-              ["signerMenyetujui", "Mengetahui / Menyetujui"],
-              ["signerPenerima", "Penerima / Vendor"],
-            ] as const
-          ).map(([key, label]) => (
-            <div
-              key={key}
-              className="grid gap-2 sm:grid-cols-[170px_1fr_1fr] sm:items-center"
-            >
-              <span className="text-sm font-medium text-muted-foreground">
-                {label}
-              </span>
-              <Input
-                placeholder="Nama terang"
-                value={value[key].name}
-                onChange={(e) =>
-                  onChange({
-                    ...value,
-                    [key]: { ...value[key], name: e.target.value },
-                  })
-                }
-              />
-              <Input
-                placeholder="Jabatan"
-                value={value[key].jabatan}
-                onChange={(e) =>
-                  onChange({
-                    ...value,
-                    [key]: { ...value[key], jabatan: e.target.value },
-                  })
-                }
-              />
-            </div>
-          ))}
+          <div className="grid gap-2 sm:grid-cols-2">
+            <Input
+              placeholder="Nama terang"
+              value={value.signer.name}
+              onChange={(e) =>
+                onChange({
+                  ...value,
+                  signer: { ...value.signer, name: e.target.value },
+                })
+              }
+            />
+            <Input
+              placeholder="Jabatan"
+              value={value.signer.jabatan}
+              onChange={(e) =>
+                onChange({
+                  ...value,
+                  signer: { ...value.signer, jabatan: e.target.value },
+                })
+              }
+            />
+          </div>
         </div>
       </CardContent>
     </Card>
