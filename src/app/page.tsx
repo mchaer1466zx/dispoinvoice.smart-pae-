@@ -106,21 +106,21 @@ export default function LandingPage() {
           <Reveal>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="/sang-prabu/emblem.png"
-              alt="Lambang Sang Prabu"
-              className="mx-auto h-24 w-auto object-contain drop-shadow-[0_4px_16px_rgba(201,162,76,0.28)] sm:h-28"
+              src="/logos/logo-sang-prabu.png"
+              alt="Logo PT Karya Sang Prabu"
+              className="mx-auto h-32 w-auto object-contain drop-shadow-[0_6px_22px_rgba(201,162,76,0.32)] sm:h-40"
             />
           </Reveal>
 
           <Reveal delayMs={90} className="mt-7">
-            <h1 className="font-display text-[3.25rem] font-semibold leading-[0.95] tracking-[-0.02em] sm:text-[6rem]">
-              SANG PRABU
+            <h1 className="font-display text-[2.5rem] font-semibold leading-[1.02] tracking-[-0.02em] sm:text-[4.5rem]">
+              PT KARYA SANG PRABU
             </h1>
           </Reveal>
 
           <Reveal delayMs={150} className="mt-4">
-            <p className="font-mono text-[11px] font-medium uppercase tracking-[0.32em] text-gold sm:text-sm">
-              Karya Sang Prabu 2026
+            <p className="font-mono text-[11px] font-medium uppercase tracking-[0.28em] text-gold sm:text-sm">
+              The Best Partner Your Business
             </p>
           </Reveal>
 
@@ -328,12 +328,12 @@ export default function LandingPage() {
         <div className="mx-auto flex max-w-6xl flex-col items-center gap-4 text-center">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/sang-prabu/logo-text.jpg"
-            alt="SANG PRABU"
-            className="h-16 w-auto object-contain mix-blend-multiply"
+            src="/logos/logo-sang-prabu.png"
+            alt="Logo PT Karya Sang Prabu"
+            className="h-20 w-auto object-contain"
           />
           <p className="font-mono text-[11px] uppercase leading-[1.6] tracking-[0.14em] text-[#6e736a]">
-            PT Karya Sang Prabu · {BRAND.groupName}
+            PT Karya Sang Prabu · The Best Partner Your Business
           </p>
           <p className="text-[12px] text-[#9a9e94]">
             © 2026 SANG PRABU — Karya Sang Prabu. Halal, higienis, terpercaya.

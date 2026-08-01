@@ -319,7 +319,7 @@ export function CbsDocument(props: CbsDocumentProps) {
         }}
       >
         <img
-          src={emblem}
+          src={theme.logoPath}
           alt=""
           style={{
             width: `${theme.visuals.watermark.sizePercent}%`,

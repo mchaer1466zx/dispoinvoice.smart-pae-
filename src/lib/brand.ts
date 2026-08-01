@@ -6,14 +6,14 @@
 export const BRAND = {
   name: "PT KARYA SANG PRABU",
   shortName: "PT KSP",
-  tagline: "QUALITY • INTERGRITY • EXCELLENCE",
+  tagline: "THE BEST PARTNER YOUR BUSINESS",
   address: "Jl. Pertanian Raya No. 64, Lebak Bulus, Cilandak, Jakarta Selatan 12440",
   phone: "021 29862350",
   email: "ptkaryasangprabu@gmail.com",
   website: "www.karyasangprabu.co.id",
   appName: "Sistem Pengadaan Digital",
   emailFrom: "PT Karya Sang Prabu <no-reply@karyasangprabu.co.id>",
-  logoPath: "/logos/logo-ksp.png",
+  logoPath: "/logos/logo-sang-prabu.png",
   // Identitas GRUP (payung PT KSP, PAE, PUB) untuk headline halaman depan.
   groupName: "PRIMA PRABU GROUP",
   groupTagline: "INTERGRITY • COMMITMENT • EXCELLENCE",

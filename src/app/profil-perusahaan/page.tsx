@@ -189,19 +189,19 @@ export default function ProfilPerusahaanPage() {
           <Reveal>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="/sang-prabu/emblem.png"
-              alt="Lambang Sang Prabu"
-              className="mx-auto h-24 w-auto object-contain drop-shadow-[0_4px_16px_rgba(201,162,76,0.28)] sm:h-28"
+              src="/logos/logo-sang-prabu.png"
+              alt="Logo PT Karya Sang Prabu"
+              className="mx-auto h-28 w-auto object-contain drop-shadow-[0_6px_20px_rgba(201,162,76,0.3)] sm:h-36"
             />
           </Reveal>
           <Reveal delayMs={90} className="mt-6">
             <h1 className="font-display text-[2.25rem] font-semibold leading-[1.05] tracking-[-0.02em] sm:text-[3.5rem]">
-              PT Karya Sang Prabu
+              PT KARYA SANG PRABU
             </h1>
           </Reveal>
           <Reveal delayMs={150} className="mt-4">
             <p className="font-mono text-[11px] font-medium uppercase tracking-[0.3em] text-gold sm:text-sm">
-              Quality • Integrity • Excellence
+              The Best Partner Your Business
             </p>
           </Reveal>
           <Reveal delayMs={210} className="mt-6">
