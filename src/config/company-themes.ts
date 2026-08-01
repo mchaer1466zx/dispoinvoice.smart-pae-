@@ -68,7 +68,8 @@ export const COMPANY_THEMES: Record<CompanyId, CompanyTheme> = {
     id: "KSP",
     fullName: "PT KARYA SANG PRABU",
     initialName: "KARYA SANG PRABU",
-    tagline: "QUALITY • INTERGRITY • EXCELLENCE",
+    // Tagline resmi identitas visual SANG PRABU.
+    tagline: "THE BEST PARTNER YOUR BUSINESS",
     address:
       "Jl. Pertanian Raya No. 64, Lebak Bulus, Cilandak, Jakarta Selatan 12440",
     phone: "021 2784 1924",
@@ -83,32 +84,36 @@ export const COMPANY_THEMES: Record<CompanyId, CompanyTheme> = {
       supplierInvoice: "BILL/KSP/YYYY/MM/XXX",
       invoice: "INV/KSP/YYYY/MM/XXX",
     },
+    // PALET RESMI: Gold #DEA402 (mahkota/padi), Green #57A83F (tulisan/daun),
+    // Red #D71920 (elemen pengikat), White. Hijau tua #0B4D21 untuk teks & garis.
     colors: {
       primary: "#0B4D21",
-      accent: "#D4AF37",
+      accent: "#DEA402",
+      accent2: "#D71920",
       dark: "#1A1A1A",
       muted: "#555555",
-      blockBg: "#000000",
+      blockBg: "#0B4D21",
       blockText: "#FFFFFF",
-      totalBg: "#FFF3B0",
+      totalBg: "#FBF0CE",
       borderTop: "#0B4D21",
-      borderBottom: "#D4AF37",
-      watermark: "#D4AF37",
+      borderBottom: "#DEA402",
+      watermark: "#DEA402",
     },
     visuals: {
       divider: {
+        // Garis pembatas identitas: Hijau tua ━ (simpul merah) ━ Hijau tua.
         leftColor: "#0B4D21",
         centerOrnament: "SINFUL_KNOT",
-        rightColor: "#D4AF37",
+        rightColor: "#0B4D21",
         thicknessPx: 3,
       },
       watermark: { showText: false, opacity: 0.08, sizePercent: 65 },
-      footerCurve: { layers: ["#0B4D21", "#D4AF37", "#F1C40F"], heightPercent: 14 },
+      footerCurve: { layers: ["#0B4D21", "#DEA402", "#57A83F"], heightPercent: 14 },
     },
     logoPath: "/logos/logo-sang-prabu.png",
-    // Selaras identitas logo SANG PRABU: nama serif hijau (warna dari logo).
-    nameFont: "Georgia, 'Times New Roman', serif",
-    nameColor: "#3E9B2E",
+    // Selaras identitas logo SANG PRABU: nama serif klasik (Cinzel) hijau daun.
+    nameFont: "var(--font-crest), 'Cinzel', 'Times New Roman', serif",
+    nameColor: "#57A83F",
   },
 
   // 🏢 PT PRIMA ANDALAS ENERGI (PAE) · Biru + Hijau

@@ -48,6 +48,21 @@ export type CbsDocumentProps = {
   bodyText?: string;
   /** Penandatangan dokumen: peran + nama + jabatan (cukup satu). */
   signers?: { role: string; name?: string; jabatan?: string }[];
+  /**
+   * Pengesahan digital via barcode/QR — MENGGANTIKAN kolom tanda tangan bila ada.
+   * `dataUrl` = gambar QR (data URI) yang isinya merangkum metadata di bawah.
+   */
+  verification?: {
+    dataUrl: string;
+    maker: string;
+    createdAt: string;
+    purpose: string;
+    description: string;
+    partner: string;
+    comment?: string;
+    /** Logo/emblem yang ditaruh di tengah QR (opsional). */
+    logo?: string;
+  };
 };
 
 const ROMAN = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
@@ -180,6 +195,7 @@ export function CbsDocument(props: CbsDocumentProps) {
     bankInfo,
     bodyText,
     signers,
+    verification,
   } = props;
 
   const signer = (signers && signers[0]) ?? {
@@ -558,24 +574,148 @@ export function CbsDocument(props: CbsDocumentProps) {
           </div>
         ) : null}
 
-        {/* [8] TANDA TANGAN — satu kolom (Nama & Jabatan) */}
-        <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 24 }}>
-          <div style={{ width: "48%", textAlign: "center", fontSize: 8.5 }}>
-            <p style={{ color: c.muted }}>{signer.role || "Disetujui Oleh,"}</p>
-            <p style={{ fontWeight: 700, marginTop: 2 }}>{theme.fullName}</p>
-            <div style={{ height: 42 }} />
-            <div style={{ borderTop: `1px solid ${c.accent}`, margin: "0 20px" }} />
-            <p style={{ fontWeight: 700, marginTop: 3 }}>
-              {signer.name?.trim()
-                ? signer.name.trim()
-                : "(............................)"}
-            </p>
-            <p style={{ color: c.muted }}>
-              Jabatan:{" "}
-              {signer.jabatan?.trim() ? signer.jabatan.trim() : "..............."}
-            </p>
+        {/* [8] PENGESAHAN — barcode digital (bila ada) ATAU tanda tangan */}
+        {verification ? (
+          <div
+            style={{ display: "flex", justifyContent: "flex-end", marginTop: 24 }}
+          >
+            <div
+              style={{
+                width: "62%",
+                border: `1px solid ${c.primary}`,
+                borderRadius: 4,
+                padding: "10px 12px",
+                display: "flex",
+                gap: 12,
+                alignItems: "flex-start",
+              }}
+            >
+              {/* Kartu QR bergaya "QR CODE / SCAN ME" dengan emblem di tengah. */}
+              <div
+                style={{
+                  width: 112,
+                  flexShrink: 0,
+                  background: "#000000",
+                  borderRadius: 12,
+                  padding: "6px 6px 7px",
+                  textAlign: "center",
+                }}
+              >
+                <div
+                  style={{
+                    color: "#FFFFFF",
+                    fontSize: 10,
+                    fontWeight: 800,
+                    letterSpacing: 2,
+                    lineHeight: 1.2,
+                    marginBottom: 4,
+                  }}
+                >
+                  QR CODE
+                </div>
+                <div
+                  style={{
+                    position: "relative",
+                    background: "#FFFFFF",
+                    borderRadius: 6,
+                    padding: 4,
+                  }}
+                >
+                  {verification.dataUrl ? (
+                    <img
+                      src={verification.dataUrl}
+                      alt="Barcode pengesahan dokumen"
+                      style={{ width: "100%", height: "auto", display: "block" }}
+                    />
+                  ) : (
+                    <div
+                      style={{
+                        width: "100%",
+                        paddingBottom: "100%",
+                        border: `1px dashed ${c.muted}`,
+                      }}
+                    />
+                  )}
+                  {verification.logo ? (
+                    <img
+                      src={verification.logo}
+                      alt=""
+                      style={{
+                        position: "absolute",
+                        top: "50%",
+                        left: "50%",
+                        transform: "translate(-50%, -50%)",
+                        width: "26%",
+                        height: "auto",
+                        background: "#FFFFFF",
+                        borderRadius: "50%",
+                        padding: 1,
+                      }}
+                    />
+                  ) : null}
+                </div>
+                <div
+                  style={{
+                    color: "#FFFFFF",
+                    fontSize: 10,
+                    fontWeight: 800,
+                    letterSpacing: 2,
+                    lineHeight: 1.2,
+                    marginTop: 4,
+                  }}
+                >
+                  SCAN ME
+                </div>
+              </div>
+              <div style={{ fontSize: 7.5, lineHeight: 1.5, flex: 1 }}>
+                <p style={{ fontWeight: 800, color: c.primary, fontSize: 8.5 }}>
+                  PENGESAHAN DIGITAL
+                </p>
+                <p style={{ color: c.muted, marginBottom: 3 }}>
+                  Pindai barcode untuk memverifikasi keaslian dokumen.
+                </p>
+                <p>
+                  <b>Pembuat:</b> {verification.maker?.trim() || "—"}
+                </p>
+                <p>
+                  <b>Waktu Pembuatan:</b> {verification.createdAt}
+                </p>
+                <p>
+                  <b>Tujuan:</b> {verification.purpose}
+                </p>
+                <p>
+                  <b>Deskripsi:</b> {verification.description}
+                </p>
+                <p>
+                  <b>Mitra:</b> {verification.partner?.trim() || "—"}
+                </p>
+                {verification.comment?.trim() ? (
+                  <p>
+                    <b>Komentar:</b> {verification.comment.trim()}
+                  </p>
+                ) : null}
+              </div>
+            </div>
           </div>
-        </div>
+        ) : (
+          <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 24 }}>
+            <div style={{ width: "48%", textAlign: "center", fontSize: 8.5 }}>
+              <p style={{ color: c.muted }}>{signer.role || "Disetujui Oleh,"}</p>
+              <p style={{ fontWeight: 700, marginTop: 2 }}>{theme.fullName}</p>
+              <div style={{ height: 42 }} />
+              <div style={{ borderTop: `1px solid ${c.accent}`, margin: "0 20px" }} />
+              <p style={{ fontWeight: 700, marginTop: 3 }}>
+                {signer.name?.trim()
+                  ? signer.name.trim()
+                  : "(............................)"}
+              </p>
+              <p style={{ color: c.muted }}>
+                Jabatan:{" "}
+                {signer.jabatan?.trim() ? signer.jabatan.trim() : "..............."}
+              </p>
+            </div>
+          </div>
+        )}
 
         {/* [10] FOOTER */}
         <div

@@ -46,35 +46,43 @@ export type PoDetail = {
   /** Berita / isi surat (narasi bebas, muncul di dokumen). */
   berita: string;
   paymentTerms: string;
-  /** Penandatangan tunggal (Nama + Jabatan). */
+  /** Pembuat dokumen (Nama + Jabatan) — masuk ke isi barcode pengesahan. */
   signer: PoSigner;
+  /** Komentar bebas yang ikut dimuat ke dalam barcode pengesahan. */
+  komentar: string;
 };
 
-/** Ambil nomor urut (angka terakhir) dari sebuah nomor dokumen. */
+/** Kode jenis dokumen dalam nomor surat resmi (PO = 01). */
+const DOC_TYPE_CODE = "01";
+
+/** Ambil nomor urut dari sebuah nomor dokumen (digit awal, mis. "001-01/..."). */
 export function extractSeq(poNumber: string): number {
+  const lead = poNumber.match(/^\s*(\d+)/);
+  if (lead) {
+    const n = Number.parseInt(lead[1], 10);
+    if (!Number.isNaN(n) && n >= 1) return n;
+  }
   const m = poNumber.match(/(\d+)\s*$/);
   const n = m ? Number.parseInt(m[1], 10) : NaN;
   return Number.isNaN(n) || n < 1 ? 1 : n;
 }
 
 /**
- * Susun nomor PO sederhana:
- * PO/<KODE>[-<KATEGORI>]/<TAHUN>/<BULAN ROMAWI>/<URUT>
- * contoh: PO/KSP-NOTARIS/2026/VII/001
+ * Susun nomor PO sesuai standar surat resmi SANG PRABU:
+ * <URUT>-<KODE JENIS>/PO/<KODE>[-<INISIAL MITRA>]/<BULAN ROMAWI>/<TAHUN>
+ * contoh: 001-01/PO/KSP-BJP/VIII/2026
  */
 export function buildPoNumber(
   companyId: CompanyId,
-  category: string,
+  mitraInitial: string,
   seq: number,
   date = new Date(),
 ): string {
-  const cat = category.trim()
-    ? `-${category.trim().toUpperCase().replace(/\s+/g, "-")}`
+  const mitra = mitraInitial.trim()
+    ? `-${mitraInitial.trim().toUpperCase().replace(/\s+/g, "")}`
     : "";
   const roman = ROMAN[date.getMonth()] ?? String(date.getMonth() + 1);
-  return `PO/${companyId}${cat}/${date.getFullYear()}/${roman}/${String(
-    seq,
-  ).padStart(3, "0")}`;
+  return `${String(seq).padStart(3, "0")}-${DOC_TYPE_CODE}/PO/${companyId}${mitra}/${roman}/${date.getFullYear()}`;
 }
 
 export function createDefaultPoDetail(): PoDetail {
@@ -91,6 +99,7 @@ export function createDefaultPoDetail(): PoDetail {
     berita: "",
     paymentTerms: DEFAULT_PAYMENT_TERMS,
     signer: { name: "", jabatan: "" },
+    komentar: "",
   };
 }
 
@@ -135,16 +144,16 @@ export function PoDetailForm({
             <p className="text-sm text-destructive">Nomor PO wajib diisi.</p>
           ) : (
             <p className="text-xs text-muted-foreground">
-              Format: PO/{value.companyId}[-KATEGORI]/tahun/bulan-romawi/urut
+              Format: urut-01/PO/{value.companyId}[-INISIAL MITRA]/bulan-romawi/tahun
             </p>
           )}
         </div>
 
         <div className="grid gap-1.5">
-          <Label htmlFor={`${idPrefix}-po-cat`}>Kategori Nomor (opsional)</Label>
+          <Label htmlFor={`${idPrefix}-po-cat`}>Inisial Mitra (opsional)</Label>
           <Input
             id={`${idPrefix}-po-cat`}
-            placeholder="mis. NOTARIS"
+            placeholder="mis. BJP"
             value={value.numberCategory}
             onChange={(e) => {
               const category = e.target.value;
@@ -160,7 +169,7 @@ export function PoDetailForm({
             }}
           />
           <p className="text-xs text-muted-foreground">
-            Disisipkan ke nomor → mis. PO/{value.companyId}-NOTARIS/…
+            Disisipkan ke nomor → mis. 001-01/PO/{value.companyId}-BJP/…
           </p>
         </div>
 
@@ -257,13 +266,14 @@ export function PoDetailForm({
         </div>
 
         <div className="grid gap-2.5 sm:col-span-2">
-          <Label>Penandatangan</Label>
+          <Label>Pembuat Dokumen</Label>
           <p className="-mt-1 text-xs text-muted-foreground">
-            Satu kolom tanda tangan — nama &amp; jabatan yang tampil di dokumen.
+            Menggantikan tanda tangan: nama &amp; jabatan pembuat ikut dimuat ke
+            dalam barcode pengesahan pada dokumen.
           </p>
           <div className="grid gap-2 sm:grid-cols-2">
             <Input
-              placeholder="Nama terang"
+              placeholder="Nama pembuat"
               value={value.signer.name}
               onChange={(e) =>
                 onChange({
@@ -283,6 +293,21 @@ export function PoDetailForm({
               }
             />
           </div>
+        </div>
+
+        <div className="grid gap-1.5 sm:col-span-2">
+          <Label htmlFor={`${idPrefix}-komentar`}>Komentar (isi barcode)</Label>
+          <Textarea
+            id={`${idPrefix}-komentar`}
+            placeholder="Komentar/keterangan yang akan tersimpan di dalam barcode pengesahan"
+            value={value.komentar}
+            onChange={(e) => updateField("komentar", e.target.value)}
+            rows={2}
+          />
+          <p className="text-xs text-muted-foreground">
+            Dimuat ke barcode bersama nama pembuat, waktu pembuatan, tujuan &amp;
+            deskripsi dokumen, dan nama mitra.
+          </p>
         </div>
       </CardContent>
     </Card>

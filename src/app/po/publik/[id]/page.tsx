@@ -59,6 +59,7 @@ export default async function PublicPoPreviewPage({
               "10% Pelunasan setelah pekerjaan selesai 100% & QC lulus",
             ].join("\n"),
             signer: { name: "", jabatan: "" },
+            komentar: "",
           }}
           supplier={po.supplier}
           items={po.items}
