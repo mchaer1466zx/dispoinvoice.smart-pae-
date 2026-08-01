@@ -58,7 +58,7 @@ export function SupplierInvoicePreview({
         docNumber={detail.invoiceNumber}
         companyId={detail.companyId}
         perihal="Tagihan Pemasok (Bill)"
-        partyLabel="Tagihan Dari Pemasok"
+        partyLabel="Kepada"
         partyName={supplier?.name ?? ""}
         partyLines={partyLines}
         dateLabel="Tanggal Tagihan"

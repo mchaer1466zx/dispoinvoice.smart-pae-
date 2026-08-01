@@ -61,7 +61,7 @@ export function QuotationPreview({
         docNumber={quotationDetail.quotationNumber}
         companyId={quotationDetail.companyId}
         perihal="Penawaran Harga"
-        partyLabel="Kepada Yth (Pelanggan)"
+        partyLabel="Kepada"
         partyName={customer?.name ?? ""}
         partyLines={[customer?.address ?? "", customer?.phone ?? "", customer?.email ?? ""]}
         dateLabel="Tanggal Penawaran"

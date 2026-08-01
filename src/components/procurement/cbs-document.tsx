@@ -555,9 +555,8 @@ export function CbsDocument(props: CbsDocumentProps) {
                 {s.name?.trim() ? s.name.trim() : "(............................)"}
               </p>
               <p style={{ color: c.muted }}>
-                {s.jabatan?.trim() ? s.jabatan.trim() : "Nama Terang · Jabatan"}
+                {s.jabatan?.trim() ? s.jabatan.trim() : "Jabatan"}
               </p>
-              <p style={{ color: c.muted }}>Tanggal : ..............</p>
             </div>
           ))}
         </div>

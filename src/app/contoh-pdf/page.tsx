@@ -223,7 +223,7 @@ export default function ContohPdfPage() {
                 docNumber={example.docNumber}
                 companyId={companyId}
                 perihal={example.perihal}
-                partyLabel="Kepada Yth (Vendor)"
+                partyLabel="Kepada"
                 partyName={example.partyName}
                 partyLines={example.partyLines}
                 dateLabel="Tanggal Pemesanan"

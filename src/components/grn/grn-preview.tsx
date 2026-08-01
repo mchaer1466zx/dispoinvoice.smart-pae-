@@ -42,7 +42,7 @@ export function GrnPreview({
         docNumber={grnDetail.grnNumber}
         companyId={grnDetail.companyId}
         perihal="Bukti Penerimaan Barang"
-        partyLabel="Diterima Dari Pemasok"
+        partyLabel="Kepada"
         partyName={supplier?.name ?? ""}
         partyLines={partyLines}
         dateLabel="Tanggal Terima"
