@@ -37,7 +37,7 @@ export function RfqPreview({
         docNumber={rfqDetail.rfqNumber}
         companyId={rfqDetail.companyId}
         perihal="Permintaan Penawaran Harga"
-        partyLabel="Kepada Pemasok"
+        partyLabel="Kepada"
         partyName={supplier?.name ?? ""}
         partyLines={[supplier?.address ?? "", supplier?.contactInfo ?? ""]}
         dateLabel="Tanggal Permintaan"

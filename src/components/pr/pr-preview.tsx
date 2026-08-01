@@ -35,7 +35,7 @@ export function PrPreview({
         docNumber={prDetail.prNumber}
         companyId={prDetail.companyId}
         perihal="Usulan / Permintaan Pembelian"
-        partyLabel="Departemen Peminta"
+        partyLabel="Kepada"
         partyName={prDetail.department}
         dateLabel="Tanggal Kebutuhan"
         date={prDetail.needDate}
