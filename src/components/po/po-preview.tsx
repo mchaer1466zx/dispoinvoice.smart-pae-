@@ -10,6 +10,8 @@ import {
   type CbsTotalRow,
 } from "@/components/procurement/cbs-document";
 
+const DOC_DESCRIPTION = "Pesanan Pembelian Barang/Jasa";
+
 export function PoPreview({
   poDetail,
   supplier,
@@ -19,6 +21,12 @@ export function PoPreview({
   supplier: SupplierRecord | null;
   items: PoItem[];
 }) {
+  const maker = poDetail.signer.name.trim()
+    ? `${poDetail.signer.name.trim()}${
+        poDetail.signer.jabatan.trim() ? ` (${poDetail.signer.jabatan.trim()})` : ""
+      }`
+    : "";
+
   const groups = buildCbsGroups(
     items.map((item) => ({
       group: item.group,
@@ -60,27 +68,18 @@ export function PoPreview({
         extraRows={extraRows}
         grandTotal={totals.total}
         notes={poDetail.notes}
+        bodyText={poDetail.berita}
         paymentTerms={poDetail.paymentTerms
           .split("\n")
           .map((line) => line.trim())
           .filter(Boolean)}
-        signers={[
-          {
-            role: "Pemohon / Pembuat",
-            name: poDetail.signerPemohon.name,
-            jabatan: poDetail.signerPemohon.jabatan,
-          },
-          {
-            role: "Mengetahui / Menyetujui",
-            name: poDetail.signerMenyetujui.name,
-            jabatan: poDetail.signerMenyetujui.jabatan,
-          },
-          {
-            role: "Penerima / Vendor",
-            name: poDetail.signerPenerima.name,
-            jabatan: poDetail.signerPenerima.jabatan,
-          },
-        ]}
+        verification={{
+          maker,
+          purpose: "PURCHASE ORDER",
+          description: DOC_DESCRIPTION,
+          partner: supplier?.name ?? "",
+          comment: poDetail.komentar,
+        }}
       />
     </div>
   );

@@ -16,8 +16,8 @@ export type CompanyProfile = {
   logoUrl: string | null;
 };
 
-/** Logo perusahaan; diisi dari Profil Perusahaan. */
-export const COMPANY_LOGO_URL = "";
+/** Logo perusahaan — Logo Original SANG PRABU (dipakai seragam di aplikasi). */
+export const COMPANY_LOGO_URL = "/logos/logo-sang-prabu.png";
 
 export const MOCK_COMPANY: CompanyProfile = {
   name: "PT KARYA SANG PRABU",

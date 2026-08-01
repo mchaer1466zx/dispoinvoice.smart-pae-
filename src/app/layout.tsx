@@ -1,5 +1,11 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Fraunces, Plus_Jakarta_Sans } from "next/font/google";
+import {
+  Geist,
+  Geist_Mono,
+  Fraunces,
+  Plus_Jakarta_Sans,
+  Cinzel,
+} from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
 import { AppHeader } from "@/components/app-header";
 import { CompanyProvider } from "@/lib/company-store";
@@ -35,6 +41,15 @@ const jakarta = Plus_Jakarta_Sans({
   display: "swap",
 });
 
+// Cinzel — serif klasik/terukir (all-caps) untuk wordmark "PT KARYA SANG PRABU"
+// pada kop dokumen, selaras identitas visual logo SANG PRABU.
+const cinzel = Cinzel({
+  variable: "--font-crest",
+  subsets: ["latin"],
+  weight: ["500", "600", "700"],
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: {
     default: "Sistem Pengadaan Digital · PRIMA PRABU GROUP",
@@ -57,7 +72,7 @@ export default async function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${fraunces.variable} ${jakarta.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${fraunces.variable} ${jakarta.variable} ${cinzel.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
         <AuthProvider>

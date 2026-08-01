@@ -9,26 +9,24 @@ import { BRAND } from "@/lib/brand";
 
 export function AppHeader() {
   const { activeCompany } = useCompany();
-  const name = activeCompany?.name ?? BRAND.groupName;
-  // Logo grup belum ditetapkan: tampilkan logo hanya bila perusahaan aktif
-  // punya logonya sendiri; jangan pakai logo KSP sebagai lambang grup.
-  const logoUrl = activeCompany?.logoUrl ?? null;
+  const name = activeCompany?.name ?? BRAND.name;
+  // Logo utama aplikasi: Logo Original SANG PRABU (dipakai seragam di semua
+  // halaman). Bila perusahaan aktif punya logo sendiri, pakai itu.
+  const logoUrl = activeCompany?.logoUrl || "/logos/logo-sang-prabu.png";
 
   return (
     <header className="border-b-2 border-primary bg-white shadow-[0_2px_0_0_var(--gold)] dark:bg-card">
       <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-3 sm:px-8">
-        <Link href="/" className="flex items-center gap-3">
-          {logoUrl ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={logoUrl}
-              alt={`Logo ${name}`}
-              width={36}
-              height={36}
-              className="h-9 w-9 rounded-md object-contain ring-1 ring-gold/30"
-            />
-          ) : null}
-          <span className="font-display text-[1.0625rem] font-semibold leading-[1.15] tracking-[-0.01em] text-foreground sm:text-xl">
+        <Link href="/" className="flex min-w-0 items-center gap-2.5">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={logoUrl}
+            alt={`Logo ${name}`}
+            width={40}
+            height={40}
+            className="h-10 w-10 shrink-0 object-contain"
+          />
+          <span className="truncate font-display text-[1rem] font-semibold leading-[1.15] tracking-[-0.01em] text-foreground sm:text-lg">
             {name}
           </span>
         </Link>
