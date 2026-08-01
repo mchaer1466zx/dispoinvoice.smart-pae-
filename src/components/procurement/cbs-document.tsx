@@ -283,7 +283,8 @@ export function CbsDocument(props: CbsDocumentProps) {
                 style={{
                   fontSize: 17,
                   fontWeight: 800,
-                  color: c.primary,
+                  color: theme.nameColor ?? c.primary,
+                  fontFamily: theme.nameFont ?? "inherit",
                   letterSpacing: 1,
                   textTransform: "uppercase",
                 }}

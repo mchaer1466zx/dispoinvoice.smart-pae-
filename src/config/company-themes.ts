@@ -55,6 +55,10 @@ export interface CompanyTheme {
     };
   };
   logoPath: string;
+  /** Font nama perusahaan di kop (opsional; default sans). */
+  nameFont?: string;
+  /** Warna nama perusahaan di kop (opsional; default colors.primary). */
+  nameColor?: string;
 }
 
 // ⬇️ PRESET 3 PERUSAHAAN ⬇️
@@ -101,7 +105,10 @@ export const COMPANY_THEMES: Record<CompanyId, CompanyTheme> = {
       watermark: { showText: false, opacity: 0.08, sizePercent: 65 },
       footerCurve: { layers: ["#0B4D21", "#D4AF37", "#F1C40F"], heightPercent: 14 },
     },
-    logoPath: "/logos/logo-ksp.png",
+    logoPath: "/logos/logo-sang-prabu.png",
+    // Selaras identitas logo SANG PRABU: nama serif hijau (warna dari logo).
+    nameFont: "Georgia, 'Times New Roman', serif",
+    nameColor: "#3E9B2E",
   },
 
   // 🏢 PT PRIMA ANDALAS ENERGI (PAE) · Biru + Hijau
