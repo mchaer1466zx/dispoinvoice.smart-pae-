@@ -2,7 +2,8 @@
 
 /* eslint-disable @next/next/no-img-element */
 
-import { Fragment } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
+import QRCode from "qrcode";
 import { formatCurrency, formatDate } from "@/lib/format";
 import { terbilangRupiah } from "@/lib/terbilang";
 import {
@@ -44,24 +45,20 @@ export type CbsDocumentProps = {
   notes?: string;
   paymentTerms?: string[];
   bankInfo?: string;
-  /** Isi/berita dokumen (narasi bebas, bisa diedit) — tampil sebelum tanda tangan. */
+  /** Isi/berita dokumen (narasi bebas, bisa diedit) — tampil sebelum blok bawah. */
   bodyText?: string;
-  /** Penandatangan dokumen: peran + nama + jabatan (cukup satu). */
-  signers?: { role: string; name?: string; jabatan?: string }[];
   /**
-   * Pengesahan digital via barcode/QR — MENGGANTIKAN kolom tanda tangan bila ada.
-   * `dataUrl` = gambar QR (data URI) yang isinya merangkum metadata di bawah.
+   * Metadata pengesahan digital. QR "QR CODE DOKUMEN" dibuat OTOMATIS oleh
+   * komponen dari nomor/dokumen/mitra + field di bawah — tak perlu kirim gambar.
+   * Semua field opsional; yang kosong diisi dari data dokumen.
    */
   verification?: {
-    dataUrl: string;
-    maker: string;
-    createdAt: string;
-    purpose: string;
-    description: string;
-    partner: string;
+    maker?: string;
+    createdAt?: string;
+    purpose?: string;
+    description?: string;
+    partner?: string;
     comment?: string;
-    /** Logo/emblem yang ditaruh di tengah QR (opsional). */
-    logo?: string;
   };
 };
 
@@ -69,6 +66,29 @@ const ROMAN = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
 
 function fmtQty(qty: number): string {
   return Number.isInteger(qty) ? String(qty) : qty.toFixed(1).replace(".", ",");
+}
+
+/** Ikon kontak bulat kecil (pin/telepon/email) pada kop surat. */
+function ContactIcon({ bg, glyph }: { bg: string; glyph: string }) {
+  return (
+    <span
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        justifyContent: "center",
+        width: 12,
+        height: 12,
+        borderRadius: "50%",
+        background: bg,
+        color: "#FFFFFF",
+        fontSize: 7.5,
+        lineHeight: 1,
+        flexShrink: 0,
+      }}
+    >
+      {glyph}
+    </span>
+  );
 }
 
 /** Ornamen tengah garis pemisah kop — beda tiap perusahaan (sesuai gambar kop). */
@@ -194,18 +214,67 @@ export function CbsDocument(props: CbsDocumentProps) {
     paymentTerms = [],
     bankInfo,
     bodyText,
-    signers,
     verification,
   } = props;
 
-  const signer = (signers && signers[0]) ?? {
-    role: "Disetujui Oleh,",
-    name: "",
-    jabatan: "",
-  };
-
   const theme = getCompanyTheme(companyId);
   const c = theme.colors;
+  const emblem = theme.emblemPath ?? theme.logoPath;
+
+  // Waktu pembuatan default (stabil selama komponen hidup).
+  const [autoCreatedAt] = useState(() =>
+    new Intl.DateTimeFormat("id-ID", {
+      dateStyle: "long",
+      timeStyle: "short",
+    }).format(new Date()),
+  );
+  const createdAt = verification?.createdAt ?? autoCreatedAt;
+  const partner = verification?.partner ?? partyName;
+
+  // Payload QR "QR CODE DOKUMEN" — penghubung dokumen fisik ↔ arsip digital.
+  const qrPayload = useMemo(
+    () =>
+      [
+        `Nomor: ${docNumber}`,
+        `Dokumen: ${docTitle}`,
+        `Pembuat: ${verification?.maker?.trim() || "-"}`,
+        `Waktu Pembuatan: ${createdAt}`,
+        `Tujuan: ${verification?.purpose?.trim() || docTitle}`,
+        `Deskripsi: ${verification?.description?.trim() || perihal || docTitle}`,
+        `Mitra: ${partner?.trim() || "-"}`,
+        `Komentar: ${verification?.comment?.trim() || "-"}`,
+      ].join("\n"),
+    [
+      docNumber,
+      docTitle,
+      perihal,
+      partner,
+      createdAt,
+      verification?.maker,
+      verification?.purpose,
+      verification?.description,
+      verification?.comment,
+    ],
+  );
+
+  const [qrDataUrl, setQrDataUrl] = useState("");
+  useEffect(() => {
+    let active = true;
+    QRCode.toDataURL(qrPayload, {
+      margin: 1,
+      width: 320,
+      errorCorrectionLevel: "H",
+    })
+      .then((url) => {
+        if (active) setQrDataUrl(url);
+      })
+      .catch(() => {
+        if (active) setQrDataUrl("");
+      });
+    return () => {
+      active = false;
+    };
+  }, [qrPayload]);
 
   const cell: React.CSSProperties = {
     border: `0.5px solid ${c.dark}`,
@@ -250,7 +319,7 @@ export function CbsDocument(props: CbsDocumentProps) {
         }}
       >
         <img
-          src={theme.logoPath}
+          src={emblem}
           alt=""
           style={{
             width: `${theme.visuals.watermark.sizePercent}%`,
@@ -288,45 +357,101 @@ export function CbsDocument(props: CbsDocumentProps) {
             gap: 12,
           }}
         >
-          <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
+          <div style={{ display: "flex", gap: 14, alignItems: "center" }}>
             <img
               src={theme.logoPath}
               alt={`Logo ${theme.fullName}`}
-              style={{ height: 54, width: "auto", objectFit: "contain" }}
+              style={{ height: 68, width: "auto", objectFit: "contain" }}
             />
             <div>
               <p
                 style={{
-                  fontSize: 17,
-                  fontWeight: 800,
+                  fontSize: 23,
+                  fontWeight: 700,
                   color: theme.nameColor ?? c.primary,
                   fontFamily: theme.nameFont ?? "inherit",
                   letterSpacing: 1,
                   textTransform: "uppercase",
+                  lineHeight: 1,
+                  whiteSpace: "nowrap",
                 }}
               >
                 {theme.fullName}
               </p>
-              <p
+              <div
                 style={{
-                  fontSize: 9,
-                  fontWeight: 700,
-                  color: c.accent,
-                  letterSpacing: 2,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 8,
+                  marginTop: 3,
                 }}
               >
-                {theme.tagline}
-              </p>
+                <span
+                  style={{
+                    flex: "0 0 24px",
+                    height: 1.5,
+                    background: c.accent,
+                  }}
+                />
+                <span
+                  style={{
+                    fontSize: 10,
+                    fontWeight: 700,
+                    color: c.accent,
+                    letterSpacing: 2,
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {theme.tagline}
+                </span>
+                <span
+                  style={{
+                    flex: "0 0 24px",
+                    height: 1.5,
+                    background: c.accent,
+                  }}
+                />
+              </div>
               {theme.subTagline ? (
-                <p style={{ fontSize: 7.5, color: c.muted, fontStyle: "italic" }}>
+                <p
+                  style={{
+                    fontSize: 7.5,
+                    color: c.muted,
+                    fontStyle: "italic",
+                    marginTop: 2,
+                  }}
+                >
                   {theme.subTagline}
                 </p>
               ) : null}
-              <p style={{ fontSize: 8, color: c.dark, marginTop: 2 }}>
-                📍 {theme.address}
+              <p
+                style={{
+                  fontSize: 8.5,
+                  color: c.dark,
+                  marginTop: 6,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 4,
+                }}
+              >
+                <ContactIcon bg={c.accent2 ?? "#D71920"} glyph="⚲" />
+                {theme.address}
               </p>
-              <p style={{ fontSize: 8, color: c.dark }}>
-                📞 {theme.phone} ✉️ {theme.email} 🌐 {theme.website}
+              <p
+                style={{
+                  fontSize: 8.5,
+                  color: c.dark,
+                  marginTop: 3,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 4,
+                }}
+              >
+                <ContactIcon bg={c.primary} glyph="✆" />
+                {theme.phone}
+                <span style={{ display: "inline-block", width: 6 }} />
+                <ContactIcon bg={c.accent} glyph="✉" />
+                {theme.email}
               </p>
             </div>
           </div>
@@ -336,12 +461,15 @@ export function CbsDocument(props: CbsDocumentProps) {
               style={{
                 background: c.blockBg,
                 color: c.blockText,
-                fontWeight: 700,
-                fontSize: 15,
+                fontWeight: 800,
+                fontSize: 16,
                 textAlign: "center",
-                padding: "9px 16px",
+                padding: "12px 22px",
                 letterSpacing: 1,
-                minWidth: 170,
+                minWidth: 190,
+                borderRadius: 8,
+                borderBottom: `4px solid ${c.accent}`,
+                whiteSpace: "nowrap",
               }}
             >
               {docTitle.toUpperCase()}
@@ -486,54 +614,7 @@ export function CbsDocument(props: CbsDocumentProps) {
           </tbody>
         </table>
 
-        {/* [6] TOTAL */}
-        <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 10 }}>
-          <table style={{ width: "45%", borderCollapse: "collapse", fontSize: 9 }}>
-            <tbody>
-              <tr>
-                <td style={{ padding: "4px 8px", color: c.muted }}>SUBTOTAL</td>
-                <td style={{ padding: "4px 8px", textAlign: "right", fontWeight: 600 }}>
-                  {formatCurrency(subtotal)}
-                </td>
-              </tr>
-              {extraRows.map((row) => (
-                <tr key={row.label}>
-                  <td style={{ padding: "4px 8px", color: c.muted }}>{row.label}</td>
-                  <td style={{ padding: "4px 8px", textAlign: "right", fontWeight: 600 }}>
-                    {formatCurrency(row.value)}
-                  </td>
-                </tr>
-              ))}
-              <tr
-                style={{
-                  background: c.totalBg,
-                  borderTop: `2px solid ${c.primary}`,
-                  borderBottom: `2px solid ${c.accent}`,
-                }}
-              >
-                <td style={{ padding: "7px 8px", fontWeight: 800, fontSize: 11 }}>
-                  GRAND TOTAL
-                </td>
-                <td
-                  style={{
-                    padding: "7px 8px",
-                    textAlign: "right",
-                    fontWeight: 800,
-                    fontSize: 11,
-                  }}
-                >
-                  {formatCurrency(grandTotal)}
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <p style={{ marginTop: 6, fontStyle: "italic", fontWeight: 700 }}>
-          Terbilang : {terbilangRupiah(grandTotal)}
-        </p>
-
-        {/* [6b] BERITA / ISI DOKUMEN (bebas, bisa diedit) */}
+        {/* [6b] BERITA / ISI DOKUMEN (bebas, bisa diedit) — lebar penuh */}
         {bodyText?.trim() ? (
           <div
             style={{
@@ -547,21 +628,41 @@ export function CbsDocument(props: CbsDocumentProps) {
           </div>
         ) : null}
 
-        {/* [7] CATATAN & PEMBAYARAN */}
-        {notes || paymentTerms.length > 0 || bankInfo ? (
-          <div style={{ marginTop: 14, fontSize: 8 }}>
-            {notes ? (
-              <>
-                <p style={{ fontWeight: 700, fontSize: 9 }}>CATATAN :</p>
-                <p style={{ color: c.muted, whiteSpace: "pre-line" }}>{notes}</p>
-              </>
-            ) : null}
+        {/* [6] BLOK BAWAH: (kiri) pembayaran · (tengah) total+catatan · (kanan) QR */}
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "flex-start",
+            gap: 18,
+            marginTop: 16,
+          }}
+        >
+          {/* KIRI — Terbilang + Cara Pembayaran */}
+          <div style={{ flex: 1, fontSize: 8.5 }}>
+            <p style={{ fontStyle: "italic", fontWeight: 700, marginBottom: 12 }}>
+              Terbilang : {terbilangRupiah(grandTotal)}
+            </p>
             {paymentTerms.length > 0 ? (
               <>
-                <p style={{ fontWeight: 700, fontSize: 9, marginTop: 6 }}>
+                <p
+                  style={{
+                    fontWeight: 800,
+                    color: c.primary,
+                    fontSize: 9,
+                    letterSpacing: 0.5,
+                  }}
+                >
                   CARA PEMBAYARAN :
                 </p>
-                <ul style={{ color: c.muted, paddingLeft: 16, listStyle: "disc" }}>
+                <ul
+                  style={{
+                    color: c.muted,
+                    paddingLeft: 16,
+                    listStyle: "disc",
+                    margin: "2px 0 0",
+                  }}
+                >
                   {paymentTerms.map((t, i) => (
                     <li key={i}>{t}</li>
                   ))}
@@ -569,170 +670,185 @@ export function CbsDocument(props: CbsDocumentProps) {
               </>
             ) : null}
             {bankInfo ? (
-              <p style={{ color: c.muted, marginTop: 4 }}>{bankInfo}</p>
+              <p style={{ color: c.muted, marginTop: 6 }}>{bankInfo}</p>
             ) : null}
           </div>
-        ) : null}
 
-        {/* [8] PENGESAHAN — barcode digital (bila ada) ATAU tanda tangan */}
-        {verification ? (
+          {/* TENGAH — Total + Catatan */}
+          <div style={{ width: 244, flexShrink: 0 }}>
+            <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 9 }}>
+              <tbody>
+                <tr>
+                  <td style={{ padding: "4px 8px", color: c.muted }}>SUBTOTAL</td>
+                  <td style={{ padding: "4px 8px", textAlign: "right", fontWeight: 600 }}>
+                    {formatCurrency(subtotal)}
+                  </td>
+                </tr>
+                {extraRows.map((row) => (
+                  <tr key={row.label}>
+                    <td style={{ padding: "4px 8px", color: c.muted }}>{row.label}</td>
+                    <td style={{ padding: "4px 8px", textAlign: "right", fontWeight: 600 }}>
+                      {formatCurrency(row.value)}
+                    </td>
+                  </tr>
+                ))}
+                <tr
+                  style={{
+                    background: c.totalBg,
+                    borderTop: `2px solid ${c.primary}`,
+                    borderBottom: `2px solid ${c.accent}`,
+                  }}
+                >
+                  <td style={{ padding: "7px 8px", fontWeight: 800, fontSize: 11 }}>
+                    GRAND TOTAL
+                  </td>
+                  <td
+                    style={{
+                      padding: "7px 8px",
+                      textAlign: "right",
+                      fontWeight: 800,
+                      fontSize: 11,
+                    }}
+                  >
+                    {formatCurrency(grandTotal)}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            {notes?.trim() ? (
+              <div style={{ marginTop: 10, fontSize: 8 }}>
+                <p
+                  style={{
+                    fontWeight: 800,
+                    color: c.primary,
+                    fontSize: 9,
+                    letterSpacing: 0.5,
+                  }}
+                >
+                  CATATAN :
+                </p>
+                <ul
+                  style={{
+                    color: c.muted,
+                    paddingLeft: 16,
+                    listStyle: "disc",
+                    margin: "2px 0 0",
+                  }}
+                >
+                  {notes
+                    .split("\n")
+                    .map((line) => line.trim())
+                    .filter(Boolean)
+                    .map((line, i) => (
+                      <li key={i}>{line}</li>
+                    ))}
+                </ul>
+              </div>
+            ) : null}
+          </div>
+
+          {/* KANAN — Kartu QR CODE DOKUMEN (emblem di tengah) */}
           <div
-            style={{ display: "flex", justifyContent: "flex-end", marginTop: 24 }}
+            style={{
+              width: 142,
+              flexShrink: 0,
+              background: c.primary,
+              borderRadius: 12,
+              padding: 9,
+              textAlign: "center",
+            }}
           >
             <div
               style={{
-                width: "62%",
-                border: `1px solid ${c.primary}`,
-                borderRadius: 4,
-                padding: "10px 12px",
-                display: "flex",
-                gap: 12,
-                alignItems: "flex-start",
+                color: "#FFFFFF",
+                fontWeight: 800,
+                fontSize: 9.5,
+                letterSpacing: 1,
+                marginBottom: 6,
               }}
             >
-              {/* Kartu QR bergaya "QR CODE / SCAN ME" dengan emblem di tengah. */}
-              <div
+              QR CODE DOKUMEN
+            </div>
+            <div
+              style={{
+                position: "relative",
+                background: "#FFFFFF",
+                borderRadius: 8,
+                padding: 5,
+              }}
+            >
+              {qrDataUrl ? (
+                <img
+                  src={qrDataUrl}
+                  alt="QR pengesahan dokumen"
+                  style={{ width: "100%", height: "auto", display: "block" }}
+                />
+              ) : (
+                <div
+                  style={{
+                    width: "100%",
+                    paddingBottom: "100%",
+                    border: `1px dashed ${c.muted}`,
+                  }}
+                />
+              )}
+              <img
+                src={emblem}
+                alt=""
                 style={{
-                  width: 112,
-                  flexShrink: 0,
-                  background: "#000000",
-                  borderRadius: 12,
-                  padding: "6px 6px 7px",
-                  textAlign: "center",
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                  width: "24%",
+                  height: "auto",
+                  background: "#FFFFFF",
+                  borderRadius: "50%",
+                  padding: 1,
                 }}
-              >
-                <div
-                  style={{
-                    color: "#FFFFFF",
-                    fontSize: 10,
-                    fontWeight: 800,
-                    letterSpacing: 2,
-                    lineHeight: 1.2,
-                    marginBottom: 4,
-                  }}
-                >
-                  QR CODE
-                </div>
-                <div
-                  style={{
-                    position: "relative",
-                    background: "#FFFFFF",
-                    borderRadius: 6,
-                    padding: 4,
-                  }}
-                >
-                  {verification.dataUrl ? (
-                    <img
-                      src={verification.dataUrl}
-                      alt="Barcode pengesahan dokumen"
-                      style={{ width: "100%", height: "auto", display: "block" }}
-                    />
-                  ) : (
-                    <div
-                      style={{
-                        width: "100%",
-                        paddingBottom: "100%",
-                        border: `1px dashed ${c.muted}`,
-                      }}
-                    />
-                  )}
-                  {verification.logo ? (
-                    <img
-                      src={verification.logo}
-                      alt=""
-                      style={{
-                        position: "absolute",
-                        top: "50%",
-                        left: "50%",
-                        transform: "translate(-50%, -50%)",
-                        width: "26%",
-                        height: "auto",
-                        background: "#FFFFFF",
-                        borderRadius: "50%",
-                        padding: 1,
-                      }}
-                    />
-                  ) : null}
-                </div>
-                <div
-                  style={{
-                    color: "#FFFFFF",
-                    fontSize: 10,
-                    fontWeight: 800,
-                    letterSpacing: 2,
-                    lineHeight: 1.2,
-                    marginTop: 4,
-                  }}
-                >
-                  SCAN ME
-                </div>
-              </div>
-              <div style={{ fontSize: 7.5, lineHeight: 1.5, flex: 1 }}>
-                <p style={{ fontWeight: 800, color: c.primary, fontSize: 8.5 }}>
-                  PENGESAHAN DIGITAL
-                </p>
-                <p style={{ color: c.muted, marginBottom: 3 }}>
-                  Pindai barcode untuk memverifikasi keaslian dokumen.
-                </p>
-                <p>
-                  <b>Pembuat:</b> {verification.maker?.trim() || "—"}
-                </p>
-                <p>
-                  <b>Waktu Pembuatan:</b> {verification.createdAt}
-                </p>
-                <p>
-                  <b>Tujuan:</b> {verification.purpose}
-                </p>
-                <p>
-                  <b>Deskripsi:</b> {verification.description}
-                </p>
-                <p>
-                  <b>Mitra:</b> {verification.partner?.trim() || "—"}
-                </p>
-                {verification.comment?.trim() ? (
-                  <p>
-                    <b>Komentar:</b> {verification.comment.trim()}
-                  </p>
-                ) : null}
-              </div>
+              />
             </div>
           </div>
-        ) : (
-          <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 24 }}>
-            <div style={{ width: "48%", textAlign: "center", fontSize: 8.5 }}>
-              <p style={{ color: c.muted }}>{signer.role || "Disetujui Oleh,"}</p>
-              <p style={{ fontWeight: 700, marginTop: 2 }}>{theme.fullName}</p>
-              <div style={{ height: 42 }} />
-              <div style={{ borderTop: `1px solid ${c.accent}`, margin: "0 20px" }} />
-              <p style={{ fontWeight: 700, marginTop: 3 }}>
-                {signer.name?.trim()
-                  ? signer.name.trim()
-                  : "(............................)"}
-              </p>
-              <p style={{ color: c.muted }}>
-                Jabatan:{" "}
-                {signer.jabatan?.trim() ? signer.jabatan.trim() : "..............."}
-              </p>
-            </div>
-          </div>
-        )}
+        </div>
 
-        {/* [10] FOOTER */}
+        {/* [10] FOOTER — hak cipta + arsip dokumen */}
         <div
           style={{
             display: "flex",
             justifyContent: "space-between",
-            marginTop: 18,
-            paddingTop: 6,
+            alignItems: "flex-end",
+            marginTop: 20,
+            paddingTop: 8,
             borderTop: `0.5px solid ${c.dark}`,
-            fontSize: 7.5,
+            fontSize: 7.8,
             color: c.muted,
           }}
         >
-          <span>
-            © {new Date().getFullYear()} {theme.fullName} · Sistem Pengadaan Digital
-          </span>
-          <span>Halaman 1 dari 1 · Dicetak {printedAt}</span>
+          <div>
+            <div style={{ fontWeight: 700, color: c.primary }}>
+              © {new Date().getFullYear()} {theme.fullName}
+            </div>
+            <div>Semua hak dilindungi undang-undang · Dicetak {printedAt}</div>
+          </div>
+          <div
+            style={{
+              display: "flex",
+              gap: 7,
+              alignItems: "flex-start",
+              maxWidth: 300,
+            }}
+          >
+            <span style={{ color: c.primary, fontSize: 16, lineHeight: 1 }}>🗂</span>
+            <div>
+              <div style={{ fontWeight: 800, color: c.primary, fontSize: 8.5 }}>
+                ARSIP DOKUMEN
+              </div>
+              <div>
+                Dokumen ini disimpan secara digital dan fisik sesuai sistem
+                pengarsipan perusahaan untuk kemudahan pelacakan dan audit.
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

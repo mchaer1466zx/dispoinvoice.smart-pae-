@@ -55,6 +55,8 @@ export interface CompanyTheme {
     };
   };
   logoPath: string;
+  /** Emblem/crest tanpa teks — dipakai di tengah QR & watermark (opsional). */
+  emblemPath?: string;
   /** Font nama perusahaan di kop (opsional; default sans). */
   nameFont?: string;
   /** Warna nama perusahaan di kop (opsional; default colors.primary). */
@@ -111,6 +113,7 @@ export const COMPANY_THEMES: Record<CompanyId, CompanyTheme> = {
       footerCurve: { layers: ["#0B4D21", "#DEA402", "#57A83F"], heightPercent: 14 },
     },
     logoPath: "/logos/logo-sang-prabu.png",
+    emblemPath: "/sang-prabu/emblem.png",
     // Selaras identitas logo SANG PRABU: nama serif klasik (Cinzel) hijau daun.
     nameFont: "var(--font-crest), 'Cinzel', 'Times New Roman', serif",
     nameColor: "#57A83F",

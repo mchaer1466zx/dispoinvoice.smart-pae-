@@ -1,7 +1,5 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-import QRCode from "qrcode";
 import type { PoDetail } from "@/components/po/po-detail-form";
 import type { PoItem } from "@/components/po/po-item-list-form";
 import type { SupplierRecord } from "@/app/actions/suppliers";
@@ -12,7 +10,6 @@ import {
   type CbsTotalRow,
 } from "@/components/procurement/cbs-document";
 
-const DOC_PURPOSE = "PURCHASE ORDER";
 const DOC_DESCRIPTION = "Pesanan Pembelian Barang/Jasa";
 
 export function PoPreview({
@@ -24,56 +21,11 @@ export function PoPreview({
   supplier: SupplierRecord | null;
   items: PoItem[];
 }) {
-  // Waktu pembuatan dokumen — stabil selama komponen hidup.
-  const [createdAt] = useState(() =>
-    new Intl.DateTimeFormat("id-ID", {
-      dateStyle: "long",
-      timeStyle: "short",
-    }).format(new Date()),
-  );
-
   const maker = poDetail.signer.name.trim()
     ? `${poDetail.signer.name.trim()}${
         poDetail.signer.jabatan.trim() ? ` (${poDetail.signer.jabatan.trim()})` : ""
       }`
     : "";
-  const partner = supplier?.name ?? "";
-
-  // Payload barcode: rangkuman metadata pengesahan dokumen.
-  const barcodePayload = useMemo(
-    () =>
-      [
-        `Dokumen: ${DOC_PURPOSE}`,
-        `Nomor: ${poDetail.poNumber}`,
-        `Pembuat: ${maker || "-"}`,
-        `Waktu Pembuatan: ${createdAt}`,
-        `Tujuan: ${DOC_PURPOSE}`,
-        `Deskripsi: ${DOC_DESCRIPTION}`,
-        `Mitra: ${partner || "-"}`,
-        `Komentar: ${poDetail.komentar.trim() || "-"}`,
-      ].join("\n"),
-    [poDetail.poNumber, poDetail.komentar, maker, partner, createdAt],
-  );
-
-  const [qrDataUrl, setQrDataUrl] = useState("");
-  useEffect(() => {
-    let active = true;
-    QRCode.toDataURL(barcodePayload, {
-      margin: 1,
-      width: 320,
-      // 'H' (pemulihan ~30%) agar tetap terbaca meski ada emblem di tengah.
-      errorCorrectionLevel: "H",
-    })
-      .then((url) => {
-        if (active) setQrDataUrl(url);
-      })
-      .catch(() => {
-        if (active) setQrDataUrl("");
-      });
-    return () => {
-      active = false;
-    };
-  }, [barcodePayload]);
 
   const groups = buildCbsGroups(
     items.map((item) => ({
@@ -122,14 +74,11 @@ export function PoPreview({
           .map((line) => line.trim())
           .filter(Boolean)}
         verification={{
-          dataUrl: qrDataUrl,
           maker,
-          createdAt,
-          purpose: DOC_PURPOSE,
+          purpose: "PURCHASE ORDER",
           description: DOC_DESCRIPTION,
-          partner,
+          partner: supplier?.name ?? "",
           comment: poDetail.komentar,
-          logo: "/sang-prabu/emblem.png",
         }}
       />
     </div>
