@@ -1,33 +1,37 @@
 /* eslint-disable @next/next/no-img-element */
 
 import type { Metadata } from "next";
-import { Target, Compass } from "lucide-react";
+import { Compass, ScrollText, Target } from "lucide-react";
 import { SiteChrome, PageHero } from "@/components/corporate/site-chrome";
 import { Container, SectionHeader, SiteButton } from "@/components/corporate/ui";
 import { ValueIcon } from "@/components/corporate/icon";
 import { Reveal } from "@/components/reveal";
-import { SITE, VALUES } from "@/lib/corporate/site";
+import {
+  COMPANY_STORY,
+  LEGALITY,
+  MISSION,
+  SITE,
+  VALUES,
+  VISION,
+} from "@/lib/corporate/site";
 
 export const metadata: Metadata = {
   title: "About",
   description:
-    "Tentang PT KARYA SANG PRABU — perusahaan pangan beku halal, perdagangan, dan kemitraan bisnis, bagian dari PRIMA PRABU GROUP. Visi, misi, dan nilai perusahaan.",
+    "Tentang PT KARYA SANG PRABU — perusahaan nasional komoditas dan general trading, bagian dari PRIMA PRABU GROUP. Visi, misi, nilai, dan legalitas perusahaan.",
   alternates: { canonical: "/about" },
 };
 
-// Visi & misi bersifat editable (positioning) — sesuaikan dengan dokumen resmi.
-const MISSION = [
-  "Memproduksi pangan beku halal yang berkualitas, higienis, dan bergizi.",
-  "Menjaga mutu dan konsistensi di setiap proses produksi dan distribusi.",
-  "Membangun kemitraan bisnis yang saling menumbuhkan dan berjangka panjang.",
-  "Memberikan pelayanan yang profesional, andal, dan berintegritas.",
-];
-
 const JOURNEY = [
   {
-    year: "2026",
-    title: "Penguatan identitas & ekspansi",
-    desc: "Konsolidasi brand SANG PRABU serta pengembangan lini produk dan kemitraan sebagai bagian dari PRIMA PRABU GROUP.",
+    year: "2019",
+    title: "Pendirian perusahaan",
+    desc: "PT KARYA SANG PRABU resmi berdiri (Akta Pendirian No. 28 Tahun 2019), memulai langkah sebagai perusahaan komoditas dan general trading nasional.",
+  },
+  {
+    year: "Kini",
+    title: "Pertumbuhan & diversifikasi",
+    desc: "Mengembangkan enam lini bisnis inti serta memperluas jaringan pemasok dan kemitraan sebagai bagian dari PRIMA PRABU GROUP.",
   },
 ];
 
@@ -36,7 +40,7 @@ export default function AboutPage() {
     <SiteChrome heroTransparent>
       <PageHero
         overline="About Company"
-        title="Perjalanan kami membangun mutu & kepercayaan"
+        title="Mitra terpercaya untuk komoditas & general trading"
         description={SITE.positioning}
       />
 
@@ -47,16 +51,17 @@ export default function AboutPage() {
             <Reveal>
               <img
                 src="/sang-prabu/butcher.jpg"
-                alt="Proses produksi PT KARYA SANG PRABU"
+                alt="Aktivitas usaha PT KARYA SANG PRABU"
                 className="aspect-[4/3] w-full rounded-lg object-cover shadow-[0_20px_60px_-30px_rgba(11,77,33,0.5)]"
               />
             </Reveal>
             <Reveal delayMs={120}>
-              <SectionHeader
-                overline="Company Overview"
-                title="Siapa PT KARYA SANG PRABU"
-                description="Kami adalah perusahaan yang memproduksi pangan beku halal berlabel SANG PRABU, menjalankan perdagangan dan distribusi, serta membuka kemitraan bisnis. Sebagai bagian dari PRIMA PRABU GROUP, kami berkomitmen menjadi partner bisnis yang dapat diandalkan."
-              />
+              <SectionHeader overline="Tentang Kami" title="Siapa PT KARYA SANG PRABU" />
+              <div className="mt-5 space-y-4 text-[15px] leading-[1.8] text-brand-ink/75">
+                {COMPANY_STORY.map((p, i) => (
+                  <p key={i}>{p}</p>
+                ))}
+              </div>
               <div className="mt-7">
                 <SiteButton href="/business" variant="outline" withArrow>
                   Lihat Lini Bisnis
@@ -80,9 +85,7 @@ export default function AboutPage() {
                   Visi
                 </h3>
                 <p className="mt-2 text-[14.5px] leading-[1.75] text-brand-ink/75">
-                  Menjadi perusahaan pangan dan mitra bisnis terpercaya yang dikenal
-                  atas mutu, integritas, dan keunggulan — tumbuh berkelanjutan bersama
-                  para mitra.
+                  {VISION}
                 </p>
               </div>
             </Reveal>
@@ -112,11 +115,7 @@ export default function AboutPage() {
       <section className="bg-white py-16 sm:py-24">
         <Container>
           <Reveal>
-            <SectionHeader
-              align="center"
-              overline="Our Values"
-              title="Nilai inti perusahaan"
-            />
+            <SectionHeader align="center" overline="Our Values" title="Nilai inti perusahaan" />
           </Reveal>
           <div className="mx-auto mt-12 grid max-w-4xl gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {VALUES.map((value, i) => (
@@ -145,18 +144,46 @@ export default function AboutPage() {
             <SectionHeader
               overline="Our Journey"
               title="Perjalanan perusahaan"
-              description="Tonggak penting perjalanan kami — struktur dinamis, mudah diperbarui seiring pertumbuhan."
+              description="Tonggak penting perjalanan kami — mudah diperbarui seiring pertumbuhan."
             />
           </Reveal>
           <div className="mt-10 border-l-2 border-brand-gold/40 pl-6">
             {JOURNEY.map((j) => (
               <Reveal key={j.year} className="relative pb-8 last:pb-0">
                 <span className="absolute -left-[31px] top-1 flex size-4 items-center justify-center rounded-full border-2 border-brand-gold bg-white" />
-                <p className="font-display text-2xl font-semibold text-brand-green">
-                  {j.year}
-                </p>
+                <p className="font-display text-2xl font-semibold text-brand-green">{j.year}</p>
                 <p className="mt-1 font-semibold text-brand-green-dark">{j.title}</p>
                 <p className="mt-1 text-[14px] leading-[1.7] text-brand-ink/70">{j.desc}</p>
+              </Reveal>
+            ))}
+          </div>
+        </Container>
+      </section>
+
+      {/* Legality */}
+      <section className="bg-white py-16 sm:py-24">
+        <Container>
+          <Reveal>
+            <SectionHeader
+              overline="Legality"
+              title="Legalitas perusahaan"
+              description="PT KARYA SANG PRABU adalah badan usaha resmi dan terdaftar."
+            />
+          </Reveal>
+          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {LEGALITY.map((item, i) => (
+              <Reveal key={item.label} delayMs={i * 60}>
+                <div className="flex items-start gap-3 rounded-lg border border-black/5 bg-brand-cream/40 p-5">
+                  <ScrollText className="mt-0.5 size-5 shrink-0 text-brand-gold" aria-hidden />
+                  <div>
+                    <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-brand-gold">
+                      {item.label}
+                    </p>
+                    <p className="mt-1 text-[14px] font-medium text-brand-green-dark">
+                      {item.value}
+                    </p>
+                  </div>
+                </div>
               </Reveal>
             ))}
           </div>

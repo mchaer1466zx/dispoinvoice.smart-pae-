@@ -1,13 +1,10 @@
 /**
  * DATA LAYER WEBSITE KORPORAT — PT KARYA SANG PRABU.
  *
- * Sumber tunggal konten halaman marketing (Home, About, Business, Products,
- * Partners, Articles, Career, FAQ, Contact). Pisahkan DATA dari UI: komponen
- * membaca dari sini, sehingga konten mudah diperbarui tanpa menyentuh layout.
- * Saat backend/CMS tersedia, struktur ini tinggal dipindah ke sumber dinamis.
- *
- * ATURAN: JANGAN mengarang fakta (bidang usaha, produk, mitra, sejarah).
- * Bila data belum tersedia, biarkan array kosong / tandai sebagai placeholder.
+ * Sumber tunggal konten halaman marketing. Konten substantif (tentang kami,
+ * visi, misi, lini bisnis, legalitas, kontak) diambil dari COMPANY PROFILE
+ * RESMI SANG PRABU. Pisahkan DATA dari UI agar mudah diperbarui / dipindah ke
+ * CMS. JANGAN mengarang fakta; bila data belum tersedia, biarkan kosong.
  */
 
 export type NavItem = { label: string; href: string };
@@ -20,7 +17,8 @@ export type BusinessUnit = {
   tagline: string;
   overview: string;
   whatWeDo: string[];
-  image: string;
+  icon: string;
+  image?: string;
   featured: boolean;
 };
 
@@ -43,7 +41,7 @@ export type Article = {
   excerpt: string;
   coverImage: string;
   author: string;
-  publishedAt: string; // ISO
+  publishedAt: string;
   content: string;
   featured: boolean;
 };
@@ -61,34 +59,64 @@ export type CareerPosition = {
   requirements: string[];
 };
 
-/** Identitas & kontak resmi (tampil di seluruh situs). */
+/** Identitas & kontak resmi (sumber: Company Profile SANG PRABU). */
 export const SITE = {
   legalName: "PT KARYA SANG PRABU",
   brand: "SANG PRABU",
+  // Tagline utama yang dipakai di seluruh identitas visual perusahaan.
   tagline: "THE BEST PARTNER YOUR BUSINESS",
+  // Tagline pada company profile resmi.
+  taglineOfficial: "YOUR TRUSTED BUSINESS PARTNER",
   group: "PRIMA PRABU GROUP",
   logo: "/logos/logo-sang-prabu.png",
   positioning:
-    "Perusahaan Indonesia yang bergerak di produksi pangan beku halal, perdagangan, dan kemitraan bisnis — hadir sebagai partner jangka panjang yang mengutamakan mutu, integritas, dan keunggulan.",
+    "PT KARYA SANG PRABU adalah perusahaan nasional yang bergerak di bidang komoditas dan general trading berbasis di Indonesia — mitra terpercaya dalam penyediaan dan distribusi berbagai komoditas unggulan untuk memenuhi kebutuhan pasar domestik dan internasional.",
   address: {
-    line: "Jl. Pertanian Raya No. 64, Lebak Bulus, Cilandak, Jakarta Selatan 12440",
-    maps: "https://maps.google.com/?q=Jl.+Pertanian+Raya+No.+64+Lebak+Bulus+Cilandak+Jakarta+Selatan+12440",
+    line: "Graha Mustika Ratu, Jl. Gatot Subroto No. 74-75, RT.002 RW.001, Menteng Dalam, Jakarta",
+    maps: "https://maps.google.com/?q=Graha+Mustika+Ratu+Jl+Gatot+Subroto+74-75+Menteng+Dalam+Jakarta",
   },
-  phone: "021 2784 1924",
-  email: "ptkaryasangprabu@gmail.com",
-  website: "www.karyasangprabu.co.id",
+  phone: "0811 3885 700",
+  email: "sangprabugroup@gmail.com",
+  website: "www.sangprabugroup.com",
   whatsapp: {
-    display: "0889 3663 031",
-    url: `https://wa.me/628893663031?text=${encodeURIComponent(
+    display: "0811 3885 700",
+    url: `https://wa.me/628113885700?text=${encodeURIComponent(
       "Halo PT KARYA SANG PRABU, saya ingin menjajaki kerja sama / kemitraan bisnis.",
     )}`,
   },
   businessHours: "Senin – Jumat · 08.00 – 17.00 WIB",
-  // Sosial media — isi bila akun resmi sudah tersedia.
   socials: [] as { label: string; href: string; icon: string }[],
 } as const;
 
-/** Menu navigasi utama (urutan sesuai PRD). */
+/** Cerita perusahaan (About) — dari company profile. */
+export const COMPANY_STORY = [
+  "PT KARYA SANG PRABU adalah perusahaan nasional yang bergerak di bidang komoditas dan general trading berbasis di Indonesia. Kami berperan sebagai mitra terpercaya dalam penyediaan dan distribusi berbagai komoditas unggulan untuk memenuhi kebutuhan pasar domestik dan internasional.",
+  "Didukung oleh sumber daya alam Indonesia yang melimpah, jaringan pemasok yang luas, serta manajemen dan tenaga kerja berpengalaman, kami berkomitmen menjalankan sistem perdagangan yang profesional, transparan, dan berkelanjutan, serta terus beradaptasi dengan perkembangan pasar global.",
+] as const;
+
+/** Visi resmi. */
+export const VISION =
+  "Menjadi perusahaan komoditas dan general trading terkemuka di Indonesia yang berdaya saing global, terpercaya, dan berkontribusi nyata terhadap pertumbuhan ekonomi nasional.";
+
+/** Misi resmi. */
+export const MISSION: string[] = [
+  "Menyediakan produk komoditas berkualitas tinggi sesuai standar nasional dan internasional.",
+  "Membangun kemitraan jangka panjang yang saling menguntungkan dengan pelanggan dan pemasok.",
+  "Menerapkan sistem perdagangan yang profesional, transparan, dan berintegritas.",
+  "Mendukung produk lokal Indonesia agar mampu bersaing di pasar global.",
+  "Mengutamakan prinsip keberlanjutan dan tanggung jawab sosial perusahaan.",
+];
+
+/** Legalitas resmi (dari company profile) — memperkuat kredibilitas. */
+export const LEGALITY: { label: string; value: string }[] = [
+  { label: "SK Pengesahan Kemenkumham", value: "AHU-0059668.AH.01.01.Tahun 2019" },
+  { label: "Akta Pendirian", value: "No. 28 Tahun 2019" },
+  { label: "Notaris", value: "Hery Kurniawan, S.H., M.Kn." },
+  { label: "NPWP", value: "93.421.295.2-609.000" },
+  { label: "SIUP", value: "9120413121192" },
+  { label: "NIB", value: "9120413121192" },
+];
+
 export const NAV: NavItem[] = [
   { label: "Home", href: "/" },
   { label: "About", href: "/about" },
@@ -102,102 +130,115 @@ export const NAV: NavItem[] = [
 
 export const CTA = { label: "Let's Work Together", href: "/contact" } as const;
 
-/** Nilai perusahaan (Core Values). */
+/** Nilai perusahaan. */
 export const VALUES: Value[] = [
   {
     title: "Quality",
     description:
-      "Mutu dijaga di setiap proses — dari pemilihan bahan hingga produk sampai ke tangan mitra.",
+      "Menyediakan komoditas berkualitas tinggi sesuai standar nasional dan internasional.",
     icon: "gem",
   },
   {
     title: "Integrity",
     description:
-      "Kejujuran dan tanggung jawab menjadi dasar setiap keputusan dan hubungan bisnis.",
+      "Menjalankan sistem perdagangan yang profesional, transparan, dan berintegritas.",
     icon: "shield-check",
   },
   {
     title: "Excellence",
     description:
-      "Terus meningkatkan standar untuk memberi hasil terbaik yang melampaui harapan.",
+      "Terus beradaptasi dengan perkembangan pasar global untuk hasil terbaik.",
     icon: "award",
   },
   {
     title: "Partnership",
     description:
-      "Membangun kerja sama jangka panjang yang saling menumbuhkan dan dapat diandalkan.",
+      "Membangun kemitraan jangka panjang yang saling menguntungkan dan berkelanjutan.",
     icon: "handshake",
   },
 ];
 
-/** Alasan memilih (Why Us) — pendukung nilai inti. */
 export const WHY_US: Value[] = [
   ...VALUES,
   {
     title: "Professionalism",
-    description: "Dikelola dengan tata kelola dan standar kerja yang profesional.",
+    description: "Dikelola manajemen & tenaga kerja berpengalaman.",
     icon: "briefcase",
   },
   {
     title: "Reliability",
-    description: "Konsisten memenuhi komitmen mutu, waktu, dan pelayanan.",
+    description: "Jaringan pemasok luas & sumber daya alam Indonesia yang melimpah.",
     icon: "badge-check",
   },
 ];
 
-/**
- * Lini bisnis. Diambil dari bidang usaha yang benar-benar dijalankan
- * (pangan beku halal + perdagangan/distribusi). Tambah unit lain lewat file
- * ini saja — komponen otomatis mengikuti.
- */
+/** Lini bisnis (Core Business) — 6 unit sesuai company profile resmi. */
 export const BUSINESS_UNITS: BusinessUnit[] = [
   {
-    slug: "food-manufacturing",
-    name: "Food Manufacturing",
-    tagline: "Produksi pangan beku halal",
+    slug: "property-konstruksi",
+    name: "Property & Konstruksi",
+    tagline: "Properti & konstruksi",
     overview:
-      "Memproduksi aneka pangan beku halal berlabel SANG PRABU — bakso, otak-otak, dimsum, hingga daging beku — dengan proses higienis dan rantai dingin terjaga.",
-    whatWeDo: [
-      "Produksi frozen food halal (bakso, otak-otak, dimsum)",
-      "Pengolahan daging ayam & sapi beku",
-      "Kontrol mutu & keamanan pangan",
-      "Pengemasan siap distribusi",
-    ],
-    image: "/sang-prabu/hero-bakso.jpg",
+      "Pengembangan dan layanan di bidang properti serta konstruksi untuk mendukung pertumbuhan dan kebutuhan pembangunan.",
+    whatWeDo: ["Pengembangan properti", "Layanan konstruksi", "Kerja sama proyek"],
+    icon: "building",
     featured: true,
   },
   {
-    slug: "trading-distribution",
-    name: "Trading & Distribution",
-    tagline: "Perdagangan & distribusi",
+    slug: "export-import",
+    name: "Export & Import",
+    tagline: "Ekspor & impor",
     overview:
-      "Perdagangan umum dan distribusi produk pangan ke mitra ritel, distributor, dan pelaku usaha kuliner di berbagai wilayah.",
-    whatWeDo: [
-      "Perdagangan umum produk pangan",
-      "Distribusi ke mitra & reseller",
-      "Manajemen rantai pasok",
-      "Kemitraan penyaluran produk",
-    ],
+      "Layanan ekspor dan impor komoditas serta produk untuk menjangkau pasar domestik dan internasional.",
+    whatWeDo: ["Ekspor komoditas unggulan", "Impor produk & bahan", "Logistik & distribusi lintas negara"],
+    icon: "ship",
+    featured: true,
+  },
+  {
+    slug: "alat-kesehatan",
+    name: "Alat Kesehatan",
+    tagline: "Alat kesehatan",
+    overview:
+      "Penyediaan dan distribusi alat kesehatan untuk mendukung kebutuhan layanan kesehatan.",
+    whatWeDo: ["Penyediaan alat kesehatan", "Distribusi ke fasilitas kesehatan", "Kemitraan pengadaan"],
+    icon: "stethoscope",
+    featured: true,
+  },
+  {
+    slug: "komoditas",
+    name: "Komoditas",
+    tagline: "Komoditas unggulan",
+    overview:
+      "Penyediaan dan distribusi berbagai komoditas unggulan Indonesia dengan mutu sesuai standar nasional & internasional.",
+    whatWeDo: ["Perdagangan komoditas", "Sourcing & pasokan", "Distribusi domestik & ekspor"],
+    icon: "wheat",
     image: "/sang-prabu/butcher.jpg",
     featured: true,
   },
   {
-    slug: "partnership",
-    name: "Business Partnership",
-    tagline: "Kemitraan & kerja sama usaha",
+    slug: "food-beverages",
+    name: "Food & Beverages",
+    tagline: "Makanan & minuman",
     overview:
-      "Membuka peluang kemitraan bisnis — reseller, distributor, hingga kerja sama strategis — sebagai bagian dari PRIMA PRABU GROUP.",
-    whatWeDo: [
-      "Program mitra & distributor",
-      "Kerja sama pasokan (supply)",
-      "Kolaborasi lintas unit grup",
-    ],
-    image: "/sang-prabu/dapur.jpg",
-    featured: false,
+      "Produk makanan & minuman — termasuk lini pangan beku halal berlabel SANG PRABU — untuk pasar ritel dan mitra usaha.",
+    whatWeDo: ["Produk pangan beku halal", "Distribusi F&B", "Kemitraan penyaluran"],
+    icon: "utensils",
+    image: "/sang-prabu/hero-bakso.jpg",
+    featured: true,
+  },
+  {
+    slug: "jasa-konsultan",
+    name: "Jasa Konsultan",
+    tagline: "Jasa konsultan",
+    overview:
+      "Layanan konsultasi bisnis untuk mendukung mitra dalam perdagangan, pengadaan, dan pengembangan usaha.",
+    whatWeDo: ["Konsultasi bisnis & perdagangan", "Pendampingan pengadaan", "Pengembangan kemitraan"],
+    icon: "users",
+    featured: true,
   },
 ];
 
-/** Produk unggulan (frozen food SANG PRABU). */
+/** Produk pangan (lini Food & Beverages — brand SANG PRABU). */
 export const PRODUCTS: Product[] = [
   {
     id: "bakso",
@@ -279,35 +320,40 @@ export const ARTICLE_CATEGORIES = [
 /** Mitra — isi bila logo/nama mitra resmi sudah tersedia. */
 export const PARTNERS: Partner[] = [];
 
-/** FAQ. */
 export const FAQS: Faq[] = [
   {
     category: "Company",
     question: "Apa itu PT KARYA SANG PRABU?",
     answer:
-      "PT KARYA SANG PRABU adalah perusahaan yang bergerak di produksi pangan beku halal (brand SANG PRABU), perdagangan, dan kemitraan bisnis — bagian dari PRIMA PRABU GROUP.",
+      "PT KARYA SANG PRABU adalah perusahaan nasional yang bergerak di bidang komoditas dan general trading berbasis di Indonesia, dengan enam lini bisnis inti — bagian dari PRIMA PRABU GROUP.",
+  },
+  {
+    category: "Company",
+    question: "Sejak kapan perusahaan berdiri?",
+    answer:
+      "PT KARYA SANG PRABU berdiri sejak 2019 (Akta Pendirian No. 28 Tahun 2019, SK Kemenkumham AHU-0059668.AH.01.01.Tahun 2019).",
   },
   {
     category: "Products",
-    question: "Apakah semua produk halal?",
+    question: "Komoditas & produk apa saja yang ditangani?",
     answer:
-      "Ya. Produk SANG PRABU diproses secara halal dan higienis dengan menjaga mutu serta rantai dingin hingga sampai ke mitra.",
+      "Kami menangani berbagai komoditas unggulan serta produk pada lini Property & Konstruksi, Export & Import, Alat Kesehatan, Komoditas, Food & Beverages, dan Jasa Konsultan.",
   },
   {
     category: "Partnership",
-    question: "Bagaimana cara menjadi mitra/distributor?",
+    question: "Bagaimana cara menjadi mitra?",
     answer:
       "Silakan isi formulir pada halaman Partners atau hubungi kami via WhatsApp/email. Tim kami akan menindaklanjuti pengajuan kerja sama Anda.",
   },
   {
     category: "Order",
-    question: "Bagaimana cara memesan atau bertanya soal produk?",
+    question: "Bagaimana cara mengajukan permintaan/penawaran?",
     answer:
-      "Gunakan tombol Inquire/Contact pada halaman Products atau hubungi kami langsung melalui kontak resmi yang tertera.",
+      "Gunakan tombol Inquire/Contact atau hubungi kontak resmi kami. Sampaikan kebutuhan Anda dan tim kami akan merespons.",
   },
   {
     category: "General",
-    question: "Di mana lokasi kantor PT KARYA SANG PRABU?",
+    question: "Di mana kantor PT KARYA SANG PRABU?",
     answer: `${SITE.address.line}. Jam operasional ${SITE.businessHours}.`,
   },
 ];
@@ -320,13 +366,11 @@ export const FAQ_CATEGORIES = [
   "General",
 ] as const;
 
-/** Lowongan karier — kosong = tampilkan status "belum ada lowongan". */
 export const CAREERS: CareerPosition[] = [];
 
-/** Subjek pesan pada form kontak/kemitraan. */
 export const CONTACT_SUBJECTS = [
   "Kemitraan / Distributor",
-  "Pemesanan Produk",
+  "Permintaan / Penawaran",
   "Kerja Sama Bisnis",
   "Karier",
   "Lainnya",
@@ -334,9 +378,9 @@ export const CONTACT_SUBJECTS = [
 
 export const BUSINESS_TYPES = [
   "Distributor",
-  "Reseller",
+  "Supplier / Pemasok",
+  "Eksportir / Importir",
   "Retail / Toko",
-  "HORECA (Hotel/Resto/Kafe)",
-  "Manufaktur",
+  "Instansi / Perusahaan",
   "Lainnya",
 ] as const;

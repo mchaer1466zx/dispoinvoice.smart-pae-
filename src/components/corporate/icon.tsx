@@ -2,9 +2,15 @@ import {
   Award,
   BadgeCheck,
   Briefcase,
+  Building2,
   Gem,
   Handshake,
+  Ship,
   ShieldCheck,
+  Stethoscope,
+  UtensilsCrossed,
+  Users,
+  Wheat,
   type LucideIcon,
 } from "lucide-react";
 
@@ -16,6 +22,12 @@ const ICONS: Record<string, LucideIcon> = {
   handshake: Handshake,
   briefcase: Briefcase,
   "badge-check": BadgeCheck,
+  building: Building2,
+  ship: Ship,
+  stethoscope: Stethoscope,
+  wheat: Wheat,
+  utensils: UtensilsCrossed,
+  users: Users,
 };
 
 export function ValueIcon({

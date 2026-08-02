@@ -1,5 +1,6 @@
 import { SiteNav } from "@/components/corporate/site-nav";
 import { SiteFooter } from "@/components/corporate/site-footer";
+import { StructuredData } from "@/components/corporate/structured-data";
 
 /**
  * Kerangka halaman marketing: navbar korporat + konten + footer.
@@ -15,6 +16,7 @@ export function SiteChrome({
 }) {
   return (
     <div className="flex min-h-screen flex-col bg-white font-jakarta text-brand-ink">
+      <StructuredData />
       <SiteNav transparent={heroTransparent} />
       <main className="flex-1">{children}</main>
       <SiteFooter />

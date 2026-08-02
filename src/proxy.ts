@@ -9,6 +9,17 @@ const PUBLIC_PATHS = [
   "/reset-password",
   "/profil-perusahaan",
   "/company-profile",
+  // Website korporat publik (marketing).
+  "/about",
+  "/business",
+  "/products",
+  "/partners",
+  "/articles",
+  "/career",
+  "/faq",
+  "/contact",
+  "/robots.txt",
+  "/sitemap.xml",
 ];
 
 const PUBLIC_PREFIXES = [
@@ -19,6 +30,8 @@ const PUBLIC_PREFIXES = [
   "/api/purchase-orders/",
   "/api/memos/",
   "/api/documents/",
+  // Sub-rute publik website korporat (mis. detail artikel).
+  "/articles/",
 ];
 
 // Aset statis dari folder public (logo, ikon, font, dll.) bersifat publik —

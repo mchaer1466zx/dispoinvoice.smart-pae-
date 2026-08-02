@@ -23,7 +23,7 @@ import {
 export const metadata: Metadata = {
   title: "PT KARYA SANG PRABU — The Best Partner Your Business",
   description:
-    "PT KARYA SANG PRABU — perusahaan pangan beku halal, perdagangan, dan kemitraan bisnis. Partner jangka panjang yang mengutamakan mutu, integritas, dan keunggulan.",
+    "PT KARYA SANG PRABU — perusahaan nasional komoditas dan general trading. Mitra terpercaya penyediaan & distribusi komoditas unggulan untuk pasar domestik dan internasional.",
   alternates: { canonical: "/" },
 };
 
@@ -106,8 +106,8 @@ export default function HomePage() {
             <Reveal delayMs={120}>
               <SectionHeader
                 overline="Who We Are"
-                title="Membangun kepercayaan melalui mutu & integritas"
-                description="PT KARYA SANG PRABU adalah perusahaan yang bergerak di produksi pangan beku halal (brand SANG PRABU), perdagangan, dan kemitraan bisnis — bagian dari PRIMA PRABU GROUP. Kami hadir sebagai partner jangka panjang yang dapat diandalkan bagi mitra dan pelanggan."
+                title="Mitra terpercaya dalam komoditas & general trading"
+                description="PT KARYA SANG PRABU adalah perusahaan nasional yang bergerak di bidang komoditas dan general trading berbasis di Indonesia — mitra terpercaya dalam penyediaan dan distribusi berbagai komoditas unggulan untuk pasar domestik dan internasional. Bagian dari PRIMA PRABU GROUP."
               />
               <div className="mt-7">
                 <SiteButton href="/about" variant="outline" withArrow>
@@ -124,40 +124,31 @@ export default function HomePage() {
         <Container>
           <Reveal>
             <SectionHeader
-              overline="Our Business"
-              title="Lini bisnis PT KARYA SANG PRABU"
-              description="Beberapa bidang usaha yang kami jalankan. Struktur ini dirancang dinamis — unit bisnis dapat berkembang seiring pertumbuhan perusahaan."
+              overline="Core Business"
+              title="Enam lini bisnis inti kami"
+              description="Cakupan usaha PT KARYA SANG PRABU — dari komoditas dan perdagangan lintas negara hingga layanan pendukung bisnis."
             />
           </Reveal>
-          <div className="mt-12 grid gap-6 md:grid-cols-3">
+          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {featuredUnits.map((unit, i) => (
-              <Reveal key={unit.slug} delayMs={i * 90}>
+              <Reveal key={unit.slug} delayMs={i * 70}>
                 <Link
                   href={`/business#${unit.slug}`}
-                  className="group flex h-full flex-col overflow-hidden rounded-lg border border-black/5 bg-white transition-shadow duration-300 hover:shadow-[0_20px_50px_-30px_rgba(11,77,33,0.6)]"
+                  className="group flex h-full flex-col rounded-lg border border-black/5 bg-white p-6 transition-shadow duration-300 hover:shadow-[0_20px_50px_-30px_rgba(11,77,33,0.6)]"
                 >
-                  <div className="relative h-44 overflow-hidden">
-                    <img
-                      src={unit.image}
-                      alt={unit.name}
-                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
-                    />
-                  </div>
-                  <div className="flex flex-1 flex-col p-6">
-                    <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-brand-gold">
-                      {unit.tagline}
-                    </p>
-                    <h3 className="mt-2 font-display text-xl font-semibold text-brand-green-dark">
-                      {unit.name}
-                    </h3>
-                    <p className="mt-2 flex-1 text-[13.5px] leading-[1.65] text-brand-ink/70">
-                      {unit.overview}
-                    </p>
-                    <span className="mt-4 inline-flex items-center gap-1.5 text-[12px] font-semibold uppercase tracking-[0.08em] text-brand-green">
-                      Selengkapnya
-                      <ArrowUpRight className="size-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                    </span>
-                  </div>
+                  <span className="flex size-12 items-center justify-center rounded-lg bg-brand-green/10 text-brand-green transition-colors group-hover:bg-brand-green group-hover:text-white">
+                    <ValueIcon name={unit.icon} className="size-6" />
+                  </span>
+                  <h3 className="mt-4 font-display text-lg font-semibold text-brand-green-dark">
+                    {unit.name}
+                  </h3>
+                  <p className="mt-2 flex-1 text-[13.5px] leading-[1.65] text-brand-ink/70">
+                    {unit.overview}
+                  </p>
+                  <span className="mt-4 inline-flex items-center gap-1.5 text-[12px] font-semibold uppercase tracking-[0.08em] text-brand-green">
+                    Selengkapnya
+                    <ArrowUpRight className="size-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                  </span>
                 </Link>
               </Reveal>
             ))}
