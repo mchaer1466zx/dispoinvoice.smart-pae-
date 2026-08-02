@@ -158,17 +158,37 @@ export const VALUES: Value[] = [
   },
 ];
 
+/** Keunggulan kami (Our Advantages) — dari company profile resmi. */
 export const WHY_US: Value[] = [
-  ...VALUES,
   {
-    title: "Professionalism",
-    description: "Dikelola manajemen & tenaga kerja berpengalaman.",
-    icon: "briefcase",
+    title: "Sumber Langsung",
+    description: "Produk langsung dari produsen dan petani.",
+    icon: "sprout",
   },
   {
-    title: "Reliability",
-    description: "Jaringan pemasok luas & sumber daya alam Indonesia yang melimpah.",
+    title: "Mutu Terkontrol",
+    description: "Kualitas produk terkontrol dan dapat disesuaikan kebutuhan buyer.",
     icon: "badge-check",
+  },
+  {
+    title: "Harga Kompetitif",
+    description: "Harga yang bersaing untuk berbagai kebutuhan.",
+    icon: "tag",
+  },
+  {
+    title: "Pengiriman Profesional",
+    description: "Pengemasan dan pengiriman yang profesional.",
+    icon: "package",
+  },
+  {
+    title: "Lokal & Ekspor",
+    description: "Siap melayani kebutuhan pasar lokal maupun ekspor.",
+    icon: "globe",
+  },
+  {
+    title: "Fleksibel",
+    description: "Fleksibel terhadap permintaan volume besar maupun kecil.",
+    icon: "scale",
   },
 ];
 
@@ -304,6 +324,52 @@ export const PRODUCTS: Product[] = [
 
 export const PRODUCT_CATEGORIES = ["Semua", "Frozen Food", "Daging Beku"] as const;
 
+export type Commodity = { name: string; en: string; category: string };
+
+/** Katalog komoditas (Our Product Commodities) — sumber: company profile resmi. */
+export const COMMODITIES: Commodity[] = [
+  { name: "Cengkeh AB6 Kualitas Ekspor", en: "Clove AB6 Export Quality", category: "Rempah & Herbal" },
+  { name: "Kapulaga Jawa", en: "Java Cardamom", category: "Rempah & Herbal" },
+  { name: "Buah Pala Jawa", en: "Java Nutmeg", category: "Rempah & Herbal" },
+  { name: "Kayu Manis Pilihan", en: "Cinnamon of Choice", category: "Rempah & Herbal" },
+  { name: "Ketumbar Super", en: "Super Coriander", category: "Rempah & Herbal" },
+  { name: "Laos, Kunyit & Temulawak", en: "Galangal, Turmeric & Curcuma", category: "Rempah & Herbal" },
+  { name: "Aneka Rempah Kualitas Ekspor", en: "Assorted Export Quality Spices", category: "Rempah & Herbal" },
+  { name: "Jahe Gajah & Jahe Emprit", en: "Elephant & Emprit Ginger", category: "Rempah & Herbal" },
+  { name: "Bawang Putih Ekspor", en: "Export Garlic", category: "Rempah & Herbal" },
+  { name: "Bawang Merah Jawa", en: "Java Red Onion", category: "Rempah & Herbal" },
+  { name: "Cabai", en: "Chili", category: "Rempah & Herbal" },
+  { name: "Kemiri Super Premium Bulat", en: "Super Premium Round Candlenut", category: "Kacang & Biji" },
+  { name: "Kacang Super 2529", en: "Super Peanut 2529", category: "Kacang & Biji" },
+  { name: "Kedelai Impor Super", en: "Super Imported Soybean", category: "Kacang & Biji" },
+  { name: "Kacang Hijau", en: "Mung Beans", category: "Kacang & Biji" },
+  { name: "Jagung Pipil Kering", en: "Dried Corn", category: "Kacang & Biji" },
+  { name: "Getah Karet Alami (Lump)", en: "Natural Rubber", category: "Hasil Bumi" },
+  { name: "Gula Aren Asli UMKM", en: "SME's Original Palm Sugar", category: "Hasil Bumi" },
+  { name: "Kopra", en: "Dry Coconut", category: "Hasil Bumi" },
+  { name: "Porang", en: "Porang", category: "Hasil Bumi" },
+  { name: "Arang", en: "Charcoal", category: "Hasil Bumi" },
+  { name: "Umbi-umbian", en: "Tubers", category: "Hasil Bumi" },
+  { name: "Buah Pinang", en: "Betel Nut", category: "Hasil Bumi" },
+  { name: "Beras Premium Cap Sang Prabu", en: "Sang Prabu Premium Rice", category: "Pangan" },
+  { name: "Gula Pasir", en: "Sugar", category: "Pangan" },
+  { name: "Minyak Goreng", en: "Cooking Oil", category: "Pangan" },
+  { name: "Telur", en: "Egg", category: "Pangan" },
+  { name: "Hasil Laut", en: "Seafood", category: "Hasil Laut" },
+  { name: "Rumput Laut", en: "Seaweed", category: "Hasil Laut" },
+  { name: "Tokek Kering", en: "Dried Gecko", category: "Lainnya" },
+];
+
+export const COMMODITY_CATEGORIES = [
+  "Semua",
+  "Rempah & Herbal",
+  "Kacang & Biji",
+  "Hasil Bumi",
+  "Pangan",
+  "Hasil Laut",
+  "Lainnya",
+] as const;
+
 /** Artikel/berita — CMS-ready. Kosong sampai konten resmi tersedia. */
 export const ARTICLES: Article[] = [];
 
@@ -317,8 +383,40 @@ export const ARTICLE_CATEGORIES = [
   "Insights",
 ] as const;
 
-/** Mitra — isi bila logo/nama mitra resmi sudah tersedia. */
-export const PARTNERS: Partner[] = [];
+/** Klien & mitra kerja sama (Our Client) — sumber: company profile resmi. */
+export const PARTNERS: Partner[] = [
+  { name: "PT. Sumbercitra Agrilestari Sentosa", category: "Perusahaan" },
+  { name: "PT. Biru Fasfood Nusantara (AW)", category: "Perusahaan" },
+  { name: "PT. Tetige Citra Khatulistiwa", category: "Perusahaan" },
+  { name: "PT. Baker Hughes Balikpapan", category: "Perusahaan" },
+  { name: "PT. Japfa Comfeed Indonesia", category: "Perusahaan" },
+  { name: "PT. Tiara Sinergy Transindo", category: "Perusahaan" },
+  { name: "PT. Pos Logistik Indonesia", category: "Perusahaan" },
+  { name: "PT. Dunia Inovasi Cemerlang", category: "Perusahaan" },
+  { name: "PT. Sarana Global Jaya", category: "Perusahaan" },
+  { name: "PT. Dheca Mandiri Sejahtera", category: "Perusahaan" },
+  { name: "PT. Estetika Tata Tiara", category: "Perusahaan" },
+  { name: "PT. Freeport Indonesia", category: "Perusahaan" },
+  { name: "PT. Agro Indotama Lestari", category: "Perusahaan" },
+  { name: "PT. ABC President", category: "Perusahaan" },
+  { name: "PT. Madex Indonesia", category: "Perusahaan" },
+  { name: "PT. Sumber Makanan Sehat", category: "Perusahaan" },
+  { name: "PT. Inti Lumbung Indonesia", category: "Perusahaan" },
+  { name: "PT. Sumber Jaya Unggas", category: "Perusahaan" },
+  { name: "PT. Sungai Budi Group", category: "Perusahaan" },
+  { name: "PT. Pandu Jaya Buana", category: "Perusahaan" },
+  { name: "PT. Kaltim Prima Coal", category: "Perusahaan" },
+  { name: "PT. Septia Anugrah", category: "Perusahaan" },
+  { name: "CV. Mahardika Maulit Sarana", category: "Perusahaan" },
+  { name: "CV. Rinjanis Chicken", category: "Perusahaan" },
+  { name: "CV. Kaliserayoe", category: "Perusahaan" },
+  { name: "Food Station", category: "Food Service" },
+  { name: "Rumah Makan Ayam Bakar Pak D", category: "Food Service" },
+  { name: "Rumah Makan President", category: "Food Service" },
+  { name: "Rumah Makan Pemuda", category: "Food Service" },
+  { name: "Rumah Makan Rachmawati", category: "Food Service" },
+  { name: "Hisana Fried Chicken", category: "Food Service" },
+];
 
 export const FAQS: Faq[] = [
   {

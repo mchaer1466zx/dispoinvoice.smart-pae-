@@ -4,10 +4,15 @@ import {
   Briefcase,
   Building2,
   Gem,
+  Globe,
   Handshake,
+  Package,
+  Scale,
   Ship,
   ShieldCheck,
+  Sprout,
   Stethoscope,
+  Tag,
   UtensilsCrossed,
   Users,
   Wheat,
@@ -28,6 +33,11 @@ const ICONS: Record<string, LucideIcon> = {
   wheat: Wheat,
   utensils: UtensilsCrossed,
   users: Users,
+  sprout: Sprout,
+  tag: Tag,
+  package: Package,
+  globe: Globe,
+  scale: Scale,
 };
 
 export function ValueIcon({

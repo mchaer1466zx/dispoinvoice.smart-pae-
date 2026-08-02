@@ -4,7 +4,8 @@ import { SiteChrome, PageHero } from "@/components/corporate/site-chrome";
 import { Container, SectionHeader } from "@/components/corporate/ui";
 import { Reveal } from "@/components/reveal";
 import { LeadForm } from "@/components/corporate/lead-form";
-import { BUSINESS_TYPES, PARTNERS } from "@/lib/corporate/site";
+import { ValueIcon } from "@/components/corporate/icon";
+import { BUSINESS_TYPES, PARTNERS, WHY_US } from "@/lib/corporate/site";
 
 export const metadata: Metadata = {
   title: "Partners",
@@ -22,28 +23,63 @@ export default function PartnersPage() {
         description="Kami membuka peluang kemitraan yang saling menumbuhkan — mari bangun kerja sama jangka panjang bersama PT KARYA SANG PRABU."
       />
 
-      {/* Our Partners */}
+      {/* Mengapa bermitra (Our Advantages) */}
       <section className="bg-white py-16 sm:py-24">
         <Container>
           <Reveal>
             <SectionHeader
-              overline="Our Partners"
-              title="Mitra yang bertumbuh bersama kami"
-              description="Kepercayaan mitra adalah bagian dari perjalanan kami."
+              align="center"
+              overline="Why Partner Us"
+              title="Mengapa bermitra dengan kami"
+            />
+          </Reveal>
+          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {WHY_US.map((adv, i) => (
+              <Reveal key={adv.title} delayMs={i * 60}>
+                <div className="flex h-full items-start gap-4 rounded-lg border border-black/5 bg-brand-cream/40 p-5">
+                  <span className="flex size-11 shrink-0 items-center justify-center rounded-lg bg-brand-green/10 text-brand-green">
+                    <ValueIcon name={adv.icon} className="size-6" />
+                  </span>
+                  <div>
+                    <h3 className="font-display text-[15px] font-semibold text-brand-green-dark">
+                      {adv.title}
+                    </h3>
+                    <p className="mt-1 text-[13px] leading-[1.6] text-brand-ink/65">
+                      {adv.description}
+                    </p>
+                  </div>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </Container>
+      </section>
+
+      {/* Our Clients */}
+      <section className="bg-brand-cream py-16 sm:py-24">
+        <Container>
+          <Reveal>
+            <SectionHeader
+              overline="Our Clients"
+              title="Dipercaya oleh berbagai mitra & klien"
+              description="Sebagian klien dan mitra kerja sama yang telah mempercayakan kebutuhan mereka kepada kami."
             />
           </Reveal>
           {PARTNERS.length > 0 ? (
-            <div className="mt-12 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
+            <div className="mt-12 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {PARTNERS.map((p) => (
                 <div
                   key={p.name}
-                  className="flex flex-col items-center justify-center gap-2 rounded-lg border border-black/5 bg-brand-cream/40 px-4 py-8 text-center"
+                  className="flex items-center gap-3 rounded-lg border border-black/5 bg-white px-4 py-3.5"
                 >
-                  <span className="font-display text-sm font-semibold text-brand-green-dark">
-                    {p.name}
-                  </span>
-                  <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-brand-gold">
-                    {p.category}
+                  <span className="size-2 shrink-0 rounded-full bg-brand-gold" />
+                  <span className="min-w-0">
+                    <span className="block truncate text-[13.5px] font-medium text-brand-green-dark">
+                      {p.name}
+                    </span>
+                    <span className="font-mono text-[9px] uppercase tracking-[0.12em] text-brand-gold">
+                      {p.category}
+                    </span>
                   </span>
                 </div>
               ))}
