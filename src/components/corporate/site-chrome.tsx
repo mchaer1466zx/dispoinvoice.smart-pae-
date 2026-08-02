@@ -15,7 +15,7 @@ export function SiteChrome({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex min-h-screen flex-col bg-white font-jakarta text-brand-ink">
+    <div className="flex min-h-screen flex-col overflow-x-hidden bg-white font-jakarta text-brand-ink">
       <StructuredData />
       <SiteNav transparent={heroTransparent} />
       <main className="flex-1">{children}</main>
