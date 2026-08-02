@@ -37,6 +37,7 @@ export default function HomePage() {
     <SiteChrome heroTransparent>
       {/* ============ HERO ============ */}
       <section
+        aria-label="PT KARYA SANG PRABU — The Best Partner Your Business"
         className="relative isolate flex min-h-screen items-center justify-center overflow-hidden"
         style={{
           background:
