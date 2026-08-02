@@ -385,23 +385,81 @@ export const COMMODITY_CATEGORIES = [
 /**
  * Artikel/berita pilihan. Untuk item bersumber eksternal, `externalUrl` diisi
  * sehingga kartu menaut langsung ke sumbernya (dibuka di tab baru).
+ *
+ * Daftar diurutkan otomatis dari tanggal terbit TERBARU ke terlama
+ * (`publishedAt`). Untuk berita CNN, waktu terbit diambil dari kode waktu pada
+ * URL (mis. 20260802214749 → 2026-08-02 21:47:49). Tutorial Hostinger tak
+ * mencantumkan tanggal terbit di URL, jadi tanggalnya adalah perkiraan.
  */
 export const ARTICLES: Article[] = [
   {
-    id: "art-dharma-jaya-ternak-sapi",
-    title: "Dharma Jaya Investasi Rp1 Triliun untuk Ternak Sapi di Ciangir",
-    slug: "dharma-jaya-investasi-ternak-sapi-ciangir",
-    category: "Industri & Investasi",
+    id: "art-lansia-dirampok",
+    title: "Lansia Dirampok Tetangga, Lapor Polisi Mulut Masih Terlakban",
+    slug: "lansia-dirampok-tetangga-lapor-polisi",
+    category: "Nasional",
     excerpt:
-      "Kabar investasi jumbo di sektor peternakan sapi nasional — peluang besar bagi rantai pasok pangan dan mitra komoditas.",
-    coverImage: "/articles/dharma-jaya-ternak-sapi.svg",
-    author: "share.google",
-    source: "share.google",
-    publishedAt: "2026-07-28",
+      "Kabar nasional: seorang lansia dirampok tetangganya dan melapor ke polisi dengan kondisi mulut masih terlakban.",
+    coverImage: "/articles/lansia-dirampok-terlakban.svg",
+    author: "CNN Indonesia",
+    source: "cnnindonesia.com",
+    publishedAt: "2026-08-02T21:47:49",
     content:
       "Ringkasan berita eksternal. Klik untuk membaca selengkapnya di sumber aslinya.",
-    featured: true,
-    externalUrl: "https://share.google/nQNXQrG4FO1ah0UKj",
+    featured: false,
+    externalUrl:
+      "https://www.cnnindonesia.com/nasional/20260802214749-12-1387798/lansia-dirampok-tetangga-lapor-polisi-mulut-masih-terlakban",
+  },
+  {
+    id: "art-ukraina-serang-rusia",
+    title: "Ukraina Serang Berbagai Wilayah Rusia, 8 Tewas",
+    slug: "ukraina-serang-berbagai-wilayah-rusia",
+    category: "Internasional",
+    excerpt:
+      "Kabar internasional terkini seputar eskalasi serangan lintas wilayah antara Ukraina dan Rusia.",
+    coverImage: "/articles/ukraina-rusia-serangan.svg",
+    author: "CNN Indonesia",
+    source: "cnnindonesia.com",
+    publishedAt: "2026-08-02T20:55:50",
+    content:
+      "Ringkasan berita eksternal. Klik untuk membaca selengkapnya di sumber aslinya.",
+    featured: false,
+    externalUrl:
+      "https://www.cnnindonesia.com/internasional/20260802205550-134-1387794/ukraina-serang-berbagai-wilayah-rusia-8-tewas",
+  },
+  {
+    id: "art-serangan-israel-gaza",
+    title:
+      "Serangan Israel ke Gaza Makin Menjadi Akhir Pekan Ini, 11 Orang Tewas",
+    slug: "serangan-israel-ke-gaza-akhir-pekan-ini",
+    category: "Internasional",
+    excerpt:
+      "Kabar internasional: eskalasi situasi di Gaza yang memanas pada akhir pekan ini.",
+    coverImage: "/articles/israel-gaza-akhir-pekan.svg",
+    author: "CNN Indonesia",
+    source: "cnnindonesia.com",
+    publishedAt: "2026-08-02T20:13:44",
+    content:
+      "Ringkasan berita eksternal. Klik untuk membaca selengkapnya di sumber aslinya.",
+    featured: false,
+    externalUrl:
+      "https://www.cnnindonesia.com/internasional/20260802201344-120-1387789/serangan-israel-ke-gaza-makin-menjadi-akhir-pekan-ini-11-orang-tewas",
+  },
+  {
+    id: "art-membaca-arah-rupiah",
+    title: "Membaca Arah Rupiah di Tengah Pencarian Maestro Baru di BI",
+    slug: "membaca-arah-rupiah-pencarian-maestro-baru-bi",
+    category: "Ekonomi",
+    excerpt:
+      "Analisis arah nilai tukar rupiah di tengah proses pencarian pemimpin (gubernur) baru Bank Indonesia.",
+    coverImage: "/articles/rupiah-maestro-bi.svg",
+    author: "CNN Indonesia",
+    source: "cnnindonesia.com",
+    publishedAt: "2026-07-30T06:16:35",
+    content:
+      "Ringkasan berita eksternal. Klik untuk membaca selengkapnya di sumber aslinya.",
+    featured: false,
+    externalUrl:
+      "https://www.cnnindonesia.com/ekonomi/20260730061635-78-1386395/membaca-arah-rupiah-di-tengah-pencarian-maestro-baru-bi",
   },
   {
     id: "art-upacara-17-agustus-2026",
@@ -421,6 +479,57 @@ export const ARTICLES: Article[] = [
     externalUrl: "https://dlvr.it/TTq9dK",
   },
   {
+    id: "art-strategi-singapura-ai",
+    title: "Strategi Singapura Maksimalkan AI untuk Produktivitas Nasional",
+    slug: "strategi-singapura-maksimalkan-ai-produktivitas-nasional",
+    category: "Teknologi",
+    excerpt:
+      "Bagaimana Singapura memanfaatkan kecerdasan buatan (AI) untuk mendongkrak produktivitas nasional.",
+    coverImage: "/articles/singapura-ai-produktivitas.svg",
+    author: "CNN Indonesia",
+    source: "cnnindonesia.com",
+    publishedAt: "2026-07-29T18:19:09",
+    content:
+      "Ringkasan berita eksternal. Klik untuk menonton/membaca selengkapnya di sumber aslinya.",
+    featured: false,
+    externalUrl:
+      "https://www.cnnindonesia.com/tv/20260729181909-407-1386307/video-strategi-singapura-maksimalkan-ai-untuk-produktivitas-nasional",
+  },
+  {
+    id: "art-dharma-jaya-ternak-sapi",
+    title: "Dharma Jaya Investasi Rp1 Triliun untuk Ternak Sapi di Ciangir",
+    slug: "dharma-jaya-investasi-ternak-sapi-ciangir",
+    category: "Industri & Investasi",
+    excerpt:
+      "Kabar investasi jumbo di sektor peternakan sapi nasional — peluang besar bagi rantai pasok pangan dan mitra komoditas.",
+    coverImage: "/articles/dharma-jaya-ternak-sapi.svg",
+    author: "share.google",
+    source: "share.google",
+    publishedAt: "2026-07-28",
+    content:
+      "Ringkasan berita eksternal. Klik untuk membaca selengkapnya di sumber aslinya.",
+    featured: true,
+    externalUrl: "https://share.google/nQNXQrG4FO1ah0UKj",
+  },
+  {
+    id: "art-ai-ide-bisnis",
+    title:
+      "25 Ide Bisnis AI yang Menjanjikan di Berbagai Bidang + Strategi Menjalankannya",
+    slug: "25-ide-bisnis-ai-menjanjikan-strategi",
+    category: "Bisnis & Teknologi",
+    excerpt:
+      "25 ide bisnis berbasis AI di berbagai bidang lengkap dengan strategi menjalankannya — inspirasi peluang usaha di era kecerdasan buatan.",
+    coverImage: "/articles/ai-ide-bisnis.svg",
+    author: "Hostinger",
+    source: "hostinger.com",
+    // Tutorial tanpa tanggal terbit di URL — tanggal perkiraan.
+    publishedAt: "2026-07-25",
+    content:
+      "Ringkasan artikel eksternal. Klik untuk membaca selengkapnya di sumber aslinya.",
+    featured: false,
+    externalUrl: "https://www.hostinger.com/id/tutorial/ide-bisnis-menggunakan-ai/",
+  },
+  {
     id: "art-elon-musk-triliuner-spacex",
     title: "Elon Musk Resmi Jadi Triliuner Pertama di Dunia Usai IPO SpaceX",
     slug: "elon-musk-triliuner-pertama-dunia-ipo-spacex",
@@ -436,7 +545,7 @@ export const ARTICLES: Article[] = [
     featured: false,
     externalUrl: "https://youtube.com/shorts/yRXCqwuyXN8?si=7iosU3nZ83k_UkrE",
   },
-];
+].sort((a, b) => +new Date(b.publishedAt) - +new Date(a.publishedAt));
 
 export const ARTICLE_CATEGORIES = [
   "Company News",

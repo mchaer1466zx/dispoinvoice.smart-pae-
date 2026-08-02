@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" width="1200" height="675" role="img" aria-label="Berita nasional: lansia dirampok, lapor polisi">
+  <defs>
+    <linearGradient id="ns1" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#7C2D12"/>
+      <stop offset="1" stop-color="#431407"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="675" fill="url(#ns1)"/>
+  <g transform="translate(1000,290)" fill="none" stroke="#FDBA74" stroke-width="4" opacity="0.5">
+    <path d="M0,-120 L100,-80 L100,20 C100,90 55,130 0,150 C-55,130 -100,90 -100,20 L-100,-80 Z"/>
+    <path d="M-40,10 L-10,45 L55,-35" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <rect x="70" y="86" width="190" height="44" rx="22" fill="#FDBA74"/>
+  <text x="90" y="116" font-family="Arial, sans-serif" font-size="20" font-weight="700" letter-spacing="2" fill="#431407">NASIONAL</text>
+  <text x="70" y="320" font-family="Georgia, 'Times New Roman', serif" font-size="58" font-weight="800" fill="#FFFFFF">Lansia Dirampok</text>
+  <text x="70" y="388" font-family="Georgia, 'Times New Roman', serif" font-size="44" font-weight="700" fill="#FED7AA">Tetangga, Lapor Polisi</text>
+  <text x="70" y="620" font-family="Arial, sans-serif" font-size="22" letter-spacing="3" fill="#FFFFFF" opacity="0.6">PT KARYA SANG PRABU · KABAR</text>
+</svg>

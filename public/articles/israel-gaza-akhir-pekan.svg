@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" width="1200" height="675" role="img" aria-label="Berita internasional: situasi Gaza akhir pekan ini">
+  <defs>
+    <linearGradient id="in1" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#334155"/>
+      <stop offset="1" stop-color="#0F172A"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="675" fill="url(#in1)"/>
+  <g transform="translate(1000,300)" fill="none" stroke="#94A3B8" stroke-width="2.5" opacity="0.4">
+    <circle cx="0" cy="0" r="150"/>
+    <ellipse cx="0" cy="0" rx="60" ry="150"/>
+    <ellipse cx="0" cy="0" rx="120" ry="150"/>
+    <line x1="-150" y1="0" x2="150" y2="0"/>
+    <line x1="-140" y1="-75" x2="140" y2="-75"/>
+    <line x1="-140" y1="75" x2="140" y2="75"/>
+  </g>
+  <rect x="70" y="86" width="270" height="44" rx="22" fill="#CBD5E1"/>
+  <text x="90" y="116" font-family="Arial, sans-serif" font-size="20" font-weight="700" letter-spacing="2" fill="#0F172A">INTERNASIONAL</text>
+  <text x="70" y="320" font-family="Georgia, 'Times New Roman', serif" font-size="56" font-weight="800" fill="#FFFFFF">Situasi Gaza</text>
+  <text x="70" y="388" font-family="Georgia, 'Times New Roman', serif" font-size="44" font-weight="700" fill="#CBD5E1">Memanas Akhir Pekan Ini</text>
+  <text x="70" y="620" font-family="Arial, sans-serif" font-size="22" letter-spacing="3" fill="#FFFFFF" opacity="0.55">PT KARYA SANG PRABU · KABAR DUNIA</text>
+</svg>
