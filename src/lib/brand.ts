@@ -8,7 +8,7 @@ export const BRAND = {
   shortName: "PT KSP",
   tagline: "THE BEST PARTNER YOUR BUSINESS",
   address: "Jl. Pertanian Raya No. 64, Lebak Bulus, Cilandak, Jakarta Selatan 12440",
-  phone: "021 29862350",
+  phone: "(021) 2784 1924",
   email: "ptkaryasangprabu@gmail.com",
   website: "www.karyasangprabu.co.id",
   appName: "Sistem Pengadaan Digital",
