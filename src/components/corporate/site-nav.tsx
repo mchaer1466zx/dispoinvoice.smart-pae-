@@ -88,6 +88,17 @@ export function SiteNav({ transparent = false }: { transparent?: boolean }) {
 
         <div className="flex items-center gap-2">
           <Link
+            href="/login"
+            className={cn(
+              "hidden rounded-md border px-3.5 py-2 text-[12px] font-semibold uppercase tracking-[0.06em] transition-colors lg:inline-flex lg:items-center",
+              solid
+                ? "border-brand-green/30 text-brand-green-dark hover:bg-brand-green hover:text-white"
+                : "border-white/40 text-white hover:bg-white/10",
+            )}
+          >
+            Masuk
+          </Link>
+          <Link
             href={CTA.href}
             className="hidden items-center gap-2 rounded-md bg-brand-gold px-4 py-2.5 text-[12px] font-semibold uppercase tracking-[0.08em] text-[#3a2c05] transition-[filter] duration-200 hover:brightness-105 lg:inline-flex"
           >
@@ -137,6 +148,13 @@ export function SiteNav({ transparent = false }: { transparent?: boolean }) {
             >
               {CTA.label}
               <ArrowRight className="size-4" />
+            </Link>
+            <Link
+              href="/login"
+              onClick={() => setOpen(false)}
+              className="mt-2.5 inline-flex w-full items-center justify-center rounded-md border border-brand-green/30 px-5 py-3.5 text-[13px] font-semibold uppercase tracking-[0.08em] text-brand-green-dark"
+            >
+              Masuk ke Sistem
             </Link>
           </div>
         </div>

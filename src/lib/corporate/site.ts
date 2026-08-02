@@ -88,8 +88,8 @@ export const SITE = {
   socials: [
     {
       label: "Instagram",
-      handle: "PT KARYA SANG PRABU",
-      href: "https://www.instagram.com/ptkaryasangprabu",
+      handle: "@karyasangprabu.group",
+      href: "https://www.instagram.com/karyasangprabu.group",
     },
   ] as { label: string; handle: string; href: string }[],
 } as const;
