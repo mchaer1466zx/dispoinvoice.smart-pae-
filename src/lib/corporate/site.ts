@@ -72,20 +72,26 @@ export const SITE = {
   positioning:
     "PT KARYA SANG PRABU adalah perusahaan nasional yang bergerak di bidang komoditas dan general trading berbasis di Indonesia — mitra terpercaya dalam penyediaan dan distribusi berbagai komoditas unggulan untuk memenuhi kebutuhan pasar domestik dan internasional.",
   address: {
-    line: "Graha Mustika Ratu, Jl. Gatot Subroto No. 74-75, RT.002 RW.001, Menteng Dalam, Jakarta",
-    maps: "https://maps.google.com/?q=Graha+Mustika+Ratu+Jl+Gatot+Subroto+74-75+Menteng+Dalam+Jakarta",
+    line: "Jl. Pertanian Raya No. 64, Lebak Bulus, Cilandak, Jakarta Selatan 12440",
+    maps: "https://maps.google.com/?q=Jl.+Pertanian+Raya+No.+64+Lebak+Bulus+Cilandak+Jakarta+Selatan+12440",
   },
-  phone: "0811 3885 700",
-  email: "sangprabugroup@gmail.com",
+  phone: "(021) 2784 1924",
+  email: "ptkaryasangprabu@gmail.com",
   website: "www.sangprabugroup.com",
   whatsapp: {
-    display: "0811 3885 700",
-    url: `https://wa.me/628113885700?text=${encodeURIComponent(
+    display: "0889 3663 031",
+    url: `https://wa.me/628893663031?text=${encodeURIComponent(
       "Halo PT KARYA SANG PRABU, saya ingin menjajaki kerja sama / kemitraan bisnis.",
     )}`,
   },
   businessHours: "Senin – Jumat · 08.00 – 17.00 WIB",
-  socials: [] as { label: string; href: string; icon: string }[],
+  socials: [
+    {
+      label: "Instagram",
+      handle: "PT KARYA SANG PRABU",
+      href: "https://www.instagram.com/ptkaryasangprabu",
+    },
+  ] as { label: string; handle: string; href: string }[],
 } as const;
 
 /** Cerita perusahaan (About) — dari company profile. */

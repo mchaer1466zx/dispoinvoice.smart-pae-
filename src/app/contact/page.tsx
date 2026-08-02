@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Clock, Mail, MapPin, MessageCircle, Phone } from "lucide-react";
+import { AtSign, Clock, Mail, MapPin, MessageCircle, Phone } from "lucide-react";
 import { SiteChrome, PageHero } from "@/components/corporate/site-chrome";
 import { Container } from "@/components/corporate/ui";
 import { Reveal } from "@/components/reveal";
@@ -58,6 +58,18 @@ export default function ContactPage() {
                       {SITE.whatsapp.display}
                     </a>
                   </ContactRow>
+                  {SITE.socials.map((s) => (
+                    <ContactRow key={s.href} icon={<AtSign className="size-5" />} label={s.label}>
+                      <a
+                        href={s.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="hover:text-brand-green"
+                      >
+                        {s.handle}
+                      </a>
+                    </ContactRow>
+                  ))}
                   <ContactRow icon={<Clock className="size-5" />} label="Jam Operasional">
                     {SITE.businessHours}
                   </ContactRow>
