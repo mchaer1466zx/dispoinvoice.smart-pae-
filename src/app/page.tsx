@@ -12,6 +12,7 @@ import {
   SiteButton,
 } from "@/components/corporate/ui";
 import { ValueIcon } from "@/components/corporate/icon";
+import { ArticleCard } from "@/components/corporate/article-card";
 import {
   ARTICLES,
   BUSINESS_UNITS,
@@ -59,10 +60,10 @@ export default function HomePage() {
             />
           </Reveal>
           <Reveal delayMs={110} className="mt-6">
-            <h1 className="font-display text-[1.6rem] font-semibold uppercase leading-[1.15] tracking-[0.03em] sm:text-[3rem]">
-              The Best Partner
+            <h1 className="text-[1.7rem] font-semibold leading-[1.2] tracking-[0.02em] sm:text-[3.1rem]">
+              𝐓𝐡𝐞 𝐁𝐞𝐬𝐭 𝐏𝐚𝐫𝐭𝐧𝐞𝐫
               <br />
-              <span className="text-brand-gold">Your Business</span>
+              <span className="text-brand-gold">𝐘𝐨𝐮𝐫 𝐁𝐮𝐬𝐢𝐧𝐞𝐬𝐬</span>
             </h1>
           </Reveal>
           <Reveal delayMs={180} className="mt-6">
@@ -280,27 +281,7 @@ export default function HomePage() {
             <div className="mt-12 grid gap-6 md:grid-cols-3">
               {latestArticles.map((article, i) => (
                 <Reveal key={article.id} delayMs={i * 90}>
-                  <Link
-                    href={`/articles/${article.slug}`}
-                    className="group flex h-full flex-col overflow-hidden rounded-lg border border-black/5 bg-white transition-shadow hover:shadow-[0_18px_50px_-30px_rgba(11,77,33,0.5)]"
-                  >
-                    <img
-                      src={article.coverImage}
-                      alt={article.title}
-                      className="h-44 w-full object-cover"
-                    />
-                    <div className="flex flex-1 flex-col p-5">
-                      <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-brand-gold">
-                        {article.category}
-                      </p>
-                      <h3 className="mt-2 font-display text-lg font-semibold text-brand-green-dark">
-                        {article.title}
-                      </h3>
-                      <p className="mt-2 flex-1 text-[13px] leading-[1.6] text-brand-ink/70">
-                        {article.excerpt}
-                      </p>
-                    </div>
-                  </Link>
+                  <ArticleCard article={article} />
                 </Reveal>
               ))}
             </div>

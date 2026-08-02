@@ -17,7 +17,7 @@ export function StructuredData() {
         alternateName: SITE.brand,
         url: BASE,
         logo: `${BASE}${SITE.logo}`,
-        slogan: SITE.tagline,
+        slogan: SITE.taglinePlain,
         email: SITE.email,
         telephone: SITE.phone,
         sameAs: SITE.socials.map((s) => s.href),

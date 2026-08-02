@@ -70,8 +70,8 @@ export const COMPANY_THEMES: Record<CompanyId, CompanyTheme> = {
     id: "KSP",
     fullName: "PT KARYA SANG PRABU",
     initialName: "KARYA SANG PRABU",
-    // Tagline resmi identitas visual SANG PRABU.
-    tagline: "THE BEST PARTNER YOUR BUSINESS",
+    // Tagline resmi identitas visual SANG PRABU (gaya tebal seragam).
+    tagline: "𝐓𝐡𝐞 𝐁𝐞𝐬𝐭 𝐏𝐚𝐫𝐭𝐧𝐞𝐫 𝐘𝐨𝐮𝐫 𝐁𝐮𝐬𝐢𝐧𝐞𝐬𝐬",
     address:
       "Jl. Pertanian Raya No. 64, Lebak Bulus, Cilandak, Jakarta Selatan 12440",
     phone: "021 2784 1924",

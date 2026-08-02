@@ -2,6 +2,8 @@
 
 /* eslint-disable @next/next/no-img-element */
 
+import { useEffect, useMemo, useState } from "react";
+import QRCode from "qrcode";
 import { formatDate } from "@/lib/format";
 import { getCompanyTheme } from "@/config/company-themes";
 import {
@@ -27,6 +29,50 @@ export function AgreementDocument({ detail }: { detail: AgreementDetail }) {
     .replace("[hari]", hariIndo(detail.date))
     .replace("[tanggal]", formatDate(detail.date))
     .replace("[tempat]", detail.place || "-");
+
+  // ---- QR dokumentasi digital ----
+  // Isi QR: ringkasan sahih dokumen agar mudah diverifikasi/diarsipkan.
+  const qrPayload = useMemo(
+    () =>
+      [
+        theme.fullName,
+        `Dokumen: ${detail.title}`,
+        `Nomor: ${detail.number}`,
+        `Tanggal: ${formatDate(detail.date)}`,
+        detail.place ? `Tempat: ${detail.place}` : null,
+        detail.parties[0]?.name ? `PIHAK I: ${detail.parties[0].name}` : null,
+        detail.parties[1]?.name ? `PIHAK II: ${detail.parties[1].name}` : null,
+      ]
+        .filter(Boolean)
+        .join("\n"),
+    [theme.fullName, detail.title, detail.number, detail.date, detail.place, detail.parties],
+  );
+
+  const [qrDataUrl, setQrDataUrl] = useState("");
+  useEffect(() => {
+    let alive = true;
+    QRCode.toDataURL(qrPayload, {
+      margin: 1,
+      width: 240,
+      errorCorrectionLevel: "M",
+      color: { dark: c.dark, light: "#FFFFFF" },
+    })
+      .then((url) => {
+        if (alive) setQrDataUrl(url);
+      })
+      .catch(() => {
+        if (alive) setQrDataUrl("");
+      });
+    return () => {
+      alive = false;
+    };
+  }, [qrPayload, c.dark]);
+
+  // Bagi penandatangan: separuh kiri, separuh kanan, QR di tengah.
+  const sigs = detail.signatories;
+  const mid = Math.ceil(sigs.length / 2);
+  const leftSigs = sigs.slice(0, mid);
+  const rightSigs = sigs.slice(mid);
 
   return (
     <div
@@ -189,31 +235,108 @@ export function AgreementDocument({ detail }: { detail: AgreementDetail }) {
       {/* ===== PENUTUP ===== */}
       <p style={{ marginTop: 16, textAlign: "justify" }}>{detail.closing}</p>
 
-      {/* ===== TANDA TANGAN ===== */}
+      {/* ===== TANDA TANGAN + QR DOKUMENTASI DIGITAL ===== */}
       <div
         style={{
           display: "flex",
+          alignItems: "flex-end",
           justifyContent: "space-between",
-          gap: 40,
+          gap: 24,
           marginTop: 34,
         }}
       >
-        {detail.signatories.map((s, i) => (
-          <div key={i} style={{ flex: 1, textAlign: "center" }}>
-            <p style={{ fontWeight: 700 }}>{s.label}</p>
-            <div style={{ height: 62 }} />
-            <p style={{ fontWeight: 700, textDecoration: "underline" }}>
-              {s.name?.trim() ? s.name : "(...........................)"}
-            </p>
-            {s.jabatan ? <p>{s.jabatan}</p> : null}
-          </div>
-        ))}
+        {/* Penandatangan kiri (PIHAK PERTAMA dst.) */}
+        <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 26 }}>
+          {leftSigs.map((s, i) => (
+            <Signatory key={i} s={s} />
+          ))}
+        </div>
+
+        {/* QR di tengah, sejajar dengan blok tanda tangan */}
+        <div
+          style={{
+            flex: "0 0 auto",
+            textAlign: "center",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            paddingBottom: 2,
+          }}
+        >
+          {qrDataUrl ? (
+            <img
+              src={qrDataUrl}
+              alt="QR dokumentasi digital"
+              style={{
+                width: 78,
+                height: 78,
+                objectFit: "contain",
+                padding: 3,
+                border: `1px solid ${c.borderBottom}`,
+                borderRadius: 4,
+                background: "#FFFFFF",
+              }}
+            />
+          ) : (
+            <div style={{ width: 78, height: 78 }} />
+          )}
+          <p
+            style={{
+              marginTop: 4,
+              fontSize: 7,
+              fontWeight: 700,
+              letterSpacing: 1,
+              textTransform: "uppercase",
+              color: c.accent,
+            }}
+          >
+            Dokumentasi Digital
+          </p>
+          <p style={{ fontSize: 6.5, color: c.muted, maxWidth: 96, lineHeight: 1.3 }}>
+            Pindai untuk verifikasi keaslian dokumen
+          </p>
+        </div>
+
+        {/* Penandatangan kanan (PIHAK KEDUA dst.) */}
+        <div
+          style={{
+            flex: 1,
+            display: "flex",
+            flexDirection: "column",
+            gap: 26,
+            textAlign: "right",
+          }}
+        >
+          {rightSigs.map((s, i) => (
+            <Signatory key={i} s={s} align="right" />
+          ))}
+        </div>
       </div>
 
       {/* materai hint */}
       <p style={{ marginTop: 18, fontSize: 8, color: c.muted, textAlign: "center" }}>
         Dokumen ini sah setelah ditandatangani PARA PIHAK dan dibubuhi materai secukupnya.
       </p>
+    </div>
+  );
+}
+
+/** Satu blok tanda tangan (label, ruang paraf, nama, jabatan). */
+function Signatory({
+  s,
+  align = "left",
+}: {
+  s: AgreementDetail["signatories"][number];
+  align?: "left" | "right";
+}) {
+  return (
+    <div style={{ textAlign: align }}>
+      <p style={{ fontWeight: 700 }}>{s.label}</p>
+      <div style={{ height: 62 }} />
+      <p style={{ fontWeight: 700, textDecoration: "underline" }}>
+        {s.name?.trim() ? s.name : "(...........................)"}
+      </p>
+      {s.jabatan ? <p>{s.jabatan}</p> : null}
     </div>
   );
 }

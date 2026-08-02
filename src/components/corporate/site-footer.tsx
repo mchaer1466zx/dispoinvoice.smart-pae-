@@ -21,7 +21,7 @@ export function SiteFooter() {
               <p className="font-display text-lg font-semibold leading-tight">
                 {SITE.legalName}
               </p>
-              <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-brand-gold">
+              <p className="text-[13px] tracking-[0.02em] text-brand-gold">
                 {SITE.tagline}
               </p>
             </div>
@@ -98,7 +98,7 @@ export function SiteFooter() {
           <span>
             © {new Date().getFullYear()} {SITE.legalName}. All Rights Reserved.
           </span>
-          <span className="font-mono uppercase tracking-[0.14em]">
+          <span className="tracking-[0.02em]">
             {SITE.tagline}
           </span>
         </div>

@@ -44,6 +44,10 @@ export type Article = {
   publishedAt: string;
   content: string;
   featured: boolean;
+  /** Jika diisi, kartu artikel menaut langsung ke sumber eksternal (tab baru). */
+  externalUrl?: string;
+  /** Nama sumber eksternal (mis. domain) untuk label kartu. */
+  source?: string;
 };
 
 export type Partner = { name: string; category: string; logo?: string };
@@ -63,8 +67,10 @@ export type CareerPosition = {
 export const SITE = {
   legalName: "PT KARYA SANG PRABU",
   brand: "SANG PRABU",
-  // Tagline utama yang dipakai di seluruh identitas visual perusahaan.
-  tagline: "THE BEST PARTNER YOUR BUSINESS",
+  // Tagline utama yang dipakai di seluruh identitas visual perusahaan
+  // (gaya tebal serif seragam untuk tampilan; versi polos untuk SEO/schema).
+  tagline: "𝐓𝐡𝐞 𝐁𝐞𝐬𝐭 𝐏𝐚𝐫𝐭𝐧𝐞𝐫 𝐘𝐨𝐮𝐫 𝐁𝐮𝐬𝐢𝐧𝐞𝐬𝐬",
+  taglinePlain: "The Best Partner Your Business",
   // Tagline pada company profile resmi.
   taglineOfficial: "YOUR TRUSTED BUSINESS PARTNER",
   group: "PRIMA PRABU GROUP",
@@ -376,8 +382,61 @@ export const COMMODITY_CATEGORIES = [
   "Lainnya",
 ] as const;
 
-/** Artikel/berita — CMS-ready. Kosong sampai konten resmi tersedia. */
-export const ARTICLES: Article[] = [];
+/**
+ * Artikel/berita pilihan. Untuk item bersumber eksternal, `externalUrl` diisi
+ * sehingga kartu menaut langsung ke sumbernya (dibuka di tab baru).
+ */
+export const ARTICLES: Article[] = [
+  {
+    id: "art-dharma-jaya-ternak-sapi",
+    title: "Dharma Jaya Investasi Rp1 Triliun untuk Ternak Sapi di Ciangir",
+    slug: "dharma-jaya-investasi-ternak-sapi-ciangir",
+    category: "Industri & Investasi",
+    excerpt:
+      "Kabar investasi jumbo di sektor peternakan sapi nasional — peluang besar bagi rantai pasok pangan dan mitra komoditas.",
+    coverImage: "/articles/dharma-jaya-ternak-sapi.svg",
+    author: "share.google",
+    source: "share.google",
+    publishedAt: "2026-07-28",
+    content:
+      "Ringkasan berita eksternal. Klik untuk membaca selengkapnya di sumber aslinya.",
+    featured: true,
+    externalUrl: "https://share.google/nQNXQrG4FO1ah0UKj",
+  },
+  {
+    id: "art-upacara-17-agustus-2026",
+    title:
+      "Cara Daftar Upacara 17 Agustus 2026 di Istana Negara, Cek Syarat dan Jadwalnya",
+    slug: "cara-daftar-upacara-17-agustus-2026-istana-negara",
+    category: "Nasional",
+    excerpt:
+      "Panduan pendaftaran, syarat, dan jadwal untuk mengikuti Upacara Peringatan HUT Kemerdekaan RI 2026 di Istana Negara.",
+    coverImage: "/articles/upacara-17-agustus-2026.svg",
+    author: "dlvr.it",
+    source: "dlvr.it",
+    publishedAt: "2026-07-30",
+    content:
+      "Ringkasan berita eksternal. Klik untuk membaca selengkapnya di sumber aslinya.",
+    featured: false,
+    externalUrl: "https://dlvr.it/TTq9dK",
+  },
+  {
+    id: "art-elon-musk-triliuner-spacex",
+    title: "Elon Musk Resmi Jadi Triliuner Pertama di Dunia Usai IPO SpaceX",
+    slug: "elon-musk-triliuner-pertama-dunia-ipo-spacex",
+    category: "Bisnis Global",
+    excerpt:
+      "Elon Musk resmi menjadi triliuner pertama di dunia setelah saham SpaceX melonjak tajam dalam IPO terbesar sepanjang sejarah pada Jumat (12/6/2026).",
+    coverImage: "/articles/elon-musk-triliuner-spacex.svg",
+    author: "YouTube",
+    source: "youtube.com",
+    publishedAt: "2026-06-13",
+    content:
+      "Ringkasan berita eksternal. Klik untuk menonton/membaca selengkapnya di sumber aslinya.",
+    featured: false,
+    externalUrl: "https://youtube.com/shorts/yRXCqwuyXN8?si=7iosU3nZ83k_UkrE",
+  },
+];
 
 export const ARTICLE_CATEGORIES = [
   "Company News",
