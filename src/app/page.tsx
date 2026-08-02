@@ -35,57 +35,44 @@ export default function HomePage() {
   return (
     <SiteChrome heroTransparent>
       {/* ============ HERO ============ */}
-      <section className="relative isolate flex min-h-[92vh] items-center overflow-hidden">
+      <section className="relative isolate flex min-h-screen items-end justify-center overflow-hidden bg-[#0b2e18]">
+        {/* Logo hero SANG PRABU (persis file yang diunggah, tanpa perubahan) */}
         <img
-          src="/sang-prabu/hero-bakso.jpg"
-          alt=""
+          src="/sang-prabu/hero-emblem.png"
+          alt="Logo SANG PRABU — PT KARYA SANG PRABU"
           className="absolute inset-0 -z-10 h-full w-full object-cover"
         />
+        {/* Gelapkan bagian bawah saja agar teks & tombol terbaca; emblem tetap utuh */}
         <div
           className="absolute inset-0 -z-10"
           style={{
             background:
-              "linear-gradient(105deg, rgba(6,42,22,0.92) 0%, rgba(6,42,22,0.78) 46%, rgba(6,42,22,0.5) 100%)",
+              "linear-gradient(180deg, rgba(6,32,18,0) 0%, rgba(6,32,18,0) 44%, rgba(6,32,18,0.55) 64%, rgba(6,30,17,0.94) 100%)",
           }}
           aria-hidden
         />
-        <Container className="py-24 sm:py-28">
-          <div className="max-w-2xl text-white">
-            <Reveal>
-              <div className="flex items-center gap-3">
-                <img
-                  src={SITE.logo}
-                  alt={`Logo ${SITE.legalName}`}
-                  className="h-14 w-14 object-contain"
-                />
-                <span className="font-mono text-[11px] uppercase tracking-[0.26em] text-brand-gold">
-                  {SITE.legalName}
-                </span>
-              </div>
-            </Reveal>
-            <Reveal delayMs={90} className="mt-7">
-              <h1 className="font-display text-[2.6rem] font-semibold leading-[1.03] tracking-[-0.02em] sm:text-[4.2rem]">
-                The Best Partner
-                <br />
-                <span className="text-brand-gold">Your Business</span>
-              </h1>
-            </Reveal>
-            <Reveal delayMs={160} className="mt-6">
-              <p className="max-w-xl text-[15px] leading-[1.75] text-white/80 sm:text-lg">
-                {SITE.positioning}
-              </p>
-            </Reveal>
-            <Reveal delayMs={230} className="mt-9">
-              <div className="flex flex-wrap gap-3">
-                <SiteButton href="/business" variant="gold" withArrow>
-                  Explore Our Business
-                </SiteButton>
-                <SiteButton href="/contact" variant="ghost">
-                  Contact Us
-                </SiteButton>
-              </div>
-            </Reveal>
-          </div>
+        <Container className="pb-20 pt-[46vh] text-center text-white sm:pb-24">
+          <Reveal>
+            <h1 className="font-display text-[2rem] font-semibold leading-[1.05] tracking-[-0.01em] sm:text-[3.2rem]">
+              The Best Partner{" "}
+              <span className="text-brand-gold">Your Business</span>
+            </h1>
+          </Reveal>
+          <Reveal delayMs={110} className="mt-5">
+            <p className="mx-auto max-w-2xl text-[15px] leading-[1.75] text-white/80 sm:text-lg">
+              {SITE.positioning}
+            </p>
+          </Reveal>
+          <Reveal delayMs={190} className="mt-9">
+            <div className="flex flex-wrap justify-center gap-3">
+              <SiteButton href="/business" variant="gold" withArrow>
+                Explore Our Business
+              </SiteButton>
+              <SiteButton href="/contact" variant="ghost">
+                Contact Us
+              </SiteButton>
+            </div>
+          </Reveal>
         </Container>
       </section>
 
