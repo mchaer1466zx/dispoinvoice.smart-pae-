@@ -9,7 +9,9 @@ import { Container, SiteButton } from "@/components/corporate/ui";
 import { ARTICLES } from "@/lib/corporate/site";
 
 export function generateStaticParams() {
-  return ARTICLES.map((a) => ({ slug: a.slug }));
+  // Hanya artikel internal yang punya halaman detail; artikel bersumber
+  // eksternal menaut langsung ke sumbernya dari daftar.
+  return ARTICLES.filter((a) => !a.externalUrl).map((a) => ({ slug: a.slug }));
 }
 
 export async function generateMetadata({
@@ -35,10 +37,11 @@ export default async function ArticleDetailPage({
 }) {
   const { slug } = await params;
   const article = ARTICLES.find((a) => a.slug === slug);
-  if (!article) notFound();
+  // Artikel eksternal tidak memiliki halaman detail internal.
+  if (!article || article.externalUrl) notFound();
 
   const related = ARTICLES.filter(
-    (a) => a.slug !== article.slug && a.category === article.category,
+    (a) => a.slug !== article.slug && a.category === article.category && !a.externalUrl,
   ).slice(0, 3);
 
   return (

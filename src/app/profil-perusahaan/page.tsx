@@ -200,8 +200,8 @@ export default function ProfilPerusahaanPage() {
             </h1>
           </Reveal>
           <Reveal delayMs={150} className="mt-4">
-            <p className="font-mono text-[11px] font-medium uppercase tracking-[0.3em] text-gold sm:text-sm">
-              The Best Partner Your Business
+            <p className="text-[15px] font-medium tracking-[0.05em] text-gold sm:text-lg">
+              𝐓𝐡𝐞 𝐁𝐞𝐬𝐭 𝐏𝐚𝐫𝐭𝐧𝐞𝐫 𝐘𝐨𝐮𝐫 𝐁𝐮𝐬𝐢𝐧𝐞𝐬𝐬
             </p>
           </Reveal>
           <Reveal delayMs={210} className="mt-6">

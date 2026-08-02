@@ -12,8 +12,8 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
           <p className="mt-2 font-display text-lg font-semibold tracking-tight text-foreground">
             PT KARYA SANG PRABU
           </p>
-          <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-gold">
-            The Best Partner Your Business
+          <p className="text-[13px] tracking-[0.04em] text-gold">
+            𝐓𝐡𝐞 𝐁𝐞𝐬𝐭 𝐏𝐚𝐫𝐭𝐧𝐞𝐫 𝐘𝐨𝐮𝐫 𝐁𝐮𝐬𝐢𝐧𝐞𝐬𝐬
           </p>
         </div>
         {children}

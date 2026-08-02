@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" width="1200" height="675" role="img" aria-label="Dharma Jaya investasi Rp1 triliun ternak sapi">
+  <defs>
+    <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0B4D21"/>
+      <stop offset="1" stop-color="#062F14"/>
+    </linearGradient>
+    <linearGradient id="gold1" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#F1D27A"/>
+      <stop offset="1" stop-color="#DEA402"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="675" fill="url(#g1)"/>
+  <g opacity="0.12" fill="none" stroke="#DEA402" stroke-width="2">
+    <circle cx="980" cy="150" r="120"/>
+    <circle cx="980" cy="150" r="180"/>
+    <circle cx="980" cy="150" r="240"/>
+  </g>
+  <g transform="translate(870,430)" opacity="0.9">
+    <circle cx="0" cy="0" r="86" fill="url(#gold1)"/>
+    <text x="0" y="26" font-family="Georgia, 'Times New Roman', serif" font-size="70" font-weight="700" fill="#0B4D21" text-anchor="middle">Rp</text>
+  </g>
+  <rect x="70" y="86" width="300" height="44" rx="22" fill="#DEA402"/>
+  <text x="90" y="116" font-family="Arial, sans-serif" font-size="20" font-weight="700" letter-spacing="2" fill="#0B4D21">INDUSTRI &amp; INVESTASI</text>
+  <text x="70" y="300" font-family="Georgia, 'Times New Roman', serif" font-size="58" font-weight="700" fill="#FFFFFF">Investasi Rp1 Triliun</text>
+  <text x="70" y="372" font-family="Georgia, 'Times New Roman', serif" font-size="58" font-weight="700" fill="#F1D27A">untuk Ternak Sapi</text>
+  <text x="70" y="620" font-family="Arial, sans-serif" font-size="22" letter-spacing="3" fill="#FFFFFF" opacity="0.75">PT KARYA SANG PRABU · KABAR</text>
+</svg>
