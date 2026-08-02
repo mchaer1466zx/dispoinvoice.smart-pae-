@@ -1,18 +1,44 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { CompanySwitcher } from "@/components/company-switcher";
 import { NotificationBell } from "@/components/notifications/notification-bell";
 import { UserMenu } from "@/components/user-menu";
 import { useCompany } from "@/lib/company-store";
 import { BRAND } from "@/lib/brand";
 
+/**
+ * Rute publik/marketing yang memakai navbar korporat (SiteNav) sendiri —
+ * header aplikasi (procurement) disembunyikan di sini agar tidak dobel.
+ */
+const MARKETING_PREFIXES = [
+  "/about",
+  "/business",
+  "/products",
+  "/partners",
+  "/articles",
+  "/career",
+  "/contact",
+  "/faq",
+  "/profil-perusahaan",
+  "/company-profile",
+];
+
 export function AppHeader() {
+  const pathname = usePathname();
+  const isMarketing =
+    pathname === "/" ||
+    MARKETING_PREFIXES.some((p) => pathname === p || pathname.startsWith(`${p}/`));
+
   const { activeCompany } = useCompany();
   const name = activeCompany?.name ?? BRAND.name;
   // Logo utama aplikasi: Logo Original SANG PRABU (dipakai seragam di semua
   // halaman). Bila perusahaan aktif punya logo sendiri, pakai itu.
   const logoUrl = activeCompany?.logoUrl || "/logos/logo-sang-prabu.png";
+
+  // Halaman marketing memakai navbar korporatnya sendiri.
+  if (isMarketing) return null;
 
   return (
     <header className="border-b-2 border-primary bg-white shadow-[0_2px_0_0_var(--gold)] dark:bg-card">

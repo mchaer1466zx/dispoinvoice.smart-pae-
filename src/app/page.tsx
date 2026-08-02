@@ -1,345 +1,356 @@
+/* eslint-disable @next/next/no-img-element */
+
+import type { Metadata } from "next";
 import Link from "next/link";
-import {
-  ArrowRight,
-  FileText,
-  Leaf,
-  ShieldCheck,
-  Snowflake,
-  Sparkles,
-  Store,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { ArrowUpRight, Newspaper } from "lucide-react";
 import { Reveal } from "@/components/reveal";
-import { BRAND } from "@/lib/brand";
+import { SiteChrome } from "@/components/corporate/site-chrome";
+import {
+  Container,
+  Overline,
+  SectionHeader,
+  SiteButton,
+} from "@/components/corporate/ui";
+import { ValueIcon } from "@/components/corporate/icon";
+import {
+  ARTICLES,
+  BUSINESS_UNITS,
+  PRODUCTS,
+  SITE,
+  VALUES,
+} from "@/lib/corporate/site";
 
-/**
- * Halaman depan publik — brand makanan SANG PRABU (PT Karya Sang Prabu),
- * gabung dengan penyebutan naungan PRIMA PRABU GROUP. Gaya food-brand:
- * foto asli full-bleed, hijau + emas, wordmark regal (Prabu = raja).
- *
- * Skala tipografi (strict): overline 11px/0.2em · body 15→17px/1.65 ·
- * judul seksi 32→44px · wordmark 52→96px/0.95 · -0.02em.
- */
-const PRODUCTS = [
-  {
-    img: "/sang-prabu/bakso.jpg",
-    name: "Bakso Sang Prabu",
-    desc: "Kenyal, padat daging, kaldunya nendang.",
-  },
-  {
-    img: "/sang-prabu/otak-otak.jpg",
-    name: "Otak-otak Sang Prabu",
-    desc: "Ikan pilihan, gurih, digoreng renyah.",
-  },
-  {
-    img: "/sang-prabu/dimsum.jpg",
-    name: "Dimsum Sang Prabu",
-    desc: "Siomay lembut, isian padat, matang kukus.",
-  },
-  {
-    img: "/sang-prabu/daging-ayam.jpg",
-    name: "Daging Ayam",
-    desc: "Frozen · halal · higienis — sehat & bergizi.",
-  },
-  {
-    img: "/sang-prabu/daging-sapi.jpg",
-    name: "Daging Sapi",
-    desc: "Frozen · halal · higienis — sehat & bergizi.",
-  },
-  {
-    img: "/sang-prabu/karkas.jpg",
-    name: "Daging Karkas Halal",
-    desc: "Karkas ayam beku, potong higienis, siap distribusi.",
-  },
-] as const;
+export const metadata: Metadata = {
+  title: "PT KARYA SANG PRABU — The Best Partner Your Business",
+  description:
+    "PT KARYA SANG PRABU — perusahaan pangan beku halal, perdagangan, dan kemitraan bisnis. Partner jangka panjang yang mengutamakan mutu, integritas, dan keunggulan.",
+  alternates: { canonical: "/" },
+};
 
-const VALUES = [
-  {
-    icon: ShieldCheck,
-    title: "Halal",
-    desc: "Disembelih & diproses sesuai syariat Islam.",
-  },
-  {
-    icon: Sparkles,
-    title: "Higienis",
-    desc: "Rumah potong bersih, standar keamanan pangan.",
-  },
-  {
-    icon: Leaf,
-    title: "Tanpa Pengawet Berlebih",
-    desc: "Bahan segar, cita rasa asli tetap terjaga.",
-  },
-  {
-    icon: Snowflake,
-    title: "Rantai Dingin",
-    desc: "Cold storage menjaga kesegaran sampai tujuan.",
-  },
-] as const;
+const featuredUnits = BUSINESS_UNITS.filter((u) => u.featured);
+const featuredProducts = PRODUCTS.filter((p) => p.featured);
+const latestArticles = ARTICLES.slice(0, 3);
 
-// Kontak WhatsApp untuk ajakan kemitraan (0889 3663 031 → format internasional).
-const WA_URL = `https://wa.me/628893663031?text=${encodeURIComponent(
-  "Halo SANG PRABU, saya tertarik menjadi mitra/distributor. Boleh info produk & kerja samanya?",
-)}`;
-
-export default function LandingPage() {
+export default function HomePage() {
   return (
-    <div className="flex flex-1 flex-col scroll-smooth bg-[#fbf8f1] font-jakarta text-[#23271f]">
+    <SiteChrome heroTransparent>
       {/* ============ HERO ============ */}
-      <section className="relative isolate flex min-h-[86vh] flex-col justify-center overflow-hidden">
-        {/* Foto bakso + overlay hijau */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
+      <section className="relative isolate flex min-h-[92vh] items-center overflow-hidden">
         <img
           src="/sang-prabu/hero-bakso.jpg"
-          alt="Bakso Sang Prabu"
+          alt=""
           className="absolute inset-0 -z-10 h-full w-full object-cover"
         />
         <div
           className="absolute inset-0 -z-10"
           style={{
             background:
-              "linear-gradient(180deg, rgba(6,51,26,0.72) 0%, rgba(6,51,26,0.66) 40%, rgba(6,51,26,0.88) 100%)",
+              "linear-gradient(105deg, rgba(6,42,22,0.92) 0%, rgba(6,42,22,0.78) 46%, rgba(6,42,22,0.5) 100%)",
           }}
           aria-hidden
         />
-
-        <div className="mx-auto w-full max-w-4xl px-6 py-20 text-center text-white sm:px-10 sm:py-28">
-          <Reveal>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/logos/logo-sang-prabu.png"
-              alt="Logo PT Karya Sang Prabu"
-              className="mx-auto h-32 w-auto object-contain drop-shadow-[0_6px_22px_rgba(201,162,76,0.32)] sm:h-40"
-            />
-          </Reveal>
-
-          <Reveal delayMs={90} className="mt-7">
-            <h1 className="font-display text-[2.5rem] font-semibold leading-[1.02] tracking-[-0.02em] sm:text-[4.5rem]">
-              PT KARYA SANG PRABU
-            </h1>
-          </Reveal>
-
-          <Reveal delayMs={150} className="mt-4">
-            <p className="font-mono text-[11px] font-medium uppercase tracking-[0.28em] text-gold sm:text-sm">
-              The Best Partner Your Business
-            </p>
-          </Reveal>
-
-          <Reveal delayMs={210} className="mt-6">
-            <p className="mx-auto max-w-xl text-[15px] leading-[1.65] text-white/80 sm:text-lg">
-              Bakso, Otak-otak & Dimsum halal — cita rasa nusantara dengan mutu
-              yang dijaga, dari dapur Sang Prabu ke meja Anda.
-            </p>
-          </Reveal>
-
-          {/* Badge Halal + naungan grup */}
-          <Reveal delayMs={270} className="mt-7">
-            <div className="flex flex-wrap items-center justify-center gap-2.5">
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-gold/15 px-3 py-1.5 font-mono text-[11px] font-semibold uppercase tracking-[0.14em] text-gold ring-1 ring-gold/40">
-                <ShieldCheck className="size-3.5" /> Halal
-              </span>
-              <span className="inline-flex items-center rounded-full bg-white/10 px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-white/70 ring-1 ring-white/20">
-                Bagian dari Prima Prabu Group
-              </span>
-            </div>
-          </Reveal>
-
-          <Reveal delayMs={330} className="mt-9">
-            <div className="flex flex-wrap items-center justify-center gap-3">
-              <Button
-                size="lg"
-                asChild
-                className="bg-gold text-[#3a2c05] transition-colors duration-200 ease-out hover:bg-gold-bright"
-              >
-                <Link href="#produk">
-                  Lihat Produk <ArrowRight />
-                </Link>
-              </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                asChild
-                className="border-white/25 bg-transparent text-white transition-colors duration-200 ease-out hover:bg-white/10 hover:text-white"
-              >
-                <Link href="/login">Masuk ke Sistem</Link>
-              </Button>
-            </div>
-          </Reveal>
-        </div>
+        <Container className="py-24 sm:py-28">
+          <div className="max-w-2xl text-white">
+            <Reveal>
+              <div className="flex items-center gap-3">
+                <img
+                  src={SITE.logo}
+                  alt={`Logo ${SITE.legalName}`}
+                  className="h-14 w-14 object-contain"
+                />
+                <span className="font-mono text-[11px] uppercase tracking-[0.26em] text-brand-gold">
+                  {SITE.legalName}
+                </span>
+              </div>
+            </Reveal>
+            <Reveal delayMs={90} className="mt-7">
+              <h1 className="font-display text-[2.6rem] font-semibold leading-[1.03] tracking-[-0.02em] sm:text-[4.2rem]">
+                The Best Partner
+                <br />
+                <span className="text-brand-gold">Your Business</span>
+              </h1>
+            </Reveal>
+            <Reveal delayMs={160} className="mt-6">
+              <p className="max-w-xl text-[15px] leading-[1.75] text-white/80 sm:text-lg">
+                {SITE.positioning}
+              </p>
+            </Reveal>
+            <Reveal delayMs={230} className="mt-9">
+              <div className="flex flex-wrap gap-3">
+                <SiteButton href="/business" variant="gold" withArrow>
+                  Explore Our Business
+                </SiteButton>
+                <SiteButton href="/contact" variant="ghost">
+                  Contact Us
+                </SiteButton>
+              </div>
+            </Reveal>
+          </div>
+        </Container>
       </section>
 
-      {/* ============ PRODUK ============ */}
-      <section id="produk" className="scroll-mt-20 px-6 py-20 sm:px-10 sm:py-28">
-        <div className="mx-auto max-w-6xl">
-          <Reveal>
-            <div className="flex items-end justify-between gap-4">
-              <div>
-                <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.28em] text-primary/70">
-                  Produk Unggulan
-                </p>
-                <h2 className="mt-3 font-display text-[2rem] font-semibold leading-[1.1] tracking-[-0.015em] text-primary sm:text-[2.75rem]">
-                  Sajian andalan Sang Prabu
-                </h2>
+      {/* ============ WHO WE ARE ============ */}
+      <section className="bg-white py-20 sm:py-28">
+        <Container>
+          <div className="grid items-center gap-12 lg:grid-cols-2">
+            <Reveal>
+              <div className="relative">
+                <img
+                  src="/sang-prabu/dapur.jpg"
+                  alt="Dapur produksi SANG PRABU"
+                  className="aspect-[4/3] w-full rounded-lg object-cover shadow-[0_20px_60px_-30px_rgba(11,77,33,0.5)]"
+                />
+                <span className="absolute -bottom-4 -right-4 hidden h-24 w-24 rounded-lg border-2 border-brand-gold sm:block" />
               </div>
-            </div>
-          </Reveal>
+            </Reveal>
+            <Reveal delayMs={120}>
+              <SectionHeader
+                overline="Who We Are"
+                title="Membangun kepercayaan melalui mutu & integritas"
+                description="PT KARYA SANG PRABU adalah perusahaan yang bergerak di produksi pangan beku halal (brand SANG PRABU), perdagangan, dan kemitraan bisnis — bagian dari PRIMA PRABU GROUP. Kami hadir sebagai partner jangka panjang yang dapat diandalkan bagi mitra dan pelanggan."
+              />
+              <div className="mt-7">
+                <SiteButton href="/about" variant="outline" withArrow>
+                  About Us
+                </SiteButton>
+              </div>
+            </Reveal>
+          </div>
+        </Container>
+      </section>
 
-          <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {PRODUCTS.map((p, i) => (
-              <Reveal key={p.name} delayMs={i * 80}>
-                <article className="group h-full overflow-hidden rounded-2xl border border-[#e6e0d2] bg-white shadow-sm transition-[transform,box-shadow] duration-300 ease-out hover:-translate-y-1 hover:shadow-md">
-                  <div className="relative aspect-[4/3] overflow-hidden">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
+      {/* ============ BUSINESS OVERVIEW ============ */}
+      <section className="bg-brand-cream py-20 sm:py-28">
+        <Container>
+          <Reveal>
+            <SectionHeader
+              overline="Our Business"
+              title="Lini bisnis PT KARYA SANG PRABU"
+              description="Beberapa bidang usaha yang kami jalankan. Struktur ini dirancang dinamis — unit bisnis dapat berkembang seiring pertumbuhan perusahaan."
+            />
+          </Reveal>
+          <div className="mt-12 grid gap-6 md:grid-cols-3">
+            {featuredUnits.map((unit, i) => (
+              <Reveal key={unit.slug} delayMs={i * 90}>
+                <Link
+                  href={`/business#${unit.slug}`}
+                  className="group flex h-full flex-col overflow-hidden rounded-lg border border-black/5 bg-white transition-shadow duration-300 hover:shadow-[0_20px_50px_-30px_rgba(11,77,33,0.6)]"
+                >
+                  <div className="relative h-44 overflow-hidden">
                     <img
-                      src={p.img}
-                      alt={p.name}
-                      loading="lazy"
-                      className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+                      src={unit.image}
+                      alt={unit.name}
+                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
                     />
-                    <span className="absolute left-3 top-3 h-1 w-8 rounded-full bg-gold" />
                   </div>
-                  <div className="p-5">
-                    <h3 className="font-display text-[1.25rem] font-semibold leading-[1.2] text-[#23271f]">
-                      {p.name}
-                    </h3>
-                    <p className="mt-2 text-[14px] leading-[1.6] text-[#6e736a]">
-                      {p.desc}
+                  <div className="flex flex-1 flex-col p-6">
+                    <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-brand-gold">
+                      {unit.tagline}
                     </p>
+                    <h3 className="mt-2 font-display text-xl font-semibold text-brand-green-dark">
+                      {unit.name}
+                    </h3>
+                    <p className="mt-2 flex-1 text-[13.5px] leading-[1.65] text-brand-ink/70">
+                      {unit.overview}
+                    </p>
+                    <span className="mt-4 inline-flex items-center gap-1.5 text-[12px] font-semibold uppercase tracking-[0.08em] text-brand-green">
+                      Selengkapnya
+                      <ArrowUpRight className="size-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                    </span>
                   </div>
-                </article>
+                </Link>
               </Reveal>
             ))}
           </div>
-        </div>
+        </Container>
       </section>
 
-      {/* ============ NILAI ============ */}
-      <section className="bg-primary px-6 py-20 text-white sm:px-10 sm:py-24">
-        <div className="mx-auto max-w-6xl">
+      {/* ============ WHY US ============ */}
+      <section className="bg-white py-20 sm:py-28">
+        <Container>
           <Reveal>
-            <p className="text-center font-mono text-[11px] font-semibold uppercase tracking-[0.28em] text-gold">
-              Kenapa Sang Prabu
-            </p>
+            <SectionHeader
+              align="center"
+              overline="Why Karya Sang Prabu"
+              title="Nilai yang menjadi fondasi kami"
+            />
           </Reveal>
-          <div className="mt-10 grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
-            {VALUES.map((v, i) => (
-              <Reveal key={v.title} delayMs={i * 80}>
-                <div className="flex flex-col items-start">
-                  <span className="flex size-11 items-center justify-center rounded-xl bg-gold/15 text-gold ring-1 ring-inset ring-gold/30">
-                    <v.icon className="size-5" />
+          <div className="mx-auto mt-12 grid max-w-4xl gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {VALUES.map((value, i) => (
+              <Reveal key={value.title} delayMs={i * 80}>
+                <div className="flex h-full flex-col items-center rounded-lg border border-black/5 bg-brand-cream/50 px-5 py-8 text-center">
+                  <span className="flex size-12 items-center justify-center rounded-full bg-brand-green/10 text-brand-green">
+                    <ValueIcon name={value.icon} className="size-6" />
                   </span>
-                  <h3 className="mt-4 font-display text-[1.25rem] font-semibold leading-[1.2]">
-                    {v.title}
+                  <h3 className="mt-4 font-display text-lg font-semibold text-brand-green-dark">
+                    {value.title}
                   </h3>
-                  <p className="mt-2 text-[14px] leading-[1.6] text-white/70">
-                    {v.desc}
+                  <p className="mt-2 text-[13px] leading-[1.6] text-brand-ink/65">
+                    {value.description}
                   </p>
                 </div>
               </Reveal>
             ))}
           </div>
-        </div>
+        </Container>
       </section>
 
-      {/* ============ CERITA ============ */}
-      <section className="px-6 py-20 sm:px-10 sm:py-28">
-        <div className="mx-auto grid max-w-6xl items-center gap-10 lg:grid-cols-2 lg:gap-16">
-          <Reveal className="order-2 lg:order-1">
-            <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.28em] text-primary/70">
-              Dari Dapur Sang Prabu
-            </p>
-            <h2 className="mt-3 font-display text-[2rem] font-semibold leading-[1.1] tracking-[-0.015em] text-primary sm:text-[2.75rem]">
-              Diproses sendiri, dari hulu ke hilir
-            </h2>
-            <p className="mt-5 text-[15px] leading-[1.7] text-[#4a4f46] sm:text-[17px]">
-              Sang Prabu mengolah daging pilihan di rumah potong sendiri —
-              disembelih secara halal, dibersihkan higienis, lalu diolah menjadi
-              bakso, otak-otak, dan dimsum. Setiap tahap dijaga rantai dinginnya
-              agar mutu dan kesegaran sampai utuh ke tangan Anda.
-            </p>
-            <div className="mt-7">
-              <Button
-                asChild
-                className="bg-primary text-white transition-colors duration-200 ease-out hover:bg-primary/90"
-              >
-                <a href={WA_URL} target="_blank" rel="noopener noreferrer">
-                  <Store /> Jadi Mitra / Distributor
-                </a>
-              </Button>
-            </div>
-          </Reveal>
-          <Reveal delayMs={120} className="order-1 lg:order-2">
-            <div className="overflow-hidden rounded-2xl border border-[#e6e0d2] shadow-sm">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/sang-prabu/dapur.jpg"
-                alt="Proses produksi di dapur Sang Prabu"
-                loading="lazy"
-                className="aspect-[4/3] h-full w-full object-cover"
+      {/* ============ PRODUCT HIGHLIGHT ============ */}
+      <section className="bg-brand-cream py-20 sm:py-28">
+        <Container>
+          <div className="flex flex-wrap items-end justify-between gap-6">
+            <Reveal>
+              <SectionHeader
+                overline="Our Products"
+                title="Produk unggulan SANG PRABU"
+                description="Pangan beku halal berkualitas — higienis, bergizi, dengan rantai dingin terjaga."
               />
-            </div>
-          </Reveal>
-        </div>
+            </Reveal>
+            <Reveal delayMs={120}>
+              <SiteButton href="/products" variant="outline" withArrow>
+                Lihat Semua Produk
+              </SiteButton>
+            </Reveal>
+          </div>
+          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {featuredProducts.map((product, i) => (
+              <Reveal key={product.id} delayMs={i * 90}>
+                <div className="group overflow-hidden rounded-lg bg-white shadow-[0_14px_40px_-30px_rgba(11,77,33,0.6)]">
+                  <div className="relative h-52 overflow-hidden">
+                    <img
+                      src={product.image}
+                      alt={product.name}
+                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.05]"
+                    />
+                    <span className="absolute left-3 top-3 rounded-full bg-white/90 px-2.5 py-1 font-mono text-[9px] font-semibold uppercase tracking-[0.14em] text-brand-green">
+                      {product.category}
+                    </span>
+                  </div>
+                  <div className="p-5">
+                    <h3 className="font-display text-lg font-semibold text-brand-green-dark">
+                      {product.name}
+                    </h3>
+                    <p className="mt-1.5 text-[13px] leading-[1.6] text-brand-ink/70">
+                      {product.description}
+                    </p>
+                  </div>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </Container>
       </section>
 
-      {/* ============ NAUNGAN GRUP ============ */}
-      <section className="bg-[#06331a] px-6 py-16 text-white sm:px-10 sm:py-20">
-        <div className="mx-auto max-w-5xl text-center">
+      {/* ============ PARTNERSHIP ============ */}
+      <section className="relative isolate overflow-hidden bg-brand-green-dark py-20 text-white sm:py-24">
+        <div
+          className="pointer-events-none absolute -left-24 top-0 h-80 w-80 rounded-full opacity-25 blur-3xl"
+          style={{ background: "radial-gradient(closest-side,#dea40255,transparent)" }}
+          aria-hidden
+        />
+        <Container className="relative">
+          <div className="grid items-center gap-8 md:grid-cols-[1.5fr_1fr]">
+            <Reveal>
+              <SectionHeader
+                invert
+                overline="Partnership"
+                title="Building Stronger Partnerships"
+                description="Kami terbuka untuk kolaborasi — distributor, reseller, hingga kerja sama strategis. Mari tumbuh bersama sebagai partner bisnis jangka panjang."
+              />
+            </Reveal>
+            <Reveal delayMs={120} className="md:justify-self-end">
+              <div className="flex flex-col gap-3 sm:flex-row md:flex-col">
+                <SiteButton href="/partners" variant="gold" withArrow>
+                  Become Our Partner
+                </SiteButton>
+                <SiteButton href={SITE.whatsapp.url} variant="ghost" external>
+                  WhatsApp
+                </SiteButton>
+              </div>
+            </Reveal>
+          </div>
+        </Container>
+      </section>
+
+      {/* ============ ARTICLES ============ */}
+      <section className="bg-white py-20 sm:py-28">
+        <Container>
           <Reveal>
-            <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.28em] text-gold/80">
-              Bagian dari
-            </p>
-            <h2 className="mt-3 font-display text-[1.75rem] font-semibold leading-[1.15] tracking-[-0.01em] sm:text-[2.25rem]">
-              {BRAND.groupName}
-            </h2>
-            <p className="mx-auto mt-4 max-w-xl text-[14px] leading-[1.65] text-white/65 sm:text-[15px]">
-              SANG PRABU adalah brand makanan dari PT Karya Sang Prabu — satu
-              dari tiga perusahaan di bawah naungan {BRAND.groupName}.
-            </p>
+            <SectionHeader
+              overline="Articles & News"
+              title="Kabar terbaru dari kami"
+              description="Informasi seputar perusahaan, produk, industri, dan kemitraan."
+            />
           </Reveal>
-          <Reveal delayMs={120}>
-            <div className="mt-8 grid gap-3 sm:grid-cols-3">
-              {BRAND.groupMembers.map((m) => (
-                <div
-                  key={m}
-                  className="rounded-xl border border-white/12 bg-white/5 px-4 py-4 font-mono text-[12px] uppercase leading-[1.4] tracking-[0.1em] text-white/75"
-                >
-                  {m}
-                </div>
+          {latestArticles.length > 0 ? (
+            <div className="mt-12 grid gap-6 md:grid-cols-3">
+              {latestArticles.map((article, i) => (
+                <Reveal key={article.id} delayMs={i * 90}>
+                  <Link
+                    href={`/articles/${article.slug}`}
+                    className="group flex h-full flex-col overflow-hidden rounded-lg border border-black/5 bg-white transition-shadow hover:shadow-[0_18px_50px_-30px_rgba(11,77,33,0.5)]"
+                  >
+                    <img
+                      src={article.coverImage}
+                      alt={article.title}
+                      className="h-44 w-full object-cover"
+                    />
+                    <div className="flex flex-1 flex-col p-5">
+                      <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-brand-gold">
+                        {article.category}
+                      </p>
+                      <h3 className="mt-2 font-display text-lg font-semibold text-brand-green-dark">
+                        {article.title}
+                      </h3>
+                      <p className="mt-2 flex-1 text-[13px] leading-[1.6] text-brand-ink/70">
+                        {article.excerpt}
+                      </p>
+                    </div>
+                  </Link>
+                </Reveal>
               ))}
             </div>
-          </Reveal>
-          <Reveal delayMs={200}>
-            <div className="mt-8 flex justify-center">
-              <Button
-                asChild
-                className="bg-gold text-[#3a2c05] transition-colors duration-200 ease-out hover:bg-gold-bright"
-              >
-                <Link href="/company-profile">
-                  <FileText /> Lihat Company Profile
-                </Link>
-              </Button>
-            </div>
-          </Reveal>
-        </div>
+          ) : (
+            <Reveal className="mt-10">
+              <div className="flex flex-col items-center gap-3 rounded-lg border border-dashed border-black/10 bg-brand-cream/40 px-6 py-16 text-center">
+                <Newspaper className="size-8 text-brand-gold" />
+                <p className="font-display text-lg font-semibold text-brand-green-dark">
+                  Artikel segera hadir
+                </p>
+                <p className="max-w-md text-[13.5px] leading-[1.65] text-brand-ink/65">
+                  Kami sedang menyiapkan kabar dan wawasan terbaru. Nantikan
+                  publikasi resmi PT KARYA SANG PRABU.
+                </p>
+              </div>
+            </Reveal>
+          )}
+        </Container>
       </section>
 
-      {/* ============ FOOTER ============ */}
-      <footer className="bg-[#fbf8f1] px-6 py-12 sm:px-10">
-        <div className="mx-auto flex max-w-6xl flex-col items-center gap-4 text-center">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/logos/logo-sang-prabu.png"
-            alt="Logo PT Karya Sang Prabu"
-            className="h-20 w-auto object-contain"
-          />
-          <p className="font-mono text-[11px] uppercase leading-[1.6] tracking-[0.14em] text-[#6e736a]">
-            PT Karya Sang Prabu · The Best Partner Your Business
-          </p>
-          <p className="text-[12px] text-[#9a9e94]">
-            © 2026 SANG PRABU — Karya Sang Prabu. Halal, higienis, terpercaya.
-          </p>
-        </div>
-      </footer>
-    </div>
+      {/* ============ FINAL CTA ============ */}
+      <section className="bg-brand-cream py-20 sm:py-24">
+        <Container>
+          <Reveal>
+            <div className="flex flex-col items-center gap-6 rounded-2xl border border-brand-gold/30 bg-white px-6 py-14 text-center shadow-[0_30px_80px_-50px_rgba(11,77,33,0.5)]">
+              <Overline>Let&apos;s Work Together</Overline>
+              <h2 className="max-w-2xl font-display text-[1.9rem] font-semibold leading-[1.1] tracking-[-0.015em] text-brand-green-dark sm:text-[2.6rem]">
+                Let&apos;s Build Something Great Together
+              </h2>
+              <p className="max-w-xl text-[15px] leading-[1.7] text-brand-ink/70">
+                Diskusikan kebutuhan bisnis Anda dengan tim PT KARYA SANG PRABU.
+              </p>
+              <div className="flex flex-wrap justify-center gap-3">
+                <SiteButton href="/contact" variant="primary" withArrow>
+                  Contact Us
+                </SiteButton>
+                <SiteButton href="/products" variant="outline">
+                  Lihat Produk
+                </SiteButton>
+              </div>
+            </div>
+          </Reveal>
+        </Container>
+      </section>
+    </SiteChrome>
   );
 }

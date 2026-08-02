@@ -46,6 +46,13 @@
   --color-gold: var(--gold);
   --color-gold-bright: var(--gold-bright);
   --color-seal: var(--seal);
+  /* Identitas korporat SANG PRABU (nilai eksak brand guide) */
+  --color-brand-green: var(--brand-green);
+  --color-brand-green-dark: var(--brand-green-dark);
+  --color-brand-gold: var(--brand-gold);
+  --color-brand-red: var(--brand-red);
+  --color-brand-cream: var(--brand-cream);
+  --color-brand-ink: var(--brand-ink);
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -79,6 +86,13 @@
   --gold: #c9a24c;
   --gold-bright: #e7c97a;
   --seal: #9e3320;
+  /* Warna brand korporat PT KARYA SANG PRABU (dipakai halaman marketing) */
+  --brand-green: #57a83f;
+  --brand-green-dark: #0b4d21;
+  --brand-gold: #dea402;
+  --brand-red: #d71920;
+  --brand-cream: #f7f4ec;
+  --brand-ink: #1b2419;
   --chart-1: #0b4d21;
   --chart-2: #c9a24c;
   --chart-3: #1e7a3e;

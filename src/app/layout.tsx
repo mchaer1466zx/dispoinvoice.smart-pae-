@@ -51,12 +51,34 @@ const cinzel = Cinzel({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://primaprabu-group-raul-pae.vercel.app"),
   title: {
-    default: "Sistem Pengadaan Digital · PRIMA PRABU GROUP",
-    template: "%s · Prima Prabu Group",
+    default: "PT KARYA SANG PRABU — The Best Partner Your Business",
+    template: "%s · PT KARYA SANG PRABU",
   },
   description:
-    "Sistem Pengadaan Digital Prima Prabu Group — Purchase Request, Purchase Order, penawaran, invoice, dan tagihan.",
+    "PT KARYA SANG PRABU — perusahaan pangan beku halal, perdagangan, dan kemitraan bisnis. Partner jangka panjang yang mengutamakan mutu, integritas, dan keunggulan.",
+  applicationName: "PT KARYA SANG PRABU",
+  keywords: [
+    "PT KARYA SANG PRABU",
+    "SANG PRABU",
+    "frozen food halal",
+    "bakso",
+    "otak-otak",
+    "dimsum",
+    "kemitraan bisnis",
+    "PRIMA PRABU GROUP",
+  ],
+  verification: { google: "6ZK-0mOdS5NeCCj4XhKkI4jwuHFQ9QZvaKKhsrYxiH8" },
+  openGraph: {
+    type: "website",
+    siteName: "PT KARYA SANG PRABU",
+    title: "PT KARYA SANG PRABU — The Best Partner Your Business",
+    description:
+      "Perusahaan pangan beku halal, perdagangan, dan kemitraan bisnis — bagian dari PRIMA PRABU GROUP.",
+    locale: "id_ID",
+  },
+  robots: { index: true, follow: true },
 };
 
 export default async function RootLayout({
