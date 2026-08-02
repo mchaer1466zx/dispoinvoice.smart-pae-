@@ -10,6 +10,7 @@ import {
   FileQuestion,
   FileText,
   LayoutDashboard,
+  Handshake,
   LogOut,
   PackageCheck,
   Receipt,
@@ -111,6 +112,11 @@ export function UserMenu() {
           <Button variant="ghost" size="sm" className="w-full justify-start" asChild>
             <Link href="/memo">
               <ScrollText /> Buat Memo
+            </Link>
+          </Button>
+          <Button variant="ghost" size="sm" className="w-full justify-start" asChild>
+            <Link href="/buat-perjanjian">
+              <Handshake /> Buat Perjanjian
             </Link>
           </Button>
           <Button variant="ghost" size="sm" className="w-full justify-start" asChild>
