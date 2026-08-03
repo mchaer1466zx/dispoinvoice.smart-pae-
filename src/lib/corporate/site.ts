@@ -33,6 +33,21 @@ export type Product = {
   featured: boolean;
 };
 
+/** Potongan teks berformat di dalam paragraf / butir daftar artikel. */
+export type ArticleSpan = {
+  text: string;
+  bold?: boolean;
+  italic?: boolean;
+  /** Tautan aktif; diawali "/" untuk internal, "http" untuk eksternal. */
+  href?: string;
+};
+
+/** Blok konten artikel bergaya (untuk artikel internal yang ditulis penuh). */
+export type ArticleBlock =
+  | { type: "heading"; text: string }
+  | { type: "paragraph"; spans: ArticleSpan[] }
+  | { type: "list"; ordered?: boolean; items: ArticleSpan[][] };
+
 export type Article = {
   id: string;
   title: string;
@@ -48,6 +63,11 @@ export type Article = {
   externalUrl?: string;
   /** Nama sumber eksternal (mis. domain) untuk label kartu. */
   source?: string;
+  /**
+   * Isi artikel berformat (heading, paragraf, daftar, tautan). Bila diisi,
+   * halaman detail memakainya alih-alih `content` polos.
+   */
+  body?: ArticleBlock[];
 };
 
 export type Partner = { name: string; category: string; logo?: string };
@@ -391,7 +411,163 @@ export const COMMODITY_CATEGORIES = [
  * URL (mis. 20260802214749 → 2026-08-02 21:47:49). Tutorial Hostinger tak
  * mencantumkan tanggal terbit di URL, jadi tanggalnya adalah perkiraan.
  */
-export const ARTICLES: Article[] = [
+export const ARTICLES: Article[] = ([
+  {
+    id: "art-frozen-food-halal",
+    title: "Apa Itu Frozen Food Halal & Kenapa Penting?",
+    slug: "apa-itu-frozen-food-halal",
+    category: "Edukasi",
+    excerpt:
+      "Kenali apa itu frozen food halal, standar sertifikasinya, dan alasan produk ini jadi pilihan aman untuk keluarga Indonesia. Temukan produk terbaik kami di sini!",
+    coverImage: "/articles/frozen-food-halal.svg",
+    author: "Tim Prima Prabu Group",
+    publishedAt: "2026-08-03",
+    content:
+      "Kenali apa itu frozen food halal, standar sertifikasinya, dan alasan produk ini jadi pilihan aman untuk keluarga Indonesia.",
+    featured: true,
+    body: [
+      {
+        type: "paragraph",
+        spans: [
+          {
+            text: "Menyiapkan makanan yang praktis, lezat, dan aman untuk keluarga tercinta setiap hari tentu menjadi prioritas utama bagi setiap ibu rumah tangga di Indonesia. Di tengah kesibukan harian yang padat, ",
+          },
+          { text: "frozen food", italic: true },
+          {
+            text: " atau makanan beku sering kali diandalkan sebagai solusi penyelamat waktu di dapur. Namun, sebagai konsumen yang cerdas, memastikan kehalalan dan kualitas makanan yang masuk ke tubuh keluarga tentu tidak boleh dilewatkan begitu saja.",
+          },
+        ],
+      },
+      {
+        type: "paragraph",
+        spans: [
+          { text: "Lalu, apa sebenarnya yang dimaksud dengan " },
+          { text: "frozen food", italic: true },
+          {
+            text: " halal, dan mengapa kehadirannya begitu krusial bagi keluarga Indonesia? Mari kita bahas tuntas bersama ",
+          },
+          { text: "Prima Prabu Group", bold: true },
+          { text: "." },
+        ],
+      },
+      { type: "heading", text: "Mengenal Lebih Dekat Apa Itu Frozen Food Halal" },
+      {
+        type: "paragraph",
+        spans: [
+          { text: "Secara sederhana, " },
+          { text: "frozen food", italic: true },
+          {
+            text: " halal adalah produk makanan olahan yang telah melalui proses pembekuan untuk menjaga kesegarannya, serta dipastikan seluruh rangkaian prosesnya memenuhi syariat Islam. Proses ini bukan hanya soal jenis bahan baku utamanya saja, melainkan mencakup:",
+          },
+        ],
+      },
+      {
+        type: "list",
+        items: [
+          [
+            { text: "Sumber Bahan Baku: ", bold: true },
+            {
+              text: "Dipastikan berasal dari hewan yang disembelih sesuai dengan syariat Islam atau bahan nabati/laut yang suci.",
+            },
+          ],
+          [
+            { text: "Proses Pengolahan: ", bold: true },
+            {
+              text: "Alat, mesin, dan fasilitas produksi bebas dari bahan-bahan yang diharamkan (seperti kontaminasi babi atau alkohol).",
+            },
+          ],
+          [
+            { text: "Standar Sertifikasi Resmi: ", bold: true },
+            {
+              text: "Produk telah mendapatkan label halal dari lembaga berwenang seperti Badan Penyelenggara Jaminan Produk Halal (BPJPH) atau Majelis Ulama Indonesia (MUI).",
+            },
+          ],
+        ],
+      },
+      {
+        type: "paragraph",
+        spans: [
+          {
+            text: "Dengan standar yang ketat ini, makanan beku tidak lagi dipandang sebelah mata, melainkan bertransformasi menjadi pilihan pangan modern yang higienis dan terjamin.",
+          },
+        ],
+      },
+      {
+        type: "heading",
+        text: "Alasan Frozen Food Halal Penting untuk Keluarga Indonesia",
+      },
+      {
+        type: "paragraph",
+        spans: [
+          {
+            text: "Bagi keluarga di Indonesia, label halal pada makanan bukan sekadar formalitas, melainkan bentuk perlindungan dan ketenangan batin. Berikut adalah beberapa alasan utama mengapa ",
+          },
+          { text: "frozen food", italic: true },
+          { text: " halal menjadi pilihan yang sangat penting:" },
+        ],
+      },
+      {
+        type: "list",
+        ordered: true,
+        items: [
+          [
+            { text: "Ketenangan Hati Konsumen Muslim: ", bold: true },
+            {
+              text: "Sebagai negara dengan mayoritas penduduk Muslim, memastikan kehalalan makanan adalah kewajiban mutlak. Mengonsumsi makanan yang halal membawa berkah dan kesehatan bagi jasmani maupun rohani keluarga.",
+            },
+          ],
+          [
+            { text: "Standar Kebersihan dan Higienitas yang Tinggi: ", bold: true },
+            { text: "Untuk mendapatkan sertifikasi halal, pabrik atau produsen " },
+            { text: "frozen food", italic: true },
+            { text: " wajib menerapkan sistem jaminan halal yang juga mengatur standar kebersihan (" },
+            { text: "good manufacturing practices", italic: true },
+            {
+              text: "). Artinya, produk yang sampai di meja makan Anda dijamin bersih dan aman.",
+            },
+          ],
+          [
+            { text: "Solusi Praktis Tanpa Kompromi Kualitas: ", bold: true },
+            {
+              text: "Gaya hidup modern menuntut efisiensi. Makanan beku halal menawarkan kepraktisan memasak dalam hitungan menit tanpa harus mengorbankan nilai gizi dan prinsip kehalalan yang memegang peranan kunci.",
+            },
+          ],
+        ],
+      },
+      { type: "heading", text: "Menjaga Kualitas dari Dapur Anda" },
+      {
+        type: "paragraph",
+        spans: [
+          {
+            text: "Memilih produk makanan beku yang tepat adalah langkah awal melindungi keluarga. Pastikan Anda selalu mengecek kemasan, tanggal kedaluwarsa, serta logo halal resmi sebelum membeli. Kombinasi antara rasa yang lezat, kepraktisan penyajian, dan jaminan kehalalan mutlak akan membuat momen makan bersama keluarga menjadi lebih hangat dan bermakna.",
+          },
+        ],
+      },
+      { type: "heading", text: "Yuk, Sediakan yang Terbaik untuk Keluarga!" },
+      {
+        type: "paragraph",
+        spans: [
+          {
+            text: "Ingin menyajikan hidangan praktis, berkualitas, dan 100% halal untuk keluarga tercinta di rumah? Jangan ragu untuk melihat berbagai pilihan produk unggulan kami yang diolah dengan standar higienis tinggi.",
+          },
+        ],
+      },
+      {
+        type: "paragraph",
+        spans: [
+          { text: "Kunjungi halaman " },
+          { text: "Produk Kami", href: "/products" },
+          {
+            text: " sekarang juga untuk menemukan inspirasi menu lezat hari ini, atau hubungi tim layanan pelanggan kami melalui ",
+          },
+          { text: "WhatsApp Business", href: SITE.whatsapp.url },
+          { text: " untuk informasi pemesanan dan peluang kerja sama " },
+          { text: "reseller", italic: true },
+          { text: "!" },
+        ],
+      },
+    ],
+  },
   {
     id: "art-lansia-dirampok",
     title: "Lansia Dirampok Tetangga, Lapor Polisi Mulut Masih Terlakban",
@@ -545,7 +721,9 @@ export const ARTICLES: Article[] = [
     featured: false,
     externalUrl: "https://youtube.com/shorts/yRXCqwuyXN8?si=7iosU3nZ83k_UkrE",
   },
-].sort((a, b) => +new Date(b.publishedAt) - +new Date(a.publishedAt));
+] satisfies Article[]).sort(
+  (a, b) => +new Date(b.publishedAt) - +new Date(a.publishedAt),
+);
 
 export const ARTICLE_CATEGORIES = [
   "Company News",
