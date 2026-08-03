@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" width="1200" height="675" role="img" aria-label="Frozen food halal untuk keluarga Indonesia">
+  <defs>
+    <linearGradient id="ff1" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0B4D21"/>
+      <stop offset="1" stop-color="#062F14"/>
+    </linearGradient>
+    <linearGradient id="ffg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#F1D27A"/>
+      <stop offset="1" stop-color="#DEA402"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="675" fill="url(#ff1)"/>
+  <!-- snowflakes / suasana beku -->
+  <g stroke="#BFE3C6" stroke-width="4" stroke-linecap="round" opacity="0.5">
+    <g transform="translate(980,180)">
+      <line x1="0" y1="-70" x2="0" y2="70"/>
+      <line x1="-70" y1="0" x2="70" y2="0"/>
+      <line x1="-50" y1="-50" x2="50" y2="50"/>
+      <line x1="-50" y1="50" x2="50" y2="-50"/>
+    </g>
+  </g>
+  <g fill="#DDF0E1" opacity="0.65">
+    <circle cx="1080" cy="360" r="6"/><circle cx="900" cy="430" r="5"/>
+    <circle cx="1030" cy="470" r="4"/><circle cx="860" cy="300" r="4"/>
+    <circle cx="1120" cy="250" r="5"/>
+  </g>
+  <!-- lencana halal -->
+  <g transform="translate(970,470)">
+    <circle cx="0" cy="0" r="86" fill="url(#ffg)"/>
+    <circle cx="0" cy="0" r="86" fill="none" stroke="#0B4D21" stroke-width="4" opacity="0.35"/>
+    <text x="0" y="-8" font-family="Georgia, 'Times New Roman', serif" font-size="34" font-weight="800" fill="#0B4D21" text-anchor="middle">HALAL</text>
+    <path d="M-34,14 L-8,40 L40,-16" fill="none" stroke="#0B4D21" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <rect x="70" y="86" width="200" height="44" rx="22" fill="url(#ffg)"/>
+  <text x="90" y="116" font-family="Arial, sans-serif" font-size="20" font-weight="700" letter-spacing="2" fill="#0B4D21">EDUKASI</text>
+  <text x="70" y="300" font-family="Georgia, 'Times New Roman', serif" font-size="66" font-weight="800" fill="#FFFFFF">Frozen Food Halal</text>
+  <text x="70" y="372" font-family="Georgia, 'Times New Roman', serif" font-size="46" font-weight="700" fill="#F1D27A">Aman &amp; Praktis untuk Keluarga</text>
+  <text x="70" y="430" font-family="Arial, sans-serif" font-size="24" fill="#CFE8D3">Kenali standar &amp; sertifikasinya</text>
+  <text x="70" y="620" font-family="Arial, sans-serif" font-size="22" letter-spacing="3" fill="#FFFFFF" opacity="0.7">PRIMA PRABU GROUP · SANG PRABU</text>
+</svg>

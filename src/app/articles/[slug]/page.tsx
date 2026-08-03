@@ -6,6 +6,7 @@ import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { SiteChrome } from "@/components/corporate/site-chrome";
 import { Container, SiteButton } from "@/components/corporate/ui";
+import { ArticleBody } from "@/components/corporate/article-body";
 import { ARTICLES } from "@/lib/corporate/site";
 
 export function generateStaticParams() {
@@ -69,11 +70,15 @@ export default async function ArticleDetailPage({
             alt={article.title}
             className="mt-8 aspect-[16/9] w-full rounded-lg object-cover"
           />
-          <div className="mt-8 space-y-5 text-[15.5px] leading-[1.8] text-brand-ink/85">
-            {article.content.split("\n\n").map((p, i) => (
-              <p key={i}>{p}</p>
-            ))}
-          </div>
+          {article.body ? (
+            <ArticleBody blocks={article.body} />
+          ) : (
+            <div className="mt-8 space-y-5 text-[15.5px] leading-[1.8] text-brand-ink/85">
+              {article.content.split("\n\n").map((p, i) => (
+                <p key={i}>{p}</p>
+              ))}
+            </div>
+          )}
         </Container>
       </article>
 
