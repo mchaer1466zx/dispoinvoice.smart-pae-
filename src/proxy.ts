@@ -32,6 +32,8 @@ const PUBLIC_PREFIXES = [
   "/api/documents/",
   // Sub-rute publik website korporat (mis. detail artikel).
   "/articles/",
+  // Endpoint AI publik (SANG PRABU AI) — read-only, di luar area login.
+  "/api/ai/",
 ];
 
 // Aset statis dari folder public (logo, ikon, font, dll.) bersifat publik —

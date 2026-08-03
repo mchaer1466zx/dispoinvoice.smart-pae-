@@ -12,6 +12,7 @@
     "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.115.0",
     "@libsql/client": "^0.17.4",
     "@react-pdf/renderer": "^4.5.1",
     "@vercel/blob": "^2.6.1",
