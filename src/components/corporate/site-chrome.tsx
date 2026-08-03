@@ -1,6 +1,10 @@
 import { SiteNav } from "@/components/corporate/site-nav";
 import { SiteFooter } from "@/components/corporate/site-footer";
 import { StructuredData } from "@/components/corporate/structured-data";
+import { SangPrabuAi } from "@/components/ai/sang-prabu-ai";
+
+// Feature flag: widget AI hanya tampil bila diaktifkan (default aman: mati).
+const AI_ENABLED = process.env.NEXT_PUBLIC_AI_ENABLED === "true";
 
 /**
  * Kerangka halaman marketing: navbar korporat + konten + footer.
@@ -20,6 +24,7 @@ export function SiteChrome({
       <SiteNav transparent={heroTransparent} />
       <main className="flex-1">{children}</main>
       <SiteFooter />
+      {AI_ENABLED ? <SangPrabuAi /> : null}
     </div>
   );
 }
