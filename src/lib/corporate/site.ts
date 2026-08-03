@@ -68,6 +68,10 @@ export type Article = {
    * halaman detail memakainya alih-alih `content` polos.
    */
   body?: ArticleBlock[];
+  /** FAQ artikel (dirender dengan komponen FaqAccordion existing + FAQ schema). */
+  faqs?: { question: string; answer: string }[];
+  /** Tombol CTA di akhir artikel (memakai SiteButton existing). */
+  cta?: { label: string; href: string; variant?: "gold" | "outline" }[];
 };
 
 export type Partner = { name: string; category: string; logo?: string };
@@ -412,6 +416,322 @@ export const COMMODITY_CATEGORIES = [
  * mencantumkan tanggal terbit di URL, jadi tanggalnya adalah perkiraan.
  */
 export const ARTICLES: Article[] = ([
+  {
+    id: "art-cara-menyimpan-frozen-food",
+    title: "Cara Menyimpan Frozen Food agar Tetap Segar dan Aman Dikonsumsi",
+    slug: "cara-menyimpan-frozen-food",
+    category: "Edukasi Frozen Food Halal",
+    excerpt:
+      "Panduan lengkap cara menyimpan frozen food agar tetap segar, higienis, dan aman dikonsumsi — mulai dari suhu freezer ideal, masa simpan, cara thawing yang benar, hingga tips saat mati listrik.",
+    coverImage: "/articles/cara-menyimpan-frozen-food.svg",
+    author: "SANG PRABU",
+    publishedAt: "2026-08-03T10:00:00",
+    content:
+      "Panduan praktis menyimpan frozen food agar tetap segar dan aman dikonsumsi: suhu freezer, masa simpan, cara thawing, dan kesalahan yang harus dihindari.",
+    featured: true,
+    body: [
+      {
+        type: "paragraph",
+        spans: [
+          { text: "Frozen food", italic: true },
+          {
+            text: " atau makanan beku sudah menjadi andalan banyak keluarga Indonesia karena praktis, tahan lama, dan mudah diolah kapan saja. Namun, kepraktisan itu hanya bertahan jika cara penyimpanannya benar. Salah menyimpan makanan beku bukan hanya membuat rasa dan teksturnya menurun, tetapi juga berisiko menurunkan keamanan pangan bagi keluarga.",
+          },
+        ],
+      },
+      {
+        type: "paragraph",
+        spans: [
+          { text: "Melalui panduan ini, " },
+          { text: "SANG PRABU", bold: true },
+          {
+            text: " merangkum cara menyimpan frozen food agar tetap segar, higienis, dan aman dikonsumsi — mulai dari suhu freezer yang ideal, masa simpan tiap jenis produk, cara mencairkan yang benar, hingga langkah yang perlu diambil saat listrik padam.",
+          },
+        ],
+      },
+      { type: "heading", text: "Mengapa Cara Menyimpan Frozen Food Sangat Penting" },
+      {
+        type: "paragraph",
+        spans: [
+          {
+            text: "Pembekuan bekerja dengan cara menghentikan sementara aktivitas bakteri dan mikroorganisme penyebab pembusukan. Selama suhu makanan tetap beku secara stabil, kualitas dan keamanannya terjaga. Masalah muncul ketika suhu naik-turun berulang kali: kristal es mencair lalu membeku kembali, merusak serat makanan, mengeluarkan cairan, dan membuka peluang bakteri kembali aktif.",
+          },
+        ],
+      },
+      {
+        type: "paragraph",
+        spans: [
+          {
+            text: "Karena itu, menyimpan dengan benar bukan sekadar soal menjaga rasa, melainkan bagian penting dari keamanan pangan keluarga. Penyimpanan yang tepat menjaga nilai gizi, mencegah kontaminasi silang, dan memastikan produk tetap layak saat tiba waktunya diolah.",
+          },
+        ],
+      },
+      { type: "heading", text: "Suhu Ideal untuk Menyimpan Frozen Food" },
+      {
+        type: "paragraph",
+        spans: [
+          { text: "Suhu freezer yang direkomendasikan untuk menyimpan makanan beku adalah " },
+          { text: "-18°C atau lebih rendah", bold: true },
+          {
+            text: ". Pada suhu ini, sebagian besar aktivitas bakteri berhenti sehingga makanan dapat bertahan lama tanpa kehilangan kualitas secara signifikan.",
+          },
+        ],
+      },
+      {
+        type: "list",
+        items: [
+          [
+            { text: "Jaga suhu tetap stabil: ", bold: true },
+            {
+              text: "hindari terlalu sering membuka pintu freezer agar suhu tidak naik-turun.",
+            },
+          ],
+          [
+            { text: "Jangan penuhi freezer secara berlebihan: ", bold: true },
+            {
+              text: "sisakan ruang agar udara dingin bersirkulasi merata ke seluruh isi.",
+            },
+          ],
+          [
+            { text: "Gunakan termometer freezer: ", bold: true },
+            {
+              text: "jika ragu, alat sederhana ini membantu memastikan suhu benar-benar berada di titik aman.",
+            },
+          ],
+        ],
+      },
+      { type: "heading", text: "Kenali Masa Simpan Berbagai Jenis Frozen Food" },
+      {
+        type: "paragraph",
+        spans: [
+          {
+            text: "Meski beku, makanan tetap memiliki masa simpan terbaik. Melewati batas ini biasanya tidak langsung membuat makanan berbahaya, tetapi kualitas rasa dan teksturnya menurun. Sebagai panduan umum:",
+          },
+        ],
+      },
+      {
+        type: "list",
+        items: [
+          [
+            { text: "Daging & unggas mentah: ", bold: true },
+            { text: "sekitar 6–12 bulan pada suhu beku stabil." },
+          ],
+          [
+            { text: "Seafood (ikan, udang): ", bold: true },
+            { text: "sekitar 3–6 bulan untuk kualitas terbaik." },
+          ],
+          [
+            { text: "Olahan beku (nugget, sosis, bakso): ", bold: true },
+            { text: "ikuti tanggal kedaluwarsa pada kemasan, umumnya 1–3 bulan setelah dibuka." },
+          ],
+          [
+            { text: "Sayur & buah beku: ", bold: true },
+            { text: "sekitar 8–12 bulan." },
+          ],
+        ],
+      },
+      {
+        type: "paragraph",
+        spans: [
+          {
+            text: "Selalu utamakan informasi pada label kemasan. Tanggal kedaluwarsa dan petunjuk penyimpanan dari produsen adalah acuan paling akurat untuk setiap produk.",
+          },
+        ],
+      },
+      { type: "heading", text: "Cara Menyimpan Frozen Food yang Benar di Freezer" },
+      {
+        type: "list",
+        ordered: true,
+        items: [
+          [
+            { text: "Simpan segera setelah tiba di rumah. ", bold: true },
+            {
+              text: "Jangan biarkan produk beku berada di suhu ruang terlalu lama; masukkan ke freezer secepatnya setelah belanja.",
+            },
+          ],
+          [
+            { text: "Gunakan wadah atau kemasan kedap udara. ", bold: true },
+            {
+              text: "Bungkus rapat atau gunakan wadah tertutup untuk mencegah freezer burn (kekeringan akibat udara).",
+            },
+          ],
+          [
+            { text: "Beri label tanggal. ", bold: true },
+            {
+              text: "Tuliskan tanggal simpan agar mudah menerapkan prinsip first in, first out — yang lebih dulu disimpan, lebih dulu dipakai.",
+            },
+          ],
+          [
+            { text: "Pisahkan bahan mentah dan matang. ", bold: true },
+            {
+              text: "Cegah kontaminasi silang dengan menyimpannya di wadah terpisah.",
+            },
+          ],
+          [
+            { text: "Bagi porsi sesuai kebutuhan. ", bold: true },
+            {
+              text: "Simpan dalam porsi sekali masak agar tidak perlu mencairkan dan membekukan ulang.",
+            },
+          ],
+        ],
+      },
+      { type: "heading", text: "Kesalahan Umum Saat Menyimpan Makanan Beku" },
+      {
+        type: "list",
+        items: [
+          [
+            { text: "Membekukan ulang makanan yang sudah dicairkan. ", bold: true },
+            { text: "Ini menurunkan kualitas dan meningkatkan risiko pertumbuhan bakteri." },
+          ],
+          [
+            { text: "Menyimpan makanan panas langsung ke freezer. ", bold: true },
+            { text: "Dinginkan dulu hingga suhu ruang agar suhu freezer tidak naik mendadak." },
+          ],
+          [
+            { text: "Membiarkan kemasan terbuka. ", bold: true },
+            { text: "Udara mempercepat freezer burn dan menyerap bau dari makanan lain." },
+          ],
+          [
+            { text: "Menjejalkan freezer terlalu penuh. ", bold: true },
+            { text: "Sirkulasi udara dingin terganggu sehingga pembekuan tidak merata." },
+          ],
+        ],
+      },
+      { type: "heading", text: "Tips Menyimpan Frozen Food Setelah Kemasan Dibuka" },
+      {
+        type: "paragraph",
+        spans: [
+          {
+            text: "Begitu kemasan dibuka, makanan lebih rentan terhadap udara dan kelembapan. Pindahkan sisa produk ke wadah kedap udara atau kantong beku (freezer bag), keluarkan udara sebanyak mungkin, tutup rapat, lalu beri label tanggal. Usahakan menghabiskan produk yang sudah dibuka dalam rentang waktu yang lebih singkat dibanding kemasan yang masih tersegel.",
+          },
+        ],
+      },
+      { type: "heading", text: "Cara Aman Mencairkan (Thawing) Frozen Food" },
+      {
+        type: "paragraph",
+        spans: [
+          {
+            text: "Proses mencairkan sama pentingnya dengan proses menyimpan. Cara thawing yang benar mencegah bakteri berkembang di permukaan makanan:",
+          },
+        ],
+      },
+      {
+        type: "list",
+        items: [
+          [
+            { text: "Di dalam kulkas (paling aman): ", bold: true },
+            { text: "pindahkan dari freezer ke rak kulkas beberapa jam sebelum diolah." },
+          ],
+          [
+            { text: "Dengan air dingin mengalir: ", bold: true },
+            { text: "gunakan kemasan kedap air bila butuh lebih cepat." },
+          ],
+          [
+            { text: "Langsung dimasak: ", bold: true },
+            { text: "banyak olahan beku (nugget, bakso, sosis) bisa langsung dimasak tanpa dicairkan lebih dulu." },
+          ],
+        ],
+      },
+      {
+        type: "paragraph",
+        spans: [
+          { text: "Hindari mencairkan makanan beku dengan membiarkannya di suhu ruang dalam waktu lama, karena bagian luar makanan bisa mencapai suhu yang memungkinkan bakteri berkembang sebelum bagian dalamnya mencair." },
+        ],
+      },
+      { type: "heading", text: "Tanda-Tanda Frozen Food Sudah Tidak Layak Konsumsi" },
+      {
+        type: "list",
+        items: [
+          [{ text: "Bau tidak sedap atau asam ", bold: true }, { text: "yang menyengat saat kemasan dibuka." }],
+          [{ text: "Perubahan warna mencolok ", bold: true }, { text: "seperti bercak keabu-abuan atau kecokelatan yang tidak wajar." }],
+          [{ text: "Tekstur berlendir ", bold: true }, { text: "atau lembek tidak wajar setelah dicairkan." }],
+          [{ text: "Kristal es berlebihan ", bold: true }, { text: "dan lapisan kering (freezer burn) yang tebal — tanda makanan sudah lama atau sempat mencair." }],
+        ],
+      },
+      {
+        type: "paragraph",
+        spans: [
+          { text: "Jika ragu, lebih baik tidak dikonsumsi. Prinsip ", bold: false },
+          { text: "\"when in doubt, throw it out\"", italic: true },
+          { text: " berlaku untuk menjaga keamanan pangan keluarga." },
+        ],
+      },
+      { type: "heading", text: "Menyimpan Frozen Food Saat Mati Listrik" },
+      {
+        type: "list",
+        items: [
+          [
+            { text: "Jangan sering membuka freezer. ", bold: true },
+            { text: "Freezer yang penuh dan tertutup rapat bisa mempertahankan suhu beku hingga sekitar 24–48 jam." },
+          ],
+          [
+            { text: "Tambahkan es batu atau ice gel ", bold: true },
+            { text: "jika mati listrik diperkirakan berlangsung lama." },
+          ],
+          [
+            { text: "Periksa kondisi setelah listrik menyala. ", bold: true },
+            { text: "Bila makanan masih mengandung kristal es dan terasa dingin beku, umumnya masih aman disimpan kembali." },
+          ],
+        ],
+      },
+      { type: "heading", text: "Menjaga Kualitas Frozen Food Bersama SANG PRABU" },
+      {
+        type: "paragraph",
+        spans: [
+          {
+            text: "Penyimpanan yang baik dimulai dari produk yang berkualitas sejak awal. ",
+          },
+          { text: "SANG PRABU", bold: true },
+          {
+            text: " menghadirkan pilihan produk frozen food yang diproses dengan standar higienis untuk memudahkan keluarga Indonesia menyajikan hidangan praktis setiap hari.",
+          },
+        ],
+      },
+      {
+        type: "paragraph",
+        spans: [
+          { text: "Ingin melihat pilihan produknya? Kunjungi halaman " },
+          { text: "Lihat Produk Frozen Food SANG PRABU", href: "/products" },
+          { text: ". Tertarik menjalankan peluang usaha? Pelajari cara " },
+          { text: "Jadi Mitra Reseller SANG PRABU", href: "/partners" },
+          { text: ", atau hubungi tim kami melalui " },
+          { text: "WhatsApp Business", href: SITE.whatsapp.url },
+          { text: " untuk informasi pemesanan dan kerja sama." },
+        ],
+      },
+    ],
+    faqs: [
+      {
+        question: "Berapa suhu ideal untuk menyimpan frozen food?",
+        answer:
+          "Suhu ideal adalah -18°C atau lebih rendah, dan sebaiknya dijaga tetap stabil. Pada suhu ini aktivitas bakteri berhenti sehingga makanan beku dapat bertahan lama tanpa kehilangan kualitas secara signifikan.",
+      },
+      {
+        question: "Apakah frozen food yang sudah dicairkan boleh dibekukan lagi?",
+        answer:
+          "Sebaiknya tidak. Membekukan ulang makanan yang sudah dicairkan menurunkan kualitas rasa dan tekstur, serta meningkatkan risiko pertumbuhan bakteri. Bagi porsi sesuai kebutuhan sejak awal agar tidak perlu membekukan ulang.",
+      },
+      {
+        question: "Berapa lama frozen food bisa disimpan?",
+        answer:
+          "Bergantung jenisnya: daging & unggas mentah sekitar 6–12 bulan, seafood 3–6 bulan, sayur & buah beku 8–12 bulan, dan olahan beku mengikuti tanggal kedaluwarsa pada kemasan. Selalu utamakan informasi pada label produk.",
+      },
+      {
+        question: "Bagaimana cara mencairkan frozen food yang benar?",
+        answer:
+          "Cara paling aman adalah mencairkan di dalam kulkas beberapa jam sebelum dimasak. Bisa juga dengan air dingin dalam kemasan kedap air, atau langsung dimasak untuk olahan seperti nugget dan bakso. Hindari mencairkan di suhu ruang dalam waktu lama.",
+      },
+      {
+        question: "Apa yang harus dilakukan saat mati listrik agar frozen food tetap aman?",
+        answer:
+          "Jangan sering membuka pintu freezer. Freezer yang penuh dan tertutup rapat dapat mempertahankan suhu beku hingga sekitar 24–48 jam. Tambahkan es batu atau ice gel bila pemadaman diperkirakan lama, dan periksa kondisi makanan setelah listrik menyala.",
+      },
+    ],
+    cta: [
+      { label: "Lihat Produk Kami", href: "/products", variant: "gold" },
+      { label: "Jadi Mitra Reseller SANG PRABU", href: "/partners", variant: "outline" },
+    ],
+  },
   {
     id: "art-frozen-food-halal",
     title: "Apa Itu Frozen Food Halal & Kenapa Penting?",

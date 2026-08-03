@@ -3,43 +3,55 @@
 import { useState } from "react";
 import { Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
-import type { Faq } from "@/lib/corporate/site";
 
-/** Accordion FAQ dengan filter kategori. */
+/** Item FAQ minimal; `category` opsional (dipakai untuk filter di halaman /faq). */
+type FaqItem = { question: string; answer: string; category?: string };
+
+/**
+ * Accordion FAQ. Baris filter kategori hanya muncul bila `categories` diberikan
+ * (mis. halaman /faq); untuk FAQ di dalam artikel, cukup panggil tanpa kategori.
+ */
 export function FaqAccordion({
   faqs,
   categories,
 }: {
-  faqs: Faq[];
-  categories: readonly string[];
+  faqs: FaqItem[];
+  categories?: readonly string[];
 }) {
   const [category, setCategory] = useState<string>("Semua");
   const [open, setOpen] = useState<string | null>(null);
 
-  const cats = ["Semua", ...categories];
+  const cats = categories && categories.length ? ["Semua", ...categories] : [];
   const shown = faqs.filter((f) => category === "Semua" || f.category === category);
 
   return (
     <div>
-      <div className="flex flex-wrap gap-2">
-        {cats.map((cat) => (
-          <button
-            key={cat}
-            type="button"
-            onClick={() => setCategory(cat)}
-            className={cn(
-              "rounded-full border px-4 py-2 text-[12.5px] font-medium transition-colors",
-              category === cat
-                ? "border-brand-green bg-brand-green text-white"
-                : "border-black/10 text-brand-ink/70 hover:border-brand-green/40 hover:text-brand-green",
-            )}
-          >
-            {cat}
-          </button>
-        ))}
-      </div>
+      {cats.length ? (
+        <div className="flex flex-wrap gap-2">
+          {cats.map((cat) => (
+            <button
+              key={cat}
+              type="button"
+              onClick={() => setCategory(cat)}
+              className={cn(
+                "rounded-full border px-4 py-2 text-[12.5px] font-medium transition-colors",
+                category === cat
+                  ? "border-brand-green bg-brand-green text-white"
+                  : "border-black/10 text-brand-ink/70 hover:border-brand-green/40 hover:text-brand-green",
+              )}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
+      ) : null}
 
-      <div className="mt-8 divide-y divide-black/8 rounded-lg border border-black/8 bg-white">
+      <div
+        className={cn(
+          "divide-y divide-black/8 rounded-lg border border-black/8 bg-white",
+          cats.length && "mt-8",
+        )}
+      >
         {shown.map((faq) => {
           const key = `${faq.category}-${faq.question}`;
           const isOpen = open === key;
