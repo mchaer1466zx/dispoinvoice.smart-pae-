@@ -62,6 +62,34 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
+/* Compatibility layer: Putih & Abu-abu Modern
+   Added by automated PR to safely expose short color tokens used elsewhere.
+   These map to existing brand tokens when available, falling back to neutral values.
+*/
+:root {
+  --primary-dark: var(--brand-ink, #1f1f1f);      /* Text utama, button dark */
+  --primary-light: var(--brand-cream, #ffffff);   /* Background */
+  --gray-50: #f9fafb;           /* Subtle background */
+  --gray-100: #f3f4f6;          /* Card background */
+  --gray-200: #e5e7eb;          /* Border, divider */
+  --gray-600: #4b5563;          /* Secondary text */
+  --gray-700: #374151;          /* Muted text */
+  --accent: var(--accent, #3b82f6);            /* CTA button - biru */
+  --accent-hover: #2563eb;      /* Hover state */
+  --success: var(--success, #10b981);           /* Status/check */
+  --warning: #f59e0b;           /* Warning/alert */
+  --danger: #ef4444;            /* Error */
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --primary-dark: #f3f4f6;    /* Text terang di dark mode */
+    --primary-light: var(--brand-ink, #1f2937);   /* Background gelap */
+    --gray-100: #374151;        /* Card background */
+    --gray-200: #4b5563;        /* Border */
+  }
+}
+
 :root {
   --background: oklch(1 0 0);
   --foreground: #23271f;
