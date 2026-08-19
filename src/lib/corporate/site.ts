@@ -98,8 +98,8 @@ export const SITE = {
   // Tagline pada company profile resmi.
   taglineOfficial: "Better Proses, Better Quality & Better Serve",
   group: "PRIMA PRABU GROUP",
-  logo: "/sang-prabu/sang-prabu-haki-logo.png",
-  logoDark: "/sang-prabu/sang-prabu-haki-logo.png",
+  logo: "/images/logo/logo-sang-prabu-haki.png",
+  logoDark: "/images/logo/logo-sang-prabu-haki.png",
   positioning:
     "PT KARYA SANG PRABU adalah perusahaan nasional yang bergerak di bidang komoditas dan general trading berbasis di Indonesia — mitra terpercaya dalam penyediaan dan distribusi berbagai komoditas unggulan untuk memenuhi kebutuhan pasar domestik dan internasional.",
   address: {
@@ -351,7 +351,7 @@ export const BUSINESS_UNITS: BusinessUnit[] = [
       "Penyediaan dan distribusi berbagai komoditas unggulan Indonesia dengan mutu sesuai standar nasional & internasional.",
     whatWeDo: ["Perdagangan komoditas", "Sourcing & pasokan", "Distribusi domestik & ekspor"],
     icon: "wheat",
-    image: "/sang-prabu/butcher.jpg",
+    image: "/images/facilities/butcher.jpg",
     featured: true,
   },
   {
@@ -362,7 +362,7 @@ export const BUSINESS_UNITS: BusinessUnit[] = [
       "Produk makanan & minuman — termasuk lini pangan beku halal berlabel SANG PRABU — untuk pasar ritel dan mitra usaha.",
     whatWeDo: ["Produk pangan beku halal", "Distribusi F&B", "Kemitraan penyaluran"],
     icon: "utensils",
-    image: "/sang-prabu/hero-bakso.jpg",
+    image: "/images/hero/hero-wiridan-master.jpg",
     featured: true,
   },
   {
@@ -465,7 +465,7 @@ export const PRODUCTS: Product[] = [
     slug: "daging-sapi",
     category: "Daging Beku",
     description: "Daging sapi pilihan potongan higienis rantai dingin terjaga (cold chain) untuk kebutuhan horeka & industri.",
-    image: "/sang-prabu/daging-sapi.jpg",
+    image: "/images/facilities/daging-sapi.jpg",
     badges: ["Halal", "Frozen Cold Chain", "Higienis"],
     featured: false,
   },
@@ -475,7 +475,7 @@ export const PRODUCTS: Product[] = [
     slug: "karkas",
     category: "Daging Beku",
     description: "Karkas ayam beku potong higienis standar rumah potong bersertifikat, siap distribusi rutin skala besar.",
-    image: "/sang-prabu/karkas.jpg",
+    image: "/images/facilities/karkas.jpg",
     badges: ["Halal", "Frozen", "Higienis"],
     featured: false,
   },
@@ -1024,7 +1024,7 @@ export const ARTICLES: Article[] = ([
     category: "Industri & Standar Mutu",
     excerpt:
       "Bagaimana sistem cold-chain -18°C menjaga kesegaran, tekstur, dan keamanan pangan olahan daging halal dari dapur produksi hingga ke tangan konsumen.",
-    coverImage: "/sang-prabu/dapur.jpg",
+    coverImage: "/images/facilities/dapur.jpg",
     author: "SANG PRABU",
     publishedAt: "2026-08-10T09:00:00",
     content:
@@ -1038,7 +1038,7 @@ export const ARTICLES: Article[] = ([
     category: "Kemitraan & Bisnis",
     excerpt:
       "Panduan lengkap menjadi mitra distributor dan reseller resmi Wiridan 318 — margin kompetitif, dukungan material promosi, dan pasokan stabil.",
-    coverImage: "/wiridan/bakso-premium.jpg",
+    coverImage: "/images/products/bakso-premium.webp",
     author: "SANG PRABU",
     publishedAt: "2026-08-08T14:30:00",
     content:
@@ -1052,7 +1052,7 @@ export const ARTICLES: Article[] = ([
     category: "Sertifikasi & Kepatuhan",
     excerpt:
       "Setiap tahapan proses produksi, pemilihan bahan baku daging sapi & ayam, hingga pengemasan telah memenuhi standar halal resmi dan higienis BPOM.",
-    coverImage: "/sang-prabu/daging-sapi.jpg",
+    coverImage: "/images/facilities/daging-sapi.jpg",
     author: "SANG PRABU",
     publishedAt: "2026-08-05T11:00:00",
     content:
@@ -1066,7 +1066,7 @@ export const ARTICLES: Article[] = ([
     category: "Wawasan B2B",
     excerpt:
       "Solusi pengadaan komoditas dan bahan pangan beku terintegrasi untuk restoran, hotel, dan katering dalam menjaga stabilitas harga dan kualitas menu.",
-    coverImage: "/sang-prabu/butcher.jpg",
+    coverImage: "/images/facilities/butcher.jpg",
     author: "SANG PRABU",
     publishedAt: "2026-08-01T08:00:00",
     content:

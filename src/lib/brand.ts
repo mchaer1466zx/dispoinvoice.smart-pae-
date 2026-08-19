@@ -14,7 +14,7 @@ export const BRAND = {
   website: "www.karyasangprabu.co.id",
   appName: "Sistem Pengadaan Digital",
   emailFrom: "PT Karya Sang Prabu <no-reply@karyasangprabu.co.id>",
-  logoPath: "/logos/logo-sang-prabu.png",
+  logoPath: "/images/logo/logo-sang-prabu.png",
   // Identitas GRUP (payung PT KSP, PAE, PUB) untuk headline halaman depan.
   groupName: "PRIMA PRABU GROUP",
   groupTagline: "INTERGRITY • COMMITMENT • EXCELLENCE",

@@ -112,8 +112,8 @@ export const COMPANY_THEMES: Record<CompanyId, CompanyTheme> = {
       watermark: { showText: false, opacity: 0.08, sizePercent: 65 },
       footerCurve: { layers: ["#0B4D21", "#DEA402", "#57A83F"], heightPercent: 14 },
     },
-    logoPath: "/sang-prabu/sang-prabu-haki-logo.png",
-    emblemPath: "/sang-prabu/sang-prabu-haki-logo.png",
+    logoPath: "/images/logo/logo-sang-prabu-haki.png",
+    emblemPath: "/images/logo/logo-sang-prabu-haki.png",
     // Selaras identitas logo SANG PRABU: nama serif klasik (Cinzel) hijau daun.
     nameFont: "var(--font-crest), 'Cinzel', 'Times New Roman', serif",
     nameColor: "#57A83F",
@@ -162,7 +162,7 @@ export const COMPANY_THEMES: Record<CompanyId, CompanyTheme> = {
       watermark: { showText: false, opacity: 0.07, sizePercent: 60 },
       footerCurve: { layers: ["#0A3D80", "#1E6FD9", "#38A169"], heightPercent: 14 },
     },
-    logoPath: "/logos/logo-pae.png",
+    logoPath: "/images/logo/logo-pae.png",
   },
 
   // 🏢 PT PRABU UNGGUL BERSAMA (PUB) · Biru + Hijau + Oranye
@@ -213,7 +213,7 @@ export const COMPANY_THEMES: Record<CompanyId, CompanyTheme> = {
         heightPercent: 15,
       },
     },
-    logoPath: "/logos/logo-pub.png",
+    logoPath: "/images/logo/logo-pub.png",
   },
 };
 

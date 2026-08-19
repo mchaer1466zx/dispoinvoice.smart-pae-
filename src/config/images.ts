@@ -10,10 +10,10 @@ export const BRAND_IMAGES = {
   sangPrabu: {
     webp: "/images/logo/logo-sang-prabu.webp",
     png: "/images/logo/logo-sang-prabu.png",
-    fallbackPng: "/logos/logo-sang-prabu.png",
-    hakiPng: "/sang-prabu/sang-prabu-haki-logo.png",
-    faviconSvg: "/assets/logo/logo-sang-prabu-favicon.svg",
-    headerSvg: "/assets/logo/logo-sang-prabu-header.svg",
+    fallbackPng: "/images/logo/logo-sang-prabu.png",
+    hakiPng: "/images/logo/logo-sang-prabu-haki.png",
+    faviconSvg: "/images/logo/logo-sang-prabu-favicon.svg",
+    headerSvg: "/images/logo/logo-sang-prabu-header.svg",
     alt: "Logo Resmi PT Karya Sang Prabu",
   },
   // Wiridan 318 Food Royal Gold Crest & Logos
@@ -25,16 +25,16 @@ export const BRAND_IMAGES = {
   },
   // Group Logos
   group: {
-    ksp: "/logos/logo-ksp.png",
-    pae: "/logos/logo-pae.png",
-    pub: "/logos/logo-pub.png",
+    ksp: "/images/logo/logo-ksp.png",
+    pae: "/images/logo/logo-pae.png",
+    pub: "/images/logo/logo-pub.png",
   },
 } as const;
 
 export const HERO_IMAGES = {
   masterWebp: "/images/hero/hero-wiridan-master.webp",
   masterJpg: "/images/hero/hero-wiridan-master.jpg",
-  groupBanner: "/wiridan/wiridan-group.jpg",
+  groupBanner: "/images/hero/hero-group.jpg",
   alt: "WIRIDAN 318 — Pilihan Terbaik Untuk Keluarga — Better Proses, Better Quality & Better Serve",
 } as const;
 

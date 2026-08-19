@@ -5,7 +5,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
         <div className="mb-6 flex flex-col items-center text-center">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/sang-prabu/sang-prabu-haki-logo.png"
+            src="/images/logo/logo-sang-prabu-haki.png"
             alt="Logo Resmi Terdaftar HAKI PT Karya Sang Prabu"
             className="h-20 w-auto object-contain drop-shadow-sm"
           />

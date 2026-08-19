@@ -52,8 +52,8 @@ export default function ProductsPage() {
             <div className="flex flex-col md:flex-row items-center gap-6 md:gap-8">
               <div className="size-28 sm:size-32 shrink-0 overflow-hidden rounded-2xl border-2 border-amber-400/80 bg-black/60 p-1.5 shadow-[0_10px_30px_rgba(212,175,55,0.3)]">
                 <ProductImage
-                  src="/wiridan/wiridan_logo_gold_1786791750372.png"
-                  fallbackSrc="/wiridan/logo-wiridan.jpg"
+                  src="/images/logo/logo-wiridan-318-gold.webp"
+                  fallbackSrc="/images/logo/logo-wiridan-318-gold.png"
                   alt="Logo Resmi WIRIDAN 318 — PT KARYA SANG PRABU"
                   className="h-full w-full object-contain rounded-xl"
                 />

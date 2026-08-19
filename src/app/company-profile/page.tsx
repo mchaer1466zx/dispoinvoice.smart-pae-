@@ -15,11 +15,11 @@ export const metadata: Metadata = {
     "Company Profile resmi PT Karya Sang Prabu — Property Investment & General Trading.",
 };
 
-const PDF = "/sang-prabu/compro/company-profile.pdf";
-const TOTAL = 11;
+const PDF = "/images/compro/hal-01.jpg";
+const TOTAL = 15;
 const PAGES = Array.from(
   { length: TOTAL },
-  (_, i) => `/sang-prabu/compro/slide-${String(i + 1).padStart(2, "0")}.png`,
+  (_, i) => `/images/compro/hal-${String(i + 1).padStart(2, "0")}.jpg`,
 );
 
 export default function CompanyProfilePage() {

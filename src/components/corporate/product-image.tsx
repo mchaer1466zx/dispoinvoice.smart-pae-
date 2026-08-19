@@ -19,27 +19,27 @@ function getIntelligentFallback(originalSrc: string, fallbackSrc?: string): stri
     return "/images/logo/logo-wiridan-318-gold.png";
   }
   if (s.includes("bakso")) {
-    return "/sang-prabu/bakso.jpg";
+    return "/images/products/bakso-premium.webp";
   }
   if (s.includes("dimsum")) {
-    return "/sang-prabu/dimsum.jpg";
+    return "/images/products/dimsum-ayam.webp";
   }
   if (s.includes("otak-otak")) {
-    return "/sang-prabu/otak-otak.jpg";
+    return "/images/products/otak-otak.webp";
   }
   if (s.includes("ayam") || s.includes("poultry") || s.includes("karkas")) {
-    return "/sang-prabu/ayam.jpg";
+    return "/images/facilities/ayam.jpg";
   }
   if (s.includes("daging") || s.includes("butcher") || s.includes("sapi")) {
-    return "/sang-prabu/daging-sapi.jpg";
+    return "/images/facilities/daging-sapi.jpg";
   }
   if (s.includes("dapur") || s.includes("factory") || s.includes("mesin") || s.includes("site-2")) {
-    return "/sang-prabu/dapur.jpg";
+    return "/images/facilities/dapur.jpg";
   }
   if (s.includes("compro") || s.includes("slide") || s.includes("hal-")) {
-    return "/sang-prabu/compro/hal-01.jpg";
+    return "/images/hero/hero-sang-prabu.jpg";
   }
-  return "/sang-prabu/hero-bakso.jpg";
+  return "/images/hero/hero-wiridan-master.jpg";
 }
 
 export function ProductImage({

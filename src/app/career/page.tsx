@@ -29,7 +29,7 @@ export default function CareerPage() {
           <div className="grid items-center gap-12 lg:grid-cols-2">
             <Reveal>
               <img
-                src="/sang-prabu/dapur.jpg"
+                src="/images/facilities/dapur.jpg"
                 alt="Suasana kerja PT KARYA SANG PRABU"
                 className="aspect-[4/3] w-full rounded-lg object-cover shadow-[0_20px_60px_-30px_rgba(11,77,33,0.5)]"
               />

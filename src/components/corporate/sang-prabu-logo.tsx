@@ -17,7 +17,7 @@ export function SangPrabuLogo({
   className = "",
   size = "md",
 }: SangPrabuLogoProps) {
-  const [logoSrc, setLogoSrc] = useState("/sang-prabu/sang-prabu-haki-logo.png");
+  const [logoSrc, setLogoSrc] = useState("/images/logo/logo-sang-prabu-haki.png");
 
   const sizeClasses = {
     sm: "h-10 w-auto max-w-full",
@@ -38,7 +38,7 @@ export function SangPrabuLogo({
         alt="Logo Resmi Terdaftar HAKI SANG PRABU — PT KARYA SANG PRABU"
         className={`${sizeClasses[size]} object-contain drop-shadow-[0_10px_25px_rgba(0,0,0,0.6)] transition-transform duration-300 hover:scale-105`}
         loading="eager"
-        onError={() => setLogoSrc("/logos/logo-sang-prabu.png")}
+        onError={() => setLogoSrc("/images/logo/logo-sang-prabu.png")}
       />
     </div>
   );

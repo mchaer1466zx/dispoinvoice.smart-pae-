@@ -50,7 +50,7 @@ export default function AboutPage() {
           <div className="grid items-center gap-12 lg:grid-cols-2">
             <Reveal>
               <ProductImage
-                src="/sang-prabu/butcher.jpg"
+                src="/images/facilities/butcher.jpg"
                 alt="Aktivitas usaha PT KARYA SANG PRABU"
                 className="aspect-[4/3] w-full rounded-lg object-cover shadow-[0_20px_60px_-30px_rgba(11,77,33,0.5)]"
               />

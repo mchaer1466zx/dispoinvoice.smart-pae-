@@ -30,51 +30,51 @@ type MediaItem = {
 
 const INITIAL_MEDIA: MediaItem[] = [
   {
-    name: "Master Logo 3D Wiridan 138",
+    name: "Master Logo 3D Wiridan 318",
     category: "Produk Wiridan",
-    path: "/wiridan/wiridan_logo_gold_1786791750372.png",
-    desc: "Logo medali emas resmi Wiridan 138 dengan latar merah timbul & rumbai royal",
+    path: "/images/logo/logo-wiridan-318-gold.webp",
+    desc: "Logo medali emas resmi Wiridan 318 dengan latar merah timbul & rumbai royal",
   },
   {
     name: "Kemasan Bakso Premium 500g (Biru)",
     category: "Produk Wiridan",
-    path: "/wiridan/bakso-premium.jpg",
+    path: "/images/products/bakso-premium.webp",
     desc: "Kemasan resmi retail pack 500g barcode 8997449990993 Halal BPJPH",
   },
   {
     name: "Kemasan Bakso Reguler 500g (Merah)",
     category: "Produk Wiridan",
-    path: "/wiridan/bakso-reguler.jpg",
+    path: "/images/products/bakso-reguler.webp",
     desc: "Kemasan resmi retail pack 500g barcode 8997235930318 Halal BPJPH",
   },
   {
     name: "Kemasan Otak-Otak Ikan 500g (Hijau)",
     category: "Produk Wiridan",
-    path: "/wiridan/otak-otak.jpg",
+    path: "/images/products/otak-otak.webp",
     desc: "Kemasan resmi retail pack 500g ikan pilihan kenyal gurih siap goreng/kukus",
   },
   {
     name: "Kemasan Dimsum Siap Kukus 500g (Ungu)",
     category: "Produk Wiridan",
-    path: "/wiridan/dimsum.jpg",
+    path: "/images/products/dimsum-ayam.webp",
     desc: "Kemasan resmi retail pack 500g barcode 8997449990105 Halal BPJPH",
   },
   {
     name: "Dapur & Fasilitas Pengolahan Higienis",
     category: "Produksi Site 2",
-    path: "/sang-prabu/dapur.jpg",
+    path: "/images/facilities/dapur.jpg",
     desc: "Area pengolahan stainless steel berstandar Good Manufacturing Practices (GMP)",
   },
   {
     name: "Daging Sapi Segar & Suplai Hulu",
     category: "Komoditas",
-    path: "/sang-prabu/daging-sapi.jpg",
+    path: "/images/facilities/daging-sapi.jpg",
     desc: "Bahan baku daging sapi berkualitas hasil seleksi rantai pasok Sang Prabu",
   },
   {
     name: "Persiapan & Pemotongan Daging Halal",
     category: "Produksi Site 2",
-    path: "/sang-prabu/butcher.jpg",
+    path: "/images/facilities/butcher.jpg",
     desc: "Tenaga pemotong profesional bersertifikasi juru sembelih halal (Juleha)",
   },
 ];
@@ -113,7 +113,7 @@ export default function AdminMediaManagementPage() {
     e.preventDefault();
     if (!uploadName) return;
 
-    const newPath = uploadedPreview || `/sang-prabu/${uploadName.toLowerCase().replace(/\s+/g, "-")}.jpg`;
+    const newPath = uploadedPreview || `/images/facilities/${uploadName.toLowerCase().replace(/\s+/g, "-")}.jpg`;
     const newItem: MediaItem = {
       name: uploadName,
       category: uploadCategory,
@@ -329,12 +329,12 @@ export default function AdminMediaManagementPage() {
                     <div className="mt-4 grid gap-3 sm:grid-cols-2 text-xs">
                       <div className="rounded-xl border border-amber-300/80 bg-white p-4">
                         <p className="font-bold text-slate-900">1. Foto Produksi &amp; Fasilitas:</p>
-                        <p className="mt-1 font-mono text-[11px] text-emerald-800">/public/sang-prabu/</p>
+                        <p className="mt-1 font-mono text-[11px] text-emerald-800">/public/images/facilities/</p>
                         <p className="mt-1 text-slate-600">Simpan foto mesin, dapur higienis, rumah potong ayam, dan peternakan di sini.</p>
                       </div>
                       <div className="rounded-xl border border-amber-300/80 bg-white p-4">
                         <p className="font-bold text-slate-900">2. Foto Kemasan Wiridan 318:</p>
-                        <p className="mt-1 font-mono text-[11px] text-emerald-800">/public/wiridan/</p>
+                        <p className="mt-1 font-mono text-[11px] text-emerald-800">/public/images/products/</p>
                         <p className="mt-1 text-slate-600">Simpan foto produk 500g (Bakso Premium, Reguler, Otak-Otak, Dimsum, Logo 3D) di sini.</p>
                       </div>
                     </div>
@@ -451,7 +451,7 @@ export default function AdminMediaManagementPage() {
                     <label className="block text-xs font-bold text-slate-800">Foto Cover Artikel (Path / URL)</label>
                     <input
                       type="text"
-                      defaultValue="/sang-prabu/dapur.jpg"
+                      defaultValue="/images/facilities/dapur.jpg"
                       className="mt-1.5 w-full rounded-xl border border-slate-300 p-3 text-xs font-mono text-slate-800"
                     />
                   </div>

@@ -59,7 +59,7 @@ export function SiteNav({ transparent = false }: { transparent?: boolean }) {
               priority
               sizes="40px"
               className="object-contain drop-shadow-[0_2px_8px_rgba(212,175,55,0.4)]"
-              onError={() => setKspLogoSrc("/logos/logo-sang-prabu.png")}
+              onError={() => setKspLogoSrc("/images/logo/logo-sang-prabu.png")}
               referrerPolicy="no-referrer"
             />
           </div>

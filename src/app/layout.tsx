@@ -59,9 +59,9 @@ export const metadata: Metadata = {
     images: ["/images/hero/hero-wiridan-master.jpg"],
   },
   icons: {
-    icon: "/assets/logo/logo-sang-prabu-favicon.svg",
-    shortcut: "/assets/logo/logo-sang-prabu-favicon.svg",
-    apple: "/assets/logo/logo-sang-prabu-favicon.svg",
+    icon: "/images/logo/logo-sang-prabu-favicon.svg",
+    shortcut: "/images/logo/logo-sang-prabu-favicon.svg",
+    apple: "/images/logo/logo-sang-prabu-favicon.svg",
   },
   themeColor: "#0A3D2A",
   robots: {

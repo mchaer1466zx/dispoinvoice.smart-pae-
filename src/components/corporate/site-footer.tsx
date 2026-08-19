@@ -34,7 +34,7 @@ export function SiteFooter() {
                   fill
                   sizes="48px"
                   className="object-contain p-0.5"
-                  onError={() => setKspLogoSrc("/logos/logo-sang-prabu.png")}
+                  onError={() => setKspLogoSrc("/images/logo/logo-sang-prabu.png")}
                   referrerPolicy="no-referrer"
                 />
               </div>

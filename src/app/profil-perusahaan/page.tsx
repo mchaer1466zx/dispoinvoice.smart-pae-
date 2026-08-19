@@ -81,32 +81,32 @@ const MISI = [
 
 const PRODUK = [
   {
-    img: "/sang-prabu/bakso.jpg",
+    img: "/images/products/bakso-premium.webp",
     kat: "Bakso Premium",
     items: ["Bakso Sapi Premium", "Bakso Urat", "Bakso Ayam", "Bakso Super"],
   },
   {
-    img: "/sang-prabu/dimsum.jpg",
+    img: "/images/products/dimsum-ayam.webp",
     kat: "Dimsum",
     items: ["Siomay Ayam", "Hakau", "Lumpia Udang", "Dimsum Premium"],
   },
   {
-    img: "/sang-prabu/otak-otak.jpg",
+    img: "/images/products/otak-otak.webp",
     kat: "Otak-otak",
     items: ["Otak-otak Ikan", "Otak-otak Premium"],
   },
   {
-    img: "/sang-prabu/ayam.jpg",
+    img: "/images/facilities/ayam.jpg",
     kat: "Daging Ayam",
     items: ["Frozen & halal", "Higienis, sehat & bergizi", "Karkas / potongan", "Retail & HORECA"],
   },
   {
-    img: "/sang-prabu/daging-sapi.jpg",
+    img: "/images/facilities/daging-sapi.jpg",
     kat: "Daging Sapi",
     items: ["Frozen & halal", "Higienis, sehat & bergizi", "Potongan pilihan", "Retail & HORECA"],
   },
   {
-    img: "/sang-prabu/poultry.jpg",
+    img: "/images/facilities/poultry.jpg",
     kat: "Inovasi & OEM",
     items: ["Ayam Marinasi", "Nugget Premium", "OEM / Private Label", "Daging Karkas Halal"],
   },
@@ -163,9 +163,9 @@ const ROADMAP = [
 ];
 
 const GALERI = [
-  { img: "/sang-prabu/peternakan.jpg", cap: "Peternakan mitra" },
-  { img: "/sang-prabu/poultry.jpg", cap: "Rumah potong halal" },
-  { img: "/sang-prabu/butcher.jpg", cap: "Daging segar berkualitas" },
+  { img: "/images/facilities/peternakan.jpg", cap: "Peternakan mitra" },
+  { img: "/images/facilities/poultry.jpg", cap: "Rumah potong halal" },
+  { img: "/images/facilities/butcher.jpg", cap: "Daging segar berkualitas" },
 ];
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
@@ -190,7 +190,7 @@ export default function ProfilPerusahaanPage() {
           <Reveal>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="/logos/logo-sang-prabu.png"
+              src="/images/logo/logo-sang-prabu.png"
               alt="Logo PT Karya Sang Prabu"
               className="mx-auto h-28 w-auto object-contain drop-shadow-[0_6px_20px_rgba(201,162,76,0.3)] sm:h-36"
             />
@@ -470,7 +470,7 @@ export default function ProfilPerusahaanPage() {
           <Reveal delayMs={120}>
             <div className="overflow-hidden rounded-2xl ring-1 ring-white/15">
               <ProductImage
-                src="/sang-prabu/dapur.jpg"
+                src="/images/facilities/dapur.jpg"
                 alt="Fasilitas produksi Sang Prabu"
                 loading="lazy"
                 className="aspect-[4/3] h-full w-full object-cover"
