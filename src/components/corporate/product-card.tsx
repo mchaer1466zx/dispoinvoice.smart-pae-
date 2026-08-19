@@ -88,6 +88,7 @@ export function ProductCard({
               alt={product.alt}
               fill
               priority={priority}
+              loading={priority ? undefined : "lazy"}
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               className={cn(
                 "object-contain p-1 drop-shadow-[0_12px_24px_rgba(0,0,0,0.7)] transition-all duration-500 group-hover:scale-105",

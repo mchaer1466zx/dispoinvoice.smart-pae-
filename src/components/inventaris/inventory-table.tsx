@@ -13,6 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { formatCurrency } from "@/lib/format";
+import { ProductImage } from "@/components/corporate/product-image";
 import type { InventoryItemRecord } from "@/app/actions/inventory";
 
 interface InventoryTableProps {
@@ -92,20 +93,30 @@ export function InventoryTable({
                   className="transition-colors hover:bg-muted/30 group"
                 >
                   <td className="px-4 py-3.5">
-                    <div className="flex flex-col">
-                      <div className="flex items-center gap-2">
-                        <span className="font-mono text-xs font-semibold px-2 py-0.5 rounded bg-muted text-foreground border border-border">
-                          {item.sku}
-                        </span>
-                        <span className="font-semibold text-foreground text-sm">
-                          {item.name}
-                        </span>
+                    <div className="flex items-center gap-3">
+                      <div className="relative size-10 shrink-0 overflow-hidden rounded-lg border border-border bg-muted/40">
+                        <ProductImage
+                          src={`/images/products/${item.sku.toLowerCase().replace(/[^a-z0-9]/g, "-")}.webp`}
+                          alt={item.name}
+                          loading="lazy"
+                          className="h-full w-full object-cover"
+                        />
                       </div>
-                      {item.description && (
-                        <span className="mt-1 text-xs text-muted-foreground line-clamp-1">
-                          {item.description}
-                        </span>
-                      )}
+                      <div className="flex flex-col min-w-0">
+                        <div className="flex items-center gap-2">
+                          <span className="font-mono text-xs font-semibold px-2 py-0.5 rounded bg-muted text-foreground border border-border">
+                            {item.sku}
+                          </span>
+                          <span className="font-semibold text-foreground text-sm truncate">
+                            {item.name}
+                          </span>
+                        </div>
+                        {item.description && (
+                          <span className="mt-0.5 text-xs text-muted-foreground line-clamp-1">
+                            {item.description}
+                          </span>
+                        )}
+                      </div>
                     </div>
                   </td>
 

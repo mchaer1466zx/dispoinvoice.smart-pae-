@@ -54,6 +54,7 @@ export function WiridanShowcaseInteractive() {
               alt="Logo Resmi Wiridan 318 Gold & Ruby Red"
               fill
               sizes="96px"
+              loading="lazy"
               className="object-contain"
               onError={() => setShowcaseLogoSrc("/images/logo/logo-wiridan-318-gold.png")}
               referrerPolicy="no-referrer"
@@ -108,11 +109,11 @@ export function WiridanShowcaseInteractive() {
 
         {/* 8-Product Grid with Next/Image & Responsive Layout */}
         <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {filteredProducts.map((prod, index) => (
+          {filteredProducts.map((prod) => (
             <ProductCard
               key={prod.id}
               product={prod}
-              priority={index < 4}
+              priority={false}
               onSelect={handleSelectProduct}
             />
           ))}
@@ -201,6 +202,7 @@ export function WiridanShowcaseInteractive() {
                         src={modalImageSrc || selectedProduct.image}
                         alt={selectedProduct.alt}
                         fill
+                        loading="lazy"
                         sizes="(max-width: 768px) 100vw, 400px"
                         className="object-contain drop-shadow-[0_16px_32px_rgba(0,0,0,0.8)] p-2"
                         onError={() => {

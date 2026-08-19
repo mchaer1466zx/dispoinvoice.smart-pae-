@@ -33,6 +33,7 @@ export function SiteFooter() {
                   alt="Logo Resmi PT Karya Sang Prabu"
                   fill
                   sizes="48px"
+                  loading="lazy"
                   className="object-contain p-0.5"
                   onError={() => setKspLogoSrc("/images/logo/logo-sang-prabu.png")}
                   referrerPolicy="no-referrer"
@@ -50,6 +51,7 @@ export function SiteFooter() {
                   alt="Logo Resmi Wiridan 318 Food"
                   fill
                   sizes="56px"
+                  loading="lazy"
                   className="object-contain"
                   onError={() => setWiridanLogoSrc("/images/logo/logo-wiridan-318-gold.png")}
                   referrerPolicy="no-referrer"
