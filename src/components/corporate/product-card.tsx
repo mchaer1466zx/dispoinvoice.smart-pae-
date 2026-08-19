@@ -19,8 +19,20 @@ export function ProductCard({
   onSelect,
   className,
 }: ProductCardProps) {
-  const [imageLoaded, setImageLoaded] = useState(true);
+  const [imageSrc, setImageSrc] = useState(product.image);
+  const [imageLoaded, setImageLoaded] = useState(false);
   const [hasError, setHasError] = useState(false);
+
+  const handleImageError = () => {
+    // Tier 1 Fallback: try JPG counterpart if WebP fails
+    if (imageSrc.endsWith(".webp")) {
+      setImageSrc(imageSrc.replace(/\.webp$/, ".jpg"));
+    } else {
+      // Tier 2 Fallback: Branded placeholder
+      setHasError(true);
+      setImageLoaded(true);
+    }
+  };
 
   // Dynamic badge accent color mapping
   const badgeColorStyles: Record<string, string> = {
@@ -72,7 +84,7 @@ export function ProductCard({
         <div className="relative h-full w-full">
           {!hasError ? (
             <Image
-              src={product.image}
+              src={imageSrc}
               alt={product.alt}
               fill
               priority={priority}
@@ -82,10 +94,7 @@ export function ProductCard({
                 imageLoaded ? "opacity-100 scale-100" : "opacity-0 scale-95",
               )}
               onLoad={() => setImageLoaded(true)}
-              onError={() => {
-                setHasError(true);
-                setImageLoaded(true);
-              }}
+              onError={handleImageError}
               referrerPolicy="no-referrer"
             />
           ) : (

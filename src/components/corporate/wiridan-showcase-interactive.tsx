@@ -19,6 +19,13 @@ import { ProductCard } from "@/components/corporate/product-card";
 export function WiridanShowcaseInteractive() {
   const [selectedProduct, setSelectedProduct] = useState<WiridanProduct | null>(null);
   const [activeCategory, setActiveCategory] = useState<"Semua" | "Bakso" | "Dimsum" | "Otak-Otak">("Semua");
+  const [showcaseLogoSrc, setShowcaseLogoSrc] = useState("/images/logo/logo-wiridan-318-gold.webp");
+  const [modalImageSrc, setModalImageSrc] = useState<string>("");
+
+  const handleSelectProduct = (product: WiridanProduct) => {
+    setSelectedProduct(product);
+    setModalImageSrc(product.image);
+  };
 
   const categories = [
     { label: "Semua Varian", value: "Semua", count: WIRIDAN_PRODUCTS.length },
@@ -43,11 +50,13 @@ export function WiridanShowcaseInteractive() {
           {/* Authentic Wiridan 318 Brand Badge */}
           <div className="mb-4 relative h-16 w-20 sm:h-20 sm:w-24 drop-shadow-[0_8px_20px_rgba(212,175,55,0.4)] transition-transform duration-300 hover:scale-105">
             <Image
-              src="/images/logo/logo-wiridan-318-gold.webp"
+              src={showcaseLogoSrc}
               alt="Logo Resmi Wiridan 318 Gold & Ruby Red"
               fill
               sizes="96px"
               className="object-contain"
+              onError={() => setShowcaseLogoSrc("/images/logo/logo-wiridan-318-gold.png")}
+              referrerPolicy="no-referrer"
             />
           </div>
 
@@ -104,7 +113,7 @@ export function WiridanShowcaseInteractive() {
               key={prod.id}
               product={prod}
               priority={index < 4}
-              onSelect={(p) => setSelectedProduct(p)}
+              onSelect={handleSelectProduct}
             />
           ))}
         </div>
@@ -189,11 +198,16 @@ export function WiridanShowcaseInteractive() {
                     {/* Next/Image inside modal */}
                     <div className="relative h-full w-full">
                       <Image
-                        src={selectedProduct.image}
+                        src={modalImageSrc || selectedProduct.image}
                         alt={selectedProduct.alt}
                         fill
                         sizes="(max-width: 768px) 100vw, 400px"
                         className="object-contain drop-shadow-[0_16px_32px_rgba(0,0,0,0.8)] p-2"
+                        onError={() => {
+                          if (modalImageSrc.endsWith(".webp")) {
+                            setModalImageSrc(modalImageSrc.replace(/\.webp$/, ".jpg"));
+                          }
+                        }}
                         referrerPolicy="no-referrer"
                       />
                     </div>
