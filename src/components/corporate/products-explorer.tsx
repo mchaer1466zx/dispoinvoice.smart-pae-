@@ -1,12 +1,11 @@
 "use client";
 
-/* eslint-disable @next/next/no-img-element */
-
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import { ArrowUpRight, Search } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { Product } from "@/lib/corporate/site";
+import { ProductImage } from "@/components/corporate/product-image";
 
 /** Katalog produk dengan filter kategori + pencarian (client-side). */
 export function ProductsExplorer({
@@ -73,8 +72,8 @@ export function ProductsExplorer({
               key={product.id}
               className="group flex flex-col overflow-hidden rounded-lg bg-white shadow-[0_14px_40px_-30px_rgba(11,77,33,0.6)]"
             >
-              <div className="relative h-52 overflow-hidden">
-                <img
+              <div className="relative h-52 overflow-hidden bg-stone-100">
+                <ProductImage
                   src={product.image}
                   alt={product.name}
                   className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.05]"

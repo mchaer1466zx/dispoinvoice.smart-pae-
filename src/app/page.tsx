@@ -1,332 +1,320 @@
-/* eslint-disable @next/next/no-img-element */
-
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowUpRight, Newspaper } from "lucide-react";
-import { Reveal } from "@/components/reveal";
+import Image from "next/image";
+import {
+  ArrowRight,
+  ShieldCheck,
+  Award,
+  Factory,
+  Snowflake,
+  Download,
+  CheckCircle2,
+  Building2,
+} from "lucide-react";
 import { SiteChrome } from "@/components/corporate/site-chrome";
-import {
-  Container,
-  Overline,
-  SectionHeader,
-  SiteButton,
-} from "@/components/corporate/ui";
-import { ValueIcon } from "@/components/corporate/icon";
-import { ArticleCard } from "@/components/corporate/article-card";
-import {
-  ARTICLES,
-  BUSINESS_UNITS,
-  PRODUCTS,
-  SITE,
-  VALUES,
-} from "@/lib/corporate/site";
+import { WiridanShowcaseInteractive } from "@/components/corporate/wiridan-showcase-interactive";
+import { QualityFactoryMetrics } from "@/components/corporate/quality-factory-metrics";
+import { B2BWholesaleCalculator } from "@/components/corporate/b2b-wholesale-calculator";
+import { SpkpdLeadForm } from "@/components/corporate/spkpd-lead-form";
+import { FloatingWhatsappWidget } from "@/components/corporate/floating-whatsapp-widget";
+import { GROUP_SYNERGY } from "@/lib/corporate/site";
 
 export const metadata: Metadata = {
-  title: "PT KARYA SANG PRABU — The Best Partner Your Business",
+  title: "PT KARYA SANG PRABU — Better Proses, Better Quality & Better Serve | Wiridan 318 Food",
   description:
-    "PT KARYA SANG PRABU — perusahaan nasional komoditas dan general trading. Mitra terpercaya penyediaan & distribusi komoditas unggulan untuk pasar domestik dan internasional.",
+    "PT KARYA SANG PRABU: Indulgence in Every Bite, Rooted in Tradition. Produsen Makanan Beku Berkualitas Tinggi (Wiridan 318) dan Perdagangan Komoditas Nasional Terpercaya.",
   alternates: { canonical: "/" },
 };
-
-const featuredUnits = BUSINESS_UNITS.filter((u) => u.featured);
-const featuredProducts = PRODUCTS.filter((p) => p.featured);
-const latestArticles = ARTICLES.slice(0, 3);
 
 export default function HomePage() {
   return (
     <SiteChrome heroTransparent>
-      {/* ============ HERO ============ */}
+      {/* =========================================================================
+          1. HERO SECTION: FUTURISTIC TRADITIONAL LUXURY
+          ========================================================================= */}
       <section
-        aria-label="PT KARYA SANG PRABU — The Best Partner Your Business"
-        className="relative isolate flex min-h-screen items-center justify-center overflow-hidden"
-        style={{
-          background:
-            "radial-gradient(120% 90% at 50% 38%, #12401f 0%, #0a2716 52%, #071c0f 100%)",
-        }}
+        aria-label="PT KARYA SANG PRABU — Wiridan 318 Food"
+        className="relative isolate flex min-h-[92vh] items-center justify-center overflow-hidden bg-[#031109] pt-28 pb-24 sm:pt-36 sm:pb-32 text-white"
       >
-        <Container className="min-w-0 py-28 text-center text-white">
-          <Reveal>
-            {/* Emblem SANG PRABU (file asli, tidak diubah) di tengah; tepi
-                gambar di-fade agar menyatu dengan latar. */}
-            <img
-              src="/sang-prabu/hero-emblem.png"
-              alt="Logo SANG PRABU — PT KARYA SANG PRABU"
-              className="mx-auto h-52 w-auto max-w-full object-contain sm:h-64 lg:h-72"
-              style={{
-                WebkitMaskImage:
-                  "radial-gradient(circle at 50% 45%, #000 56%, transparent 80%)",
-                maskImage:
-                  "radial-gradient(circle at 50% 45%, #000 56%, transparent 80%)",
-              }}
-            />
-          </Reveal>
-          <Reveal delayMs={110} className="mt-6">
-            <h1 className="text-[1.7rem] font-semibold leading-[1.2] tracking-[0.02em] sm:text-[3.1rem]">
-              𝐓𝐡𝐞 𝐁𝐞𝐬𝐭 𝐏𝐚𝐫𝐭𝐧𝐞𝐫
-              <br />
-              <span className="text-brand-gold">𝐘𝐨𝐮𝐫 𝐁𝐮𝐬𝐢𝐧𝐞𝐬𝐬</span>
-            </h1>
-          </Reveal>
-          <Reveal delayMs={180} className="mt-6">
-            <p className="mx-auto max-w-2xl text-[15px] leading-[1.75] text-white/75 sm:text-lg">
-              {SITE.positioning}
-            </p>
-          </Reveal>
-          <Reveal delayMs={250} className="mt-9">
-            <div className="mx-auto flex max-w-sm flex-col items-stretch gap-3 sm:max-w-none sm:flex-row sm:justify-center">
-              <SiteButton
-                href="/business"
-                variant="gold"
-                withArrow
-                className="w-full sm:w-auto"
-              >
-                Explore Our Business
-              </SiteButton>
-              <SiteButton
-                href="/contact"
-                variant="ghost"
-                className="w-full sm:w-auto"
-              >
-                Contact Us
-              </SiteButton>
-            </div>
-          </Reveal>
-        </Container>
-      </section>
-
-      {/* ============ WHO WE ARE ============ */}
-      <section className="bg-white py-20 sm:py-28">
-        <Container>
-          <div className="grid items-center gap-12 lg:grid-cols-2">
-            <Reveal>
-              <div className="relative">
-                <img
-                  src="/sang-prabu/dapur.jpg"
-                  alt="Dapur produksi SANG PRABU"
-                  className="aspect-[4/3] w-full rounded-lg object-cover shadow-[0_20px_60px_-30px_rgba(11,77,33,0.5)]"
-                />
-                <span className="absolute -bottom-4 -right-4 hidden h-24 w-24 rounded-lg border-2 border-brand-gold sm:block" />
-              </div>
-            </Reveal>
-            <Reveal delayMs={120}>
-              <SectionHeader
-                overline="Who We Are"
-                title="Mitra terpercaya dalam komoditas & general trading"
-                description="PT KARYA SANG PRABU adalah perusahaan nasional yang bergerak di bidang komoditas dan general trading berbasis di Indonesia — mitra terpercaya dalam penyediaan dan distribusi berbagai komoditas unggulan untuk pasar domestik dan internasional. Bagian dari PRIMA PRABU GROUP."
-              />
-              <div className="mt-7">
-                <SiteButton href="/about" variant="outline" withArrow>
-                  About Us
-                </SiteButton>
-              </div>
-            </Reveal>
-          </div>
-        </Container>
-      </section>
-
-      {/* ============ BUSINESS OVERVIEW ============ */}
-      <section className="bg-brand-cream py-20 sm:py-28">
-        <Container>
-          <Reveal>
-            <SectionHeader
-              overline="Core Business"
-              title="Enam lini bisnis inti kami"
-              description="Cakupan usaha PT KARYA SANG PRABU — dari komoditas dan perdagangan lintas negara hingga layanan pendukung bisnis."
-            />
-          </Reveal>
-          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {featuredUnits.map((unit, i) => (
-              <Reveal key={unit.slug} delayMs={i * 70}>
-                <Link
-                  href={`/business#${unit.slug}`}
-                  className="group flex h-full flex-col rounded-lg border border-black/5 bg-white p-6 transition-shadow duration-300 hover:shadow-[0_20px_50px_-30px_rgba(11,77,33,0.6)]"
-                >
-                  <span className="flex size-12 items-center justify-center rounded-lg bg-brand-green/10 text-brand-green transition-colors group-hover:bg-brand-green group-hover:text-white">
-                    <ValueIcon name={unit.icon} className="size-6" />
-                  </span>
-                  <h3 className="mt-4 font-display text-lg font-semibold text-brand-green-dark">
-                    {unit.name}
-                  </h3>
-                  <p className="mt-2 flex-1 text-[13.5px] leading-[1.65] text-brand-ink/70">
-                    {unit.overview}
-                  </p>
-                  <span className="mt-4 inline-flex items-center gap-1.5 text-[12px] font-semibold uppercase tracking-[0.08em] text-brand-green">
-                    Selengkapnya
-                    <ArrowUpRight className="size-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                  </span>
-                </Link>
-              </Reveal>
-            ))}
-          </div>
-        </Container>
-      </section>
-
-      {/* ============ WHY US ============ */}
-      <section className="bg-white py-20 sm:py-28">
-        <Container>
-          <Reveal>
-            <SectionHeader
-              align="center"
-              overline="Why Karya Sang Prabu"
-              title="Nilai yang menjadi fondasi kami"
-            />
-          </Reveal>
-          <div className="mx-auto mt-12 grid max-w-4xl gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {VALUES.map((value, i) => (
-              <Reveal key={value.title} delayMs={i * 80}>
-                <div className="flex h-full flex-col items-center rounded-lg border border-black/5 bg-brand-cream/50 px-5 py-8 text-center">
-                  <span className="flex size-12 items-center justify-center rounded-full bg-brand-green/10 text-brand-green">
-                    <ValueIcon name={value.icon} className="size-6" />
-                  </span>
-                  <h3 className="mt-4 font-display text-lg font-semibold text-brand-green-dark">
-                    {value.title}
-                  </h3>
-                  <p className="mt-2 text-[13px] leading-[1.6] text-brand-ink/65">
-                    {value.description}
-                  </p>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-        </Container>
-      </section>
-
-      {/* ============ PRODUCT HIGHLIGHT ============ */}
-      <section className="bg-brand-cream py-20 sm:py-28">
-        <Container>
-          <div className="flex flex-wrap items-end justify-between gap-6">
-            <Reveal>
-              <SectionHeader
-                overline="Our Products"
-                title="Produk unggulan SANG PRABU"
-                description="Pangan beku halal berkualitas — higienis, bergizi, dengan rantai dingin terjaga."
-              />
-            </Reveal>
-            <Reveal delayMs={120}>
-              <SiteButton href="/products" variant="outline" withArrow>
-                Lihat Semua Produk
-              </SiteButton>
-            </Reveal>
-          </div>
-          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {featuredProducts.map((product, i) => (
-              <Reveal key={product.id} delayMs={i * 90}>
-                <div className="group overflow-hidden rounded-lg bg-white shadow-[0_14px_40px_-30px_rgba(11,77,33,0.6)]">
-                  <div className="relative h-52 overflow-hidden">
-                    <img
-                      src={product.image}
-                      alt={product.name}
-                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.05]"
-                    />
-                    <span className="absolute left-3 top-3 rounded-full bg-white/90 px-2.5 py-1 font-mono text-[9px] font-semibold uppercase tracking-[0.14em] text-brand-green">
-                      {product.category}
-                    </span>
-                  </div>
-                  <div className="p-5">
-                    <h3 className="font-display text-lg font-semibold text-brand-green-dark">
-                      {product.name}
-                    </h3>
-                    <p className="mt-1.5 text-[13px] leading-[1.6] text-brand-ink/70">
-                      {product.description}
-                    </p>
-                  </div>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-        </Container>
-      </section>
-
-      {/* ============ PARTNERSHIP ============ */}
-      <section className="relative isolate overflow-hidden bg-brand-green-dark py-20 text-white sm:py-24">
+        {/* Radial Dark Emerald Gradient Backdrop */}
         <div
-          className="pointer-events-none absolute -left-24 top-0 h-80 w-80 rounded-full opacity-25 blur-3xl"
-          style={{ background: "radial-gradient(closest-side,#dea40255,transparent)" }}
+          className="pointer-events-none absolute inset-0 z-0 opacity-90"
+          style={{
+            background:
+              "radial-gradient(ellipse 85% 65% at 50% 35%, #083a20 0%, #041f11 40%, #020b06 100%)",
+          }}
           aria-hidden
         />
-        <Container className="relative">
-          <div className="grid items-center gap-8 md:grid-cols-[1.5fr_1fr]">
-            <Reveal>
-              <SectionHeader
-                invert
-                overline="Partnership"
-                title="Building Stronger Partnerships"
-                description="Kami terbuka untuk kolaborasi — distributor, reseller, hingga kerja sama strategis. Mari tumbuh bersama sebagai partner bisnis jangka panjang."
-              />
-            </Reveal>
-            <Reveal delayMs={120} className="md:justify-self-end">
-              <div className="flex flex-col gap-3 sm:flex-row md:flex-col">
-                <SiteButton href="/partners" variant="gold" withArrow>
-                  Become Our Partner
-                </SiteButton>
-                <SiteButton href={SITE.whatsapp.url} variant="ghost" external>
-                  WhatsApp
-                </SiteButton>
-              </div>
-            </Reveal>
-          </div>
-        </Container>
-      </section>
 
-      {/* ============ ARTICLES ============ */}
-      <section className="bg-white py-20 sm:py-28">
-        <Container>
-          <Reveal>
-            <SectionHeader
-              overline="Articles & News"
-              title="Kabar terbaru dari kami"
-              description="Informasi seputar perusahaan, produk, industri, dan kemitraan."
-            />
-          </Reveal>
-          {latestArticles.length > 0 ? (
-            <div className="mt-12 grid gap-6 md:grid-cols-3">
-              {latestArticles.map((article, i) => (
-                <Reveal key={article.id} delayMs={i * 90}>
-                  <ArticleCard article={article} />
-                </Reveal>
+        {/* Concentric Golden Heritage Geometric Circles */}
+        <div className="pointer-events-none absolute inset-0 z-0 opacity-20" aria-hidden>
+          <div className="absolute left-1/2 top-[35%] -translate-x-1/2 -translate-y-1/2">
+            <svg
+              className="size-[600px] sm:size-[850px] animate-[spin_180s_linear_infinite]"
+              viewBox="0 0 800 800"
+              fill="none"
+              stroke="#dea402"
+              strokeWidth="0.8"
+            >
+              <circle cx="400" cy="400" r="380" strokeDasharray="6 8" opacity="0.4" />
+              <circle cx="400" cy="400" r="320" opacity="0.6" />
+              <circle cx="400" cy="400" r="260" strokeDasharray="4 6" opacity="0.5" />
+              <circle cx="400" cy="400" r="190" opacity="0.7" />
+              {[...Array(16)].map((_, idx) => (
+                <line
+                  key={idx}
+                  x1="400"
+                  y1="400"
+                  x2={400 + 380 * Math.cos((idx * 22.5 * Math.PI) / 180)}
+                  y2={400 + 380 * Math.sin((idx * 22.5 * Math.PI) / 180)}
+                  opacity="0.25"
+                  strokeDasharray="2 10"
+                />
               ))}
-            </div>
-          ) : (
-            <Reveal className="mt-10">
-              <div className="flex flex-col items-center gap-3 rounded-lg border border-dashed border-black/10 bg-brand-cream/40 px-6 py-16 text-center">
-                <Newspaper className="size-8 text-brand-gold" />
-                <p className="font-display text-lg font-semibold text-brand-green-dark">
-                  Artikel segera hadir
-                </p>
-                <p className="max-w-md text-[13.5px] leading-[1.65] text-brand-ink/65">
-                  Kami sedang menyiapkan kabar dan wawasan terbaru. Nantikan
-                  publikasi resmi PT KARYA SANG PRABU.
-                </p>
+            </svg>
+          </div>
+        </div>
+
+        {/* Halo Glow */}
+        <div
+          className="pointer-events-none absolute left-1/2 top-[32%] -translate-x-1/2 -translate-y-1/2 size-96 rounded-full opacity-35 blur-[100px]"
+          style={{ background: "radial-gradient(circle, #f59e0b 0%, #10b981 50%, transparent 80%)" }}
+          aria-hidden
+        />
+
+        <div className="relative z-10 mx-auto max-w-6xl px-4 text-center sm:px-6 lg:px-8">
+          {/* Dual Brand Crest Center Graphic with Authentic Master Logos */}
+          <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 mb-6">
+            {/* PT Karya Sang Prabu Official Corporate Crest */}
+            <div className="group relative flex items-center gap-2 rounded-2xl border border-amber-400/40 bg-black/60 px-3.5 py-2 backdrop-blur-md">
+              <div className="relative size-8">
+                <Image
+                  src="/images/logo/logo-sang-prabu.webp"
+                  alt="Logo PT Karya Sang Prabu"
+                  fill
+                  priority
+                  sizes="32px"
+                  className="object-contain"
+                />
               </div>
-            </Reveal>
-          )}
-        </Container>
+              <span className="font-mono text-xs font-bold uppercase tracking-wider text-amber-300">
+                PT KARYA SANG PRABU
+              </span>
+            </div>
+
+            {/* Divider */}
+            <span className="text-amber-400/60 font-serif text-sm">✕</span>
+
+            {/* Wiridan 318 Food Official Royal Emblem */}
+            <div className="group relative flex items-center gap-2 rounded-2xl border border-amber-400/40 bg-black/60 px-3.5 py-2 backdrop-blur-md">
+              <div className="relative size-8">
+                <Image
+                  src="/images/logo/logo-wiridan-318-gold.webp"
+                  alt="Logo Wiridan 318 Food"
+                  fill
+                  priority
+                  sizes="32px"
+                  className="object-contain"
+                />
+              </div>
+              <span className="font-mono text-xs font-bold uppercase tracking-wider text-amber-300">
+                WIRIDAN 318 FOOD
+              </span>
+            </div>
+          </div>
+
+          {/* Master Headline Banner Image Container */}
+          <div className="relative mx-auto w-full max-w-5xl overflow-hidden rounded-3xl border-2 border-amber-400/50 bg-[#061e12] shadow-[0_25px_60px_-15px_rgba(212,175,55,0.35)] transition-all duration-300 hover:border-amber-300">
+            <div className="relative aspect-[16/9] sm:aspect-[21/9] w-full">
+              <Image
+                src="/images/hero/hero-wiridan-master.webp"
+                alt="WIRIDAN 318 — Pilihan Terbaik Untuk Keluarga — Better Proses, Better Quality &amp; Better Serve"
+                fill
+                priority
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1100px"
+                className="object-cover object-center"
+                referrerPolicy="no-referrer"
+              />
+            </div>
+          </div>
+
+          {/* Sub-headline Description for Corporate Context */}
+          <p className="mx-auto mt-8 max-w-3xl text-sm leading-relaxed text-emerald-100/90 sm:text-base">
+            <strong className="font-semibold text-white">PT KARYA SANG PRABU</strong> mempersembahkan lini produk makanan beku halal{" "}
+            <strong className="text-amber-300">WIRIDAN 318 FOOD</strong> dengan standar mutu higienis pabrik modern,
+            resep rempah warisan tradisi, dan sertifikasi resmi BPJPH untuk kebutuhan rumah tangga, retail, horeka, dan distributor se-Indonesia.
+          </p>
+
+          {/* Action Buttons */}
+          <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row sm:gap-5">
+            <a
+              href="#products"
+              className="flex w-full sm:w-auto items-center justify-center gap-2.5 rounded-2xl bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 px-8 py-4 text-sm font-extrabold uppercase tracking-wider text-slate-950 shadow-[0_0_30px_rgba(212,175,55,0.4)] transition-all duration-300 hover:scale-103 hover:shadow-[0_0_40px_rgba(212,175,55,0.7)]"
+            >
+              <span>Jelajahi 8 Varian Produk</span>
+              <ArrowRight className="size-4" />
+            </a>
+
+            <Link
+              href="/company-profile"
+              className="flex w-full sm:w-auto items-center justify-center gap-2.5 rounded-2xl border border-emerald-400/40 bg-emerald-950/60 px-8 py-4 text-sm font-bold uppercase tracking-wider text-emerald-200 backdrop-blur-md transition-all duration-300 hover:bg-emerald-900/60 hover:text-white hover:border-emerald-400"
+            >
+              <Download className="size-4 text-emerald-400" />
+              <span>Download Company Profile</span>
+            </Link>
+          </div>
+
+          {/* Trust Badges Strip */}
+          <div className="mt-14 grid grid-cols-2 gap-3 pt-8 border-t border-white/10 sm:grid-cols-4 text-left">
+            <div className="flex items-center gap-3 rounded-2xl border border-white/5 bg-black/30 p-3.5 backdrop-blur-md">
+              <ShieldCheck className="size-6 text-emerald-400 shrink-0" />
+              <div>
+                <p className="text-xs font-bold text-white">Halal BPJPH</p>
+                <p className="font-mono text-[10px] text-amber-300/80">ID00410000123456721</p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3 rounded-2xl border border-white/5 bg-black/30 p-3.5 backdrop-blur-md">
+              <Award className="size-6 text-amber-400 shrink-0" />
+              <div>
+                <p className="text-xs font-bold text-white">BPOM / P-IRT</p>
+                <p className="text-[10px] text-slate-300">Standar Uji Higienis</p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3 rounded-2xl border border-white/5 bg-black/30 p-3.5 backdrop-blur-md">
+              <Snowflake className="size-6 text-sky-400 shrink-0" />
+              <div>
+                <p className="text-xs font-bold text-white">Cold-Chain -18°C</p>
+                <p className="text-[10px] text-slate-300">Kualitas Terjaga</p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3 rounded-2xl border border-white/5 bg-black/30 p-3.5 backdrop-blur-md">
+              <Factory className="size-6 text-emerald-400 shrink-0" />
+              <div>
+                <p className="text-xs font-bold text-white">250K Butir / Hari</p>
+                <p className="text-[10px] text-slate-300">Lini Otomatisasi</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
 
-      {/* ============ FINAL CTA ============ */}
-      <section className="bg-brand-cream py-20 sm:py-24">
-        <Container>
-          <Reveal>
-            <div className="flex flex-col items-center gap-6 rounded-2xl border border-brand-gold/30 bg-white px-6 py-14 text-center shadow-[0_30px_80px_-50px_rgba(11,77,33,0.5)]">
-              <Overline>Let&apos;s Work Together</Overline>
-              <h2 className="max-w-2xl font-display text-[1.9rem] font-semibold leading-[1.1] tracking-[-0.015em] text-brand-green-dark sm:text-[2.6rem]">
-                Let&apos;s Build Something Great Together
-              </h2>
-              <p className="max-w-xl text-[15px] leading-[1.7] text-brand-ink/70">
-                Diskusikan kebutuhan bisnis Anda dengan tim PT KARYA SANG PRABU.
-              </p>
-              <div className="flex flex-wrap justify-center gap-3">
-                <SiteButton href="/contact" variant="primary" withArrow>
-                  Contact Us
-                </SiteButton>
-                <SiteButton href="/products" variant="outline">
-                  Lihat Produk
-                </SiteButton>
-              </div>
+      {/* =========================================================================
+          2. PRODUCT SHOWCASE SECTION: 4 CORE WIRIDAN 318 PRODUCTS
+          ========================================================================= */}
+      <WiridanShowcaseInteractive />
+
+      {/* =========================================================================
+          3. CORPORATE QUALITY & FACTORY CAPABILITY SECTION
+          ========================================================================= */}
+      <div id="quality">
+        <QualityFactoryMetrics />
+      </div>
+
+      {/* =========================================================================
+          4. B2B & WHOLESALE CALCULATOR (INTERACTIVE SIMULATOR)
+          ========================================================================= */}
+      <B2BWholesaleCalculator />
+
+      {/* =========================================================================
+          5. DIGITAL SPKPD / LEAD FORM SECTION
+          ========================================================================= */}
+      <SpkpdLeadForm />
+
+      {/* =========================================================================
+          6. GROUP SYNERGY & UPSTREAM-DOWNSTREAM INTEGRATION
+          ========================================================================= */}
+      <section className="relative isolate bg-[#031109] py-24 text-white sm:py-32">
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-3xl text-center">
+            <div className="inline-flex items-center gap-2 rounded-full border border-amber-400/40 bg-amber-400/10 px-4 py-1.5 backdrop-blur-md">
+              <Building2 className="size-4 text-amber-300" />
+              <span className="font-mono text-xs font-semibold uppercase tracking-[0.25em] text-amber-300">
+                Ekosistem Terpadu
+              </span>
             </div>
-          </Reveal>
-        </Container>
+
+            <h2 className="mt-5 font-serif text-3xl font-bold tracking-tight text-white sm:text-4xl">
+              Sinergi Hulu-Hilir{" "}
+              <span className="text-amber-400">Prima Prabu Group</span>
+            </h2>
+
+            <p className="mt-4 text-sm leading-relaxed text-emerald-100/80 sm:text-base">
+              Menjamin kestabilan pasokan bahan baku daging &amp; rempah dari sumber terbaik hingga ke
+              proses manufaktur pangan beku modern.
+            </p>
+          </div>
+
+          <div className="mt-14 grid grid-cols-1 gap-8 md:grid-cols-2">
+            {/* Upstream Entity */}
+            <div className="rounded-3xl border border-amber-400/30 bg-gradient-to-b from-[#072415] to-[#031109] p-8 shadow-xl">
+              <div className="flex items-center gap-3.5">
+                <div className="flex size-12 items-center justify-center rounded-2xl bg-amber-400/10 border border-amber-400/30 text-amber-400 font-bold">
+                  <ShieldCheck className="size-6" />
+                </div>
+                <div>
+                  <span className="font-mono text-[11px] uppercase tracking-wider text-amber-300">
+                    Hulu &amp; Brand Owner
+                  </span>
+                  <h3 className="font-serif text-xl font-bold text-white">
+                    {GROUP_SYNERGY.upstream.entity}
+                  </h3>
+                </div>
+              </div>
+
+              <p className="mt-4 text-xs font-semibold text-amber-200">
+                {GROUP_SYNERGY.upstream.role}
+              </p>
+
+              <ul className="mt-5 space-y-2.5 text-xs text-slate-300">
+                {GROUP_SYNERGY.upstream.capabilities.map((cap, idx) => (
+                  <li key={idx} className="flex items-start gap-2.5">
+                    <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-emerald-400" />
+                    <span>{cap}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Downstream Entity */}
+            <div className="rounded-3xl border border-emerald-500/30 bg-gradient-to-b from-[#062013] to-[#020b06] p-8 shadow-xl">
+              <div className="flex items-center gap-3.5">
+                <div className="flex size-12 items-center justify-center rounded-2xl bg-emerald-400/10 border border-emerald-400/30 text-emerald-400 font-bold">
+                  <Factory className="size-6" />
+                </div>
+                <div>
+                  <span className="font-mono text-[11px] uppercase tracking-wider text-emerald-300">
+                    Hilir &amp; Manufaktur
+                  </span>
+                  <h3 className="font-serif text-xl font-bold text-white">
+                    {GROUP_SYNERGY.downstream.entity}
+                  </h3>
+                </div>
+              </div>
+
+              <p className="mt-4 text-xs font-semibold text-emerald-200">
+                {GROUP_SYNERGY.downstream.role}
+              </p>
+
+              <ul className="mt-5 space-y-2.5 text-xs text-slate-300">
+                {GROUP_SYNERGY.downstream.capabilities.map((cap, idx) => (
+                  <li key={idx} className="flex items-start gap-2.5">
+                    <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-emerald-400" />
+                    <span>{cap}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
       </section>
+
+      {/* =========================================================================
+          7. FLOATING WHATSAPP ACTION WIDGET
+          ========================================================================= */}
+      <FloatingWhatsappWidget />
     </SiteChrome>
   );
 }

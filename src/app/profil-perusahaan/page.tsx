@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Reveal } from "@/components/reveal";
+import { ProductImage } from "@/components/corporate/product-image";
 import { BRAND } from "@/lib/brand";
 
 /**
@@ -34,7 +35,7 @@ export const metadata: Metadata = {
 };
 
 const KONTAK = {
-  alamat: "Jl. Pertanian Raya No. 64, Lebak Bulus, Cilandak, Jakarta Selatan 12440",
+  alamat: "Jl. Tole Iskandar No.77, Sukamaju, Kec. Cilodong, Kota Depok, Jawa Barat 16415",
   telepon: "(021) 2784 1924",
   whatsapp: "0889 3663 031",
   email: "ptkaryasangprabu@gmail.com",
@@ -95,7 +96,7 @@ const PRODUK = [
     items: ["Otak-otak Ikan", "Otak-otak Premium"],
   },
   {
-    img: "/sang-prabu/daging-ayam.jpg",
+    img: "/sang-prabu/ayam.jpg",
     kat: "Daging Ayam",
     items: ["Frozen & halal", "Higienis, sehat & bergizi", "Karkas / potongan", "Retail & HORECA"],
   },
@@ -105,7 +106,7 @@ const PRODUK = [
     items: ["Frozen & halal", "Higienis, sehat & bergizi", "Potongan pilihan", "Retail & HORECA"],
   },
   {
-    img: "/sang-prabu/karkas.jpg",
+    img: "/sang-prabu/poultry.jpg",
     kat: "Inovasi & OEM",
     items: ["Ayam Marinasi", "Nugget Premium", "OEM / Private Label", "Daging Karkas Halal"],
   },
@@ -162,8 +163,8 @@ const ROADMAP = [
 ];
 
 const GALERI = [
-  { img: "/sang-prabu/sapi-farm.jpg", cap: "Peternakan mitra" },
-  { img: "/sang-prabu/ayam-proses.jpg", cap: "Rumah potong halal" },
+  { img: "/sang-prabu/peternakan.jpg", cap: "Peternakan mitra" },
+  { img: "/sang-prabu/poultry.jpg", cap: "Rumah potong halal" },
   { img: "/sang-prabu/butcher.jpg", cap: "Daging segar berkualitas" },
 ];
 
@@ -375,8 +376,7 @@ export default function ProfilPerusahaanPage() {
               <Reveal key={p.kat} delayMs={i * 70}>
                 <article className="h-full overflow-hidden rounded-2xl border border-[#e6e0d2] bg-white shadow-sm">
                   <div className="aspect-[4/3] overflow-hidden">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
+                    <ProductImage
                       src={p.img}
                       alt={p.kat}
                       loading="lazy"
@@ -428,8 +428,7 @@ export default function ProfilPerusahaanPage() {
               <Reveal key={g.cap} delayMs={i * 80}>
                 <figure className="overflow-hidden rounded-2xl border border-[#e6e0d2] bg-white shadow-sm">
                   <div className="aspect-[4/3] overflow-hidden">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
+                    <ProductImage
                       src={g.img}
                       alt={g.cap}
                       loading="lazy"
@@ -470,8 +469,7 @@ export default function ProfilPerusahaanPage() {
           </Reveal>
           <Reveal delayMs={120}>
             <div className="overflow-hidden rounded-2xl ring-1 ring-white/15">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
+              <ProductImage
                 src="/sang-prabu/dapur.jpg"
                 alt="Fasilitas produksi Sang Prabu"
                 loading="lazy"

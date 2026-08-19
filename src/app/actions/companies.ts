@@ -5,6 +5,9 @@ import { cookies } from "next/headers";
 import { db } from "@/db";
 import { companies } from "@/db/schema";
 import { requireAdmin, requireSessionUser } from "@/app/actions/auth";
+import { MOCK_COMPANY } from "@/lib/mock-data";
+
+import { ensureDatabaseTables } from "@/lib/ensure-tables";
 
 const ACTIVE_COMPANY_COOKIE = "active_company_id";
 const ACTIVE_COMPANY_COOKIE_OPTIONS = {
@@ -20,6 +23,15 @@ export type CompanyRecord = {
   email: string | null;
   phone: string | null;
   logoUrl: string | null;
+};
+
+const DEFAULT_COMPANY_FALLBACK: CompanyRecord = {
+  id: "comp-default",
+  name: MOCK_COMPANY.name,
+  address: MOCK_COMPANY.address,
+  email: MOCK_COMPANY.email,
+  phone: MOCK_COMPANY.phone,
+  logoUrl: MOCK_COMPANY.logoUrl,
 };
 
 const COMPANY_COLUMNS = {
@@ -44,18 +56,43 @@ export type DeleteCompanyResult =
   | { success: true }
   | { success: false; error: string };
 
+/** Helper untuk meng-injeksi default company jika tabel masih kosong */
+async function ensureDefaultCompany(): Promise<CompanyRecord[]> {
+  try {
+    const [inserted] = await db
+      .insert(companies)
+      .values({
+        id: "comp-ksp-default",
+        name: MOCK_COMPANY.name,
+        address: MOCK_COMPANY.address,
+        email: MOCK_COMPANY.email,
+        phone: MOCK_COMPANY.phone,
+        logoUrl: MOCK_COMPANY.logoUrl,
+      })
+      .returning(COMPANY_COLUMNS);
+    if (inserted) return [inserted];
+  } catch {
+    // Abaikan jika sudah ada atau konflik
+  }
+  return [DEFAULT_COMPANY_FALLBACK];
+}
+
 /** Server Action untuk mengambil daftar perusahaan, dipakai pada switcher & halaman manajemen. */
 export async function listCompaniesAction(): Promise<CompanyRecord[]> {
   try {
-    return await db
+    await ensureDatabaseTables();
+    const rows = await db
       .select(COMPANY_COLUMNS)
       .from(companies)
       .orderBy(asc(companies.name));
+
+    if (rows && rows.length > 0) {
+      return rows;
+    }
+    return await ensureDefaultCompany();
   } catch (error) {
-    // Database belum siap (mis. env DATABASE_URL belum diset atau migrasi belum
-    // dijalankan). Kembalikan daftar kosong agar UI tetap tampil, bukan 500.
-    console.error("listCompaniesAction gagal membaca database:", error);
-    return [];
+    console.warn("listCompaniesAction fallback to default company:", error);
+    return [DEFAULT_COMPANY_FALLBACK];
   }
 }
 
@@ -148,6 +185,7 @@ export async function getActiveCompanyAction(): Promise<CompanyRecord | null> {
   const activeId = cookieStore.get(ACTIVE_COMPANY_COOKIE)?.value;
 
   try {
+    await ensureDatabaseTables();
     if (activeId) {
       const [company] = await db
         .select(COMPANY_COLUMNS)
@@ -163,10 +201,13 @@ export async function getActiveCompanyAction(): Promise<CompanyRecord | null> {
       .orderBy(asc(companies.name))
       .limit(1);
 
-    return first ?? null;
+    if (first) return first;
+
+    const list = await ensureDefaultCompany();
+    return list[0] ?? DEFAULT_COMPANY_FALLBACK;
   } catch (error) {
-    // Database belum siap — jangan bikin seluruh layout 500.
-    console.error("getActiveCompanyAction gagal membaca database:", error);
-    return null;
+    // Database belum siap — fallback ke default company agar UI tidak error
+    console.warn("getActiveCompanyAction fallback to default:", error);
+    return DEFAULT_COMPANY_FALLBACK;
   }
 }

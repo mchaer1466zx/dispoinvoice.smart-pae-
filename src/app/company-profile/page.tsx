@@ -2,10 +2,11 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowLeft, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ProductImage } from "@/components/corporate/product-image";
 
 /**
- * Penampil Company Profile RESMI PT Karya Sang Prabu — halaman PDF asli
- * dirender jadi gambar (isi dipertahankan persis), plus tombol unduh PDF.
+ * Penampil Company Profile RESMI PT Karya Sang Prabu — slide presentasi resmi
+ * dirender jadi gambar beresolusi tinggi, plus tombol unduh PDF.
  * Halaman ini publik.
  */
 export const metadata: Metadata = {
@@ -15,10 +16,10 @@ export const metadata: Metadata = {
 };
 
 const PDF = "/sang-prabu/compro/company-profile.pdf";
-const TOTAL = 15;
+const TOTAL = 11;
 const PAGES = Array.from(
   { length: TOTAL },
-  (_, i) => `/sang-prabu/compro/hal-${String(i + 1).padStart(2, "0")}.jpg`,
+  (_, i) => `/sang-prabu/compro/slide-${String(i + 1).padStart(2, "0")}.png`,
 );
 
 export default function CompanyProfilePage() {
@@ -41,16 +42,16 @@ export default function CompanyProfilePage() {
               PT Karya Sang Prabu
             </h1>
             <p className="mt-1 text-[14px] text-white/70">
-              Dokumen resmi — {TOTAL} halaman.
+              Dokumen resmi — {TOTAL} slide presentasi &amp; profil korporat.
             </p>
           </div>
           <div className="flex flex-wrap gap-3">
             <Button
               asChild
-              className="bg-gold text-[#3a2c05] hover:bg-gold-bright"
+              className="bg-gold text-[#3a2c05] hover:bg-gold-bright font-bold"
             >
               <a href={PDF} target="_blank" rel="noopener noreferrer" download>
-                <Download /> Unduh PDF
+                <Download className="size-4" /> Unduh PDF
               </a>
             </Button>
             <Button
@@ -59,7 +60,7 @@ export default function CompanyProfilePage() {
               className="border-white/25 bg-transparent text-white hover:bg-white/10 hover:text-white"
             >
               <Link href="/profil-perusahaan">
-                <ArrowLeft /> Profil
+                <ArrowLeft className="size-4" /> Profil Perusahaan
               </Link>
             </Button>
           </div>
@@ -67,31 +68,30 @@ export default function CompanyProfilePage() {
       </header>
 
       {/* Halaman-halaman compro */}
-      <main className="mx-auto flex w-full max-w-4xl flex-col items-center gap-5 px-4 py-8 sm:px-8 sm:py-10">
+      <main className="mx-auto flex w-full max-w-4xl flex-col items-center gap-6 px-4 py-8 sm:px-8 sm:py-10">
         {PAGES.map((src, i) => (
           <figure
             key={src}
             className="w-full overflow-hidden rounded-xl border border-[#dcd6c8] bg-white shadow-sm"
           >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
+            <ProductImage
               src={src}
               alt={`Company Profile halaman ${i + 1}`}
               loading={i === 0 ? "eager" : "lazy"}
-              className="block h-auto w-full"
+              className="block h-auto w-full object-contain"
             />
           </figure>
         ))}
 
         <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
-          <Button asChild className="bg-primary text-white hover:bg-primary/90">
+          <Button asChild className="bg-primary text-white hover:bg-primary/90 font-bold">
             <a href={PDF} target="_blank" rel="noopener noreferrer" download>
-              <Download /> Unduh PDF ({TOTAL} halaman)
+              <Download className="size-4" /> Unduh PDF ({TOTAL} halaman)
             </a>
           </Button>
           <Button asChild variant="outline">
             <Link href="/">
-              <ArrowLeft /> Kembali ke Beranda
+              <ArrowLeft className="size-4" /> Kembali ke Beranda
             </Link>
           </Button>
         </div>

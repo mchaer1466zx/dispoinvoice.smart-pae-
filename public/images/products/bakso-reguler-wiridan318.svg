@@ -1,0 +1,161 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 650" width="100%" height="100%">
+  <defs>
+    <!-- Crimson Red Foil Gradients -->
+    <linearGradient id="pouchBgRed" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4a040b" />
+      <stop offset="25%" stop-color="#7a0a14" />
+      <stop offset="50%" stop-color="#450308" />
+      <stop offset="75%" stop-color="#8f0f1c" />
+      <stop offset="100%" stop-color="#2a0205" />
+    </linearGradient>
+
+    <!-- Metallic Foil Sheen -->
+    <linearGradient id="foilSheenRed" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.05" />
+      <stop offset="30%" stop-color="#ffffff" stop-opacity="0.3" />
+      <stop offset="45%" stop-color="#ffffff" stop-opacity="0.05" />
+      <stop offset="70%" stop-color="#ffffff" stop-opacity="0.25" />
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.4" />
+    </linearGradient>
+
+    <!-- Gold Foil Headers -->
+    <linearGradient id="goldGradRed" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFF3C4" />
+      <stop offset="30%" stop-color="#FFD700" />
+      <stop offset="70%" stop-color="#D4AF37" />
+      <stop offset="100%" stop-color="#996515" />
+    </linearGradient>
+
+    <linearGradient id="goldEmbossRed" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFF8DC" />
+      <stop offset="50%" stop-color="#E5C158" />
+      <stop offset="100%" stop-color="#8B6508" />
+    </linearGradient>
+
+    <!-- Pouch 3D Shadow -->
+    <filter id="pouchShadowRed" x="-10%" y="-5%" width="120%" height="115%">
+      <feDropShadow dx="0" dy="18" stdDeviation="22" flood-color="#000000" flood-opacity="0.65" />
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000000" flood-opacity="0.4" />
+    </filter>
+
+    <filter id="glowGoldRed" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#FFD700" flood-opacity="0.5" />
+    </filter>
+
+    <clipPath id="pouchShapeRed">
+      <path d="M 60 40 Q 250 35 440 40 Q 455 120 450 560 Q 448 600 420 610 Q 250 618 80 610 Q 52 600 50 560 Q 45 120 60 40 Z" />
+    </clipPath>
+  </defs>
+
+  <g filter="url(#pouchShadowRed)">
+    <!-- Stand-up Pouch Body -->
+    <path d="M 60 40 Q 250 35 440 40 Q 455 120 450 560 Q 448 600 420 610 Q 250 618 80 610 Q 52 600 50 560 Q 45 120 60 40 Z" fill="url(#pouchBgRed)" stroke="#991b1b" stroke-width="2" />
+
+    <!-- Top Seal Crimping & Tear Notch -->
+    <g clip-path="url(#pouchShapeRed)">
+      <!-- Metallic Foil Texture Overlay -->
+      <rect x="50" y="30" width="400" height="590" fill="url(#foilSheenRed)" />
+
+      <!-- Top Seal Pattern -->
+      <rect x="50" y="35" width="400" height="42" fill="#2d0205" stroke="#7a0a14" stroke-width="1" opacity="0.9" />
+      <line x1="50" y1="42" x2="450" y2="42" stroke="#dc2626" stroke-width="1" stroke-dasharray="3 3" opacity="0.6" />
+      <line x1="50" y1="50" x2="450" y2="50" stroke="#dc2626" stroke-width="1" stroke-dasharray="3 3" opacity="0.6" />
+      <line x1="50" y1="58" x2="450" y2="58" stroke="#dc2626" stroke-width="1" stroke-dasharray="3 3" opacity="0.6" />
+      <line x1="50" y1="66" x2="450" y2="66" stroke="#dc2626" stroke-width="1" stroke-dasharray="3 3" opacity="0.6" />
+
+      <!-- Tear Notches -->
+      <path d="M 48 70 L 60 74 L 48 78 Z" fill="#150002" />
+      <path d="M 452 70 L 440 74 L 452 78 Z" fill="#150002" />
+
+      <!-- Top Golden Banner Header -->
+      <path d="M 70 85 L 430 85 L 420 120 L 80 120 Z" fill="url(#goldGradRed)" />
+      <text x="250" y="108" font-family="'Plus Jakarta Sans', sans-serif" font-weight="900" font-size="15" letter-spacing="0.18em" fill="#3a2000" text-anchor="middle">
+        PILIHAN GURIH &amp; EKONOMIS
+      </text>
+
+      <!-- 3D Gold Wiridan 318 Brand Emblem -->
+      <g transform="translate(250, 195)" filter="url(#glowGoldRed)">
+        <circle cx="0" cy="0" r="54" fill="#380407" stroke="url(#goldGradRed)" stroke-width="4" />
+        <circle cx="0" cy="0" r="47" fill="none" stroke="#FFD700" stroke-width="1" stroke-dasharray="4 3" opacity="0.8" />
+        
+        <path d="M -26 -10 C -36 -28 -15 -42 0 -44 C 15 -42 36 -28 26 -10 C 20 -25 5 -32 0 -32 C -5 -32 -20 -25 -26 -10 Z" fill="url(#goldGradRed)" />
+        
+        <text x="0" y="-3" font-family="'Plus Jakarta Sans', sans-serif" font-weight="900" font-size="14" letter-spacing="0.22em" fill="#FFF3C4" text-anchor="middle">
+          WIRIDAN
+        </text>
+        <rect x="-24" y="6" width="48" height="20" rx="10" fill="url(#goldEmbossRed)" stroke="#FFE58F" stroke-width="1" />
+        <text x="0" y="21" font-family="'Plus Jakarta Sans', monospace, sans-serif" font-weight="900" font-size="14" letter-spacing="0.1em" fill="#1b1202" text-anchor="middle">
+          318
+        </text>
+        <text x="0" y="36" font-family="'Plus Jakarta Sans', sans-serif" font-weight="700" font-size="7.5" letter-spacing="0.2em" fill="#FFD700" text-anchor="middle">
+          FOOD QUALITY
+        </text>
+      </g>
+
+      <!-- Main Product Name Typography -->
+      <text x="250" y="285" font-family="'Playfair Display', Georgia, serif" font-weight="900" font-size="28" letter-spacing="0.02em" fill="#FFFFFF" text-anchor="middle">
+        BAKSO SAPI
+      </text>
+      <text x="250" y="315" font-family="'Plus Jakarta Sans', sans-serif" font-weight="800" font-size="17" letter-spacing="0.24em" fill="#FFD700" text-anchor="middle">
+        REGULER CRIMSON
+      </text>
+
+      <!-- Clear Window / Savory Bowl Graphic -->
+      <g transform="translate(250, 420)">
+        <ellipse cx="0" cy="0" rx="130" ry="78" fill="#240205" stroke="url(#goldGradRed)" stroke-width="3" />
+        <ellipse cx="0" cy="0" rx="122" ry="72" fill="#380509" opacity="0.95" />
+
+        <!-- Meatball cluster graphic -->
+        <circle cx="0" cy="-4" r="34" fill="#693c26" stroke="#482514" stroke-width="2" />
+        <ellipse cx="-6" cy="-12" rx="24" ry="14" fill="#844d32" opacity="0.6" />
+
+        <circle cx="-56" cy="4" r="28" fill="#5c341f" stroke="#3d2112" stroke-width="1.5" />
+        <circle cx="56" cy="4" r="28" fill="#5c341f" stroke="#3d2112" stroke-width="1.5" />
+
+        <circle cx="-25" cy="-28" r="20" fill="#502c18" opacity="0.9" />
+        <circle cx="25" cy="-28" r="20" fill="#502c18" opacity="0.9" />
+
+        <!-- Noodle & Garnish lines -->
+        <path d="M -80 20 Q 0 45 80 20" stroke="#facc15" stroke-width="3" fill="none" opacity="0.8" />
+        <path d="M -70 28 Q 0 52 70 28" stroke="#facc15" stroke-width="2.5" fill="none" opacity="0.75" />
+        <circle cx="-14" cy="16" r="2" fill="#22c55e" />
+        <circle cx="18" cy="18" r="2.5" fill="#eab308" />
+        <circle cx="0" cy="22" r="2" fill="#22c55e" />
+
+        <!-- Steam -->
+        <path d="M -30 -52 Q -20 -68 -35 -82" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.35" />
+        <path d="M 0 -56 Q 10 -72 -2 -88" stroke="#ffffff" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.45" />
+        <path d="M 30 -52 Q 40 -68 25 -82" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.35" />
+      </g>
+
+      <!-- Bottom Feature Strip -->
+      <g transform="translate(250, 525)">
+        <rect x="-160" y="0" width="320" height="26" rx="13" fill="#2a0206" stroke="#b91c1c" stroke-width="1" />
+        <text x="0" y="17" font-family="'Plus Jakarta Sans', sans-serif" font-weight="700" font-size="10.5" letter-spacing="0.08em" fill="#fca5a5" text-anchor="middle">
+          RASA GURIH MANTAP • COCOK USAHA &amp; KELUARGA
+        </text>
+      </g>
+
+      <!-- Bottom Legal & Net Weight Footer -->
+      <g transform="translate(75, 580)">
+        <text x="0" y="0" font-family="'Plus Jakarta Sans', sans-serif" font-weight="700" font-size="9" fill="#94a3b8">
+          DIPRODUKSI OLEH:
+        </text>
+        <text x="0" y="12" font-family="'Plus Jakarta Sans', sans-serif" font-weight="800" font-size="10.5" fill="#f8fafc">
+          PT KARYA SANG PRABU
+        </text>
+      </g>
+
+      <g transform="translate(425, 580)">
+        <text x="0" y="0" font-family="'Plus Jakarta Sans', sans-serif" font-weight="700" font-size="9" fill="#94a3b8" text-anchor="end">
+          BERAT BERSIH:
+        </text>
+        <text x="0" y="14" font-family="'Plus Jakarta Sans', monospace, sans-serif" font-weight="900" font-size="14" fill="#FFD700" text-anchor="end">
+          500 g
+        </text>
+      </g>
+
+      <ellipse cx="250" cy="610" rx="180" ry="10" fill="#150002" opacity="0.8" />
+    </g>
+  </g>
+</svg>

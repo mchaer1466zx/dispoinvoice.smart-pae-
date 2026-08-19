@@ -1,8 +1,7 @@
-/* eslint-disable @next/next/no-img-element */
-
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import type { Article } from "@/lib/corporate/site";
+import { ProductImage } from "@/components/corporate/product-image";
 
 function formatDate(iso: string) {
   return new Intl.DateTimeFormat("id-ID", { dateStyle: "long" }).format(
@@ -29,7 +28,7 @@ export function ArticleCard({
   const inner = (
     <>
       <div className="relative">
-        <img
+        <ProductImage
           src={article.coverImage}
           alt={article.title}
           className="h-44 w-full object-cover"

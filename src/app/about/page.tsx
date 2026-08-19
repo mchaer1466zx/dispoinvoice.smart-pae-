@@ -1,13 +1,13 @@
-/* eslint-disable @next/next/no-img-element */
-
 import type { Metadata } from "next";
 import { Compass, ScrollText, Target } from "lucide-react";
 import { SiteChrome, PageHero } from "@/components/corporate/site-chrome";
 import { Container, SectionHeader, SiteButton } from "@/components/corporate/ui";
 import { ValueIcon } from "@/components/corporate/icon";
 import { Reveal } from "@/components/reveal";
+import { ProductImage } from "@/components/corporate/product-image";
 import {
   COMPANY_STORY,
+  LEADERSHIP_TEAM,
   LEGALITY,
   MISSION,
   SITE,
@@ -49,7 +49,7 @@ export default function AboutPage() {
         <Container>
           <div className="grid items-center gap-12 lg:grid-cols-2">
             <Reveal>
-              <img
+              <ProductImage
                 src="/sang-prabu/butcher.jpg"
                 alt="Aktivitas usaha PT KARYA SANG PRABU"
                 className="aspect-[4/3] w-full rounded-lg object-cover shadow-[0_20px_60px_-30px_rgba(11,77,33,0.5)]"
@@ -154,6 +154,42 @@ export default function AboutPage() {
                 <p className="font-display text-2xl font-semibold text-brand-green">{j.year}</p>
                 <p className="mt-1 font-semibold text-brand-green-dark">{j.title}</p>
                 <p className="mt-1 text-[14px] leading-[1.7] text-brand-ink/70">{j.desc}</p>
+              </Reveal>
+            ))}
+          </div>
+        </Container>
+      </section>
+
+      {/* Leadership & Executive Team */}
+      <section className="bg-white py-16 sm:py-24 border-b border-black/5">
+        <Container>
+          <Reveal>
+            <SectionHeader
+              overline="Leadership & Governance"
+              title="Jajaran Manajemen & Eksekutif"
+              description="Dikelola oleh tim berpengalaman dalam rantai pasok komoditas hulu, manufaktur pangan, dan tata kelola korporat."
+            />
+          </Reveal>
+          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {LEADERSHIP_TEAM.map((leader, i) => (
+              <Reveal key={leader.name} delayMs={i * 80}>
+                <div className="flex h-full flex-col rounded-xl border border-black/5 bg-[#faf9f5] p-6 shadow-sm">
+                  <div className="flex size-12 items-center justify-center rounded-xl bg-brand-green text-white font-bold text-base">
+                    {leader.name.slice(0, 2).toUpperCase()}
+                  </div>
+                  <h3 className="mt-4 font-display text-lg font-bold text-brand-green-dark">
+                    {leader.name}
+                  </h3>
+                  <p className="text-xs font-semibold uppercase tracking-wider text-brand-gold">
+                    {leader.role}
+                  </p>
+                  <p className="mt-1 font-mono text-[11px] text-emerald-800 font-medium">
+                    Fokus: {leader.focus}
+                  </p>
+                  <p className="mt-3 text-[13px] leading-relaxed text-brand-ink/75 flex-1">
+                    {leader.bio}
+                  </p>
+                </div>
               </Reveal>
             ))}
           </div>

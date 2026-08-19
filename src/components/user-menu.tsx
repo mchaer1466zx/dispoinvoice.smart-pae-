@@ -6,6 +6,8 @@ import { toast } from "sonner";
 import {
   Archive,
   BadgeDollarSign,
+  ArrowLeftRight,
+  Boxes,
   ClipboardList,
   FileQuestion,
   FileText,
@@ -127,6 +129,16 @@ export function UserMenu() {
           <Button variant="ghost" size="sm" className="w-full justify-start" asChild>
             <Link href="/pelanggan">
               <Users /> Pelanggan
+            </Link>
+          </Button>
+          <Button variant="ghost" size="sm" className="w-full justify-start" asChild>
+            <Link href="/inventaris">
+              <Boxes /> Inventaris & Stok
+            </Link>
+          </Button>
+          <Button variant="ghost" size="sm" className="w-full justify-start" asChild>
+            <Link href="/inventaris/mutasi">
+              <ArrowLeftRight /> Mutasi Stok (Opnam)
             </Link>
           </Button>
           <Button variant="ghost" size="sm" className="w-full justify-start" asChild>

@@ -7,6 +7,7 @@ import { requireSessionUser } from "@/app/actions/auth";
 import { createNotification } from "@/lib/notify";
 import { recordAudit } from "@/lib/audit";
 import { generatePurchaseOrderNumberAction } from "@/app/actions/numbering";
+import { syncDocumentStockMovementsAction } from "@/app/actions/inventory";
 
 export type PoStatus = "draft" | "dikirim" | "selesai" | "dibatalkan";
 
@@ -194,6 +195,18 @@ export async function createPurchaseOrderAction(
       action: "create",
       actorUserId: user.id,
     });
+
+    if (input.status === "dikirim" || input.status === "selesai") {
+      await syncDocumentStockMovementsAction({
+        docType: "po",
+        docNumber: purchaseOrder.poNumber,
+        items: input.items.map((it) => ({
+          description: it.description,
+          quantity: it.quantity,
+        })),
+        userId: user.id,
+      });
+    }
 
     return { success: true, purchaseOrder };
   } catch {

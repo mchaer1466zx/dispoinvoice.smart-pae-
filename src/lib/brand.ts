@@ -6,9 +6,9 @@
 export const BRAND = {
   name: "PT KARYA SANG PRABU",
   shortName: "PT KSP",
-  tagline: "𝐓𝐡𝐞 𝐁𝐞𝐬𝐭 𝐏𝐚𝐫𝐭𝐧𝐞𝐫 𝐘𝐨𝐮𝐫 𝐁𝐮𝐬𝐢𝐧𝐞𝐬𝐬",
-  taglinePlain: "The Best Partner Your Business",
-  address: "Jl. Pertanian Raya No. 64, Lebak Bulus, Cilandak, Jakarta Selatan 12440",
+  tagline: "𝐁𝐞𝐭𝐭𝐞𝐫 𝐏𝐫𝐨𝐬𝐞𝐬, 𝐁𝐞𝐭𝐭𝐞𝐫 𝐐𝐮𝐚𝐥𝐢𝐭𝐲 & 𝐁𝐞𝐭𝐭𝐞𝐫 𝐒𝐞𝐫𝐯𝐞",
+  taglinePlain: "Better Proses, Better Quality & Better Serve",
+  address: "Jl. Tole Iskandar No.77, Sukamaju, Kec. Cilodong, Kota Depok, Jawa Barat 16415",
   phone: "(021) 2784 1924",
   email: "ptkaryasangprabu@gmail.com",
   website: "www.karyasangprabu.co.id",

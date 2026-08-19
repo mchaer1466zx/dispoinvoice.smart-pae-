@@ -563,3 +563,130 @@ export const companies = sqliteTable("companies", {
     .notNull()
     .default(sql`(current_timestamp)`),
 });
+
+/**
+ * Master Inventaris / Stok Barang:
+ * Menyimpan data barang, SKU, harga hpp/jual, stok minimum, dan stok saat ini.
+ */
+export const inventoryItems = sqliteTable(
+  "inventory_items",
+  {
+    id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),
+    sku: text("sku").notNull().unique(),
+    name: text("name").notNull(),
+    category: text("category").notNull().default("Umum"),
+    unit: text("unit").notNull().default("pcs"),
+    minStock: real("min_stock").notNull().default(0),
+    currentStock: real("current_stock").notNull().default(0),
+    costPrice: real("cost_price").notNull().default(0),
+    sellingPrice: real("selling_price").notNull().default(0),
+    description: text("description"),
+    companyId: text("company_id").references(() => companies.id, {
+      onDelete: "set null",
+    }),
+    createdAt: text("created_at")
+      .notNull()
+      .default(sql`(current_timestamp)`),
+    updatedAt: text("updated_at")
+      .notNull()
+      .default(sql`(current_timestamp)`),
+  },
+  (table) => [
+    index("inventory_items_sku_idx").on(table.sku),
+    index("inventory_items_name_idx").on(table.name),
+    index("inventory_items_category_idx").on(table.category),
+  ]
+);
+
+/**
+ * Mutasi Stok / Pergerakan Inventaris:
+ * Pelacakan stok masuk (GRN), stok keluar (Invoice / PO), atau penyesuaian manual.
+ */
+export const stockMovements = sqliteTable(
+  "stock_movements",
+  {
+    id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),
+    inventoryItemId: text("inventory_item_id")
+      .notNull()
+      .references(() => inventoryItems.id, { onDelete: "cascade" }),
+    type: text("type", {
+      enum: ["masuk", "keluar", "penyesuaian"],
+    }).notNull(),
+    quantity: real("quantity").notNull(),
+    balanceAfter: real("balance_after").notNull(),
+    referenceType: text("reference_type", {
+      enum: ["grn", "invoice", "po", "manual"],
+    })
+      .notNull()
+      .default("manual"),
+    referenceId: text("reference_id"),
+    notes: text("notes"),
+    userId: text("user_id").references(() => users.id, {
+      onDelete: "set null",
+    }),
+    createdAt: text("created_at")
+      .notNull()
+      .default(sql`(current_timestamp)`),
+  },
+  (table) => [
+    index("stock_movements_item_idx").on(table.inventoryItemId),
+    index("stock_movements_type_idx").on(table.type),
+    index("stock_movements_created_at_idx").on(table.createdAt),
+  ]
+);
+
+/**
+ * 1. Tabel Bahan Baku (Raw Material)
+ * Menyimpan data bahan baku, stok fisik di gudang bahan, satuan, dan harga pembelian terakhir.
+ */
+export const rawMaterials = sqliteTable("raw_materials", {
+  id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),
+  materialName: text("material_name").notNull(),
+  stockQuantity: real("stock_quantity").notNull().default(0), // kg, gram, pcs, ml
+  unit: text("unit").notNull().default("kg"),
+  lastPurchasePrice: real("last_purchase_price").notNull().default(0), // Harga beli per unit bahan
+  createdAt: text("created_at")
+    .notNull()
+    .default(sql`(current_timestamp)`),
+  updatedAt: text("updated_at")
+    .notNull()
+    .default(sql`(current_timestamp)`),
+});
+
+/**
+ * 2. Tabel Produk Jadi (Finished Goods WIRIDAN 318)
+ * Menyimpan data varian produk beku, jumlah fisik stok di cold-storage (pack 500g),
+ * nilai HPP terupdate (Moving Average), dan rekomendasi harga jual berdasarkan margin target perusahaan.
+ */
+export const finishedGoods = sqliteTable("finished_goods", {
+  id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),
+  productName: text("product_name").notNull(),
+  currentStock: integer("current_stock").notNull().default(0), // Jumlah pack (kantong kemasan 500g) di cold-storage
+  currentHpp: real("current_hpp").notNull().default(0), // Terkalkulasi otomatis dari sistem
+  recommendedPrice: real("recommended_price").notNull().default(0), // Berdasarkan target margin perusahaan
+  createdAt: text("created_at")
+    .notNull()
+    .default(sql`(current_timestamp)`),
+  updatedAt: text("updated_at")
+    .notNull()
+    .default(sql`(current_timestamp)`),
+});
+
+/**
+ * 3. Tabel Formula / Resep (Bill of Materials - BOM per 1 Pack 500g)
+ * Takaran kebutuhan bahan baku untuk menghasilkan 1 kemasan pack 500g produk jadi.
+ */
+export const productFormulas = sqliteTable("product_formulas", {
+  id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),
+  productId: text("product_id")
+    .notNull()
+    .references(() => finishedGoods.id, { onDelete: "cascade" }),
+  materialId: text("material_id")
+    .notNull()
+    .references(() => rawMaterials.id, { onDelete: "cascade" }),
+  requiredQuantity: real("required_quantity").notNull(), // Takaran bahan baku per 1 pack 500g
+  createdAt: text("created_at")
+    .notNull()
+    .default(sql`(current_timestamp)`),
+});
+

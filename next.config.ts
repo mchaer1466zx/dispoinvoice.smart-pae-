@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  output: "standalone",
   experimental: {
     // Unggahan logo perusahaan boleh sampai 2MB (dicek di server action). Batas
     // bawaan Server Actions hanya 1MB, sehingga file 1-2MB ditolak framework
@@ -8,6 +9,31 @@ const nextConfig: NextConfig = {
     serverActions: {
       bodySizeLimit: "4mb",
     },
+  },
+  async headers() {
+    return [
+      {
+        source: "/(.*)",
+        headers: [
+          {
+            key: "X-Content-Type-Options",
+            value: "nosniff",
+          },
+          {
+            key: "Referrer-Policy",
+            value: "strict-origin-when-cross-origin",
+          },
+          {
+            key: "Permissions-Policy",
+            value: "camera=(), microphone=(), geolocation=()",
+          },
+          {
+            key: "X-Robots-Tag",
+            value: "all",
+          },
+        ],
+      },
+    ];
   },
   turbopack: {
     resolveAlias: {

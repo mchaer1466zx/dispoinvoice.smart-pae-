@@ -1,11 +1,10 @@
-/* eslint-disable @next/next/no-img-element */
-
 import type { Metadata } from "next";
 import { Check } from "lucide-react";
 import { SiteChrome, PageHero } from "@/components/corporate/site-chrome";
 import { Container, Overline, SiteButton } from "@/components/corporate/ui";
 import { ValueIcon } from "@/components/corporate/icon";
 import { Reveal } from "@/components/reveal";
+import { ProductImage } from "@/components/corporate/product-image";
 import { BUSINESS_UNITS } from "@/lib/corporate/site";
 
 export const metadata: Metadata = {
@@ -67,7 +66,7 @@ export default function BusinessPage() {
             >
               <Reveal>
                 {unit.image ? (
-                  <img
+                  <ProductImage
                     src={unit.image}
                     alt={unit.name}
                     className="aspect-[4/3] w-full rounded-lg object-cover shadow-[0_20px_60px_-30px_rgba(11,77,33,0.5)]"

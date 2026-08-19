@@ -71,9 +71,9 @@ export const COMPANY_THEMES: Record<CompanyId, CompanyTheme> = {
     fullName: "PT KARYA SANG PRABU",
     initialName: "KARYA SANG PRABU",
     // Tagline resmi identitas visual SANG PRABU (gaya tebal seragam).
-    tagline: "𝐓𝐡𝐞 𝐁𝐞𝐬𝐭 𝐏𝐚𝐫𝐭𝐧𝐞𝐫 𝐘𝐨𝐮𝐫 𝐁𝐮𝐬𝐢𝐧𝐞𝐬𝐬",
+    tagline: "𝐁𝐞𝐭𝐭𝐞𝐫 𝐏𝐫𝐨𝐬𝐞𝐬, 𝐁𝐞𝐭𝐭𝐞𝐫 𝐐𝐮𝐚𝐥𝐢𝐭𝐲 & 𝐁𝐞𝐭𝐭𝐞𝐫 𝐒𝐞𝐫𝐯𝐞",
     address:
-      "Jl. Pertanian Raya No. 64, Lebak Bulus, Cilandak, Jakarta Selatan 12440",
+      "Jl. Tole Iskandar No.77, Sukamaju, Kec. Cilodong, Kota Depok, Jawa Barat 16415",
     phone: "021 2784 1924",
     email: "ptkaryasangprabu@gmail.com",
     website: "www.karyasangprabu.co.id",
@@ -112,8 +112,8 @@ export const COMPANY_THEMES: Record<CompanyId, CompanyTheme> = {
       watermark: { showText: false, opacity: 0.08, sizePercent: 65 },
       footerCurve: { layers: ["#0B4D21", "#DEA402", "#57A83F"], heightPercent: 14 },
     },
-    logoPath: "/logos/logo-sang-prabu.png",
-    emblemPath: "/sang-prabu/emblem.png",
+    logoPath: "/sang-prabu/sang-prabu-haki-logo.png",
+    emblemPath: "/sang-prabu/sang-prabu-haki-logo.png",
     // Selaras identitas logo SANG PRABU: nama serif klasik (Cinzel) hijau daun.
     nameFont: "var(--font-crest), 'Cinzel', 'Times New Roman', serif",
     nameColor: "#57A83F",
@@ -127,7 +127,7 @@ export const COMPANY_THEMES: Record<CompanyId, CompanyTheme> = {
     tagline: "INTEGRITY • QUALITY • COMMITMENT",
     subTagline: "Global Commodity Sourcing, Trading & Distribution",
     address:
-      "Jl. Pertanian Raya No 64, Lebak Bulus, Cilandak, Jakarta Selatan 12440",
+      "Jl. Tole Iskandar No.77, Sukamaju, Kec. Cilodong, Kota Depok, Jawa Barat 16415",
     phone: "021 2784 1924",
     email: "ptprimaandalasenergi@gmail.com",
     website: "www.primaandalasenergi.co.id",
@@ -174,7 +174,7 @@ export const COMPANY_THEMES: Record<CompanyId, CompanyTheme> = {
     subTagline:
       "Connecting Markets, Delivering Value • Global Commodity Sourcing, Trading & Distribution",
     address:
-      "Jl. Pertanian Raya No. 64, Lebak Bulus, Cilandak, Jakarta Selatan 12440",
+      "Jl. Tole Iskandar No.77, Sukamaju, Kec. Cilodong, Kota Depok, Jawa Barat 16415",
     phone: "021 2784 1924",
     email: "info@prabuunggulbersama.co.id",
     website: "www.prabuunggulbersama.co.id",

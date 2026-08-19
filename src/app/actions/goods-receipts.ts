@@ -7,6 +7,7 @@ import { requireSessionUser } from "@/app/actions/auth";
 import { createNotification } from "@/lib/notify";
 import { recordAudit } from "@/lib/audit";
 import { generateGoodsReceiptNumberAction } from "@/app/actions/numbering";
+import { syncDocumentStockMovementsAction } from "@/app/actions/inventory";
 
 export type GrnStatus =
   | "draft"
@@ -195,6 +196,18 @@ export async function createGoodsReceiptAction(
       action: "create",
       actorUserId: user.id,
     });
+
+    if (input.status === "diterima" || input.status === "sebagian") {
+      await syncDocumentStockMovementsAction({
+        docType: "grn",
+        docNumber: goodsReceipt.grnNumber,
+        items: input.items.map((it) => ({
+          description: it.description,
+          quantity: it.quantity,
+        })),
+        userId: user.id,
+      });
+    }
 
     return { success: true, goodsReceipt };
   } catch {

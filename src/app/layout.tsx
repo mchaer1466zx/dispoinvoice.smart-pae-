@@ -1,11 +1,5 @@
 import type { Metadata } from "next";
-import {
-  Geist,
-  Geist_Mono,
-  Fraunces,
-  Plus_Jakarta_Sans,
-  Cinzel,
-} from "next/font/google";
+/* eslint-disable @next/next/no-page-custom-font */
 import { Toaster } from "@/components/ui/sonner";
 import { AppHeader } from "@/components/app-header";
 import { CompanyProvider } from "@/lib/company-store";
@@ -13,72 +7,74 @@ import { AuthProvider } from "@/lib/auth-store";
 import { listCompaniesAction, getActiveCompanyAction } from "@/app/actions/companies";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
-// Serif tampil (Fraunces) untuk wordmark & judul — memberi kesan resmi/terukir
-// khas kop surat, dipakai terbatas. Body & data tetap Geist.
-const fraunces = Fraunces({
-  variable: "--font-display",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  display: "swap",
-});
-
-// Plus Jakarta Sans — sans ramah buatan Indonesia, dipakai untuk isi brand
-// makanan SANG PRABU di halaman depan (hangat & mudah didekati).
-const jakarta = Plus_Jakarta_Sans({
-  variable: "--font-jakarta",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
-  display: "swap",
-});
-
-// Cinzel — serif klasik/terukir (all-caps) untuk wordmark "PT KARYA SANG PRABU"
-// pada kop dokumen, selaras identitas visual logo SANG PRABU.
-const cinzel = Cinzel({
-  variable: "--font-crest",
-  subsets: ["latin"],
-  weight: ["500", "600", "700"],
-  display: "swap",
-});
-
 export const metadata: Metadata = {
-  metadataBase: new URL("https://primaprabu-group-raul-pae.vercel.app"),
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL || "https://www.karyasangprabu.co.id",
+  ),
   title: {
-    default: "PT KARYA SANG PRABU — The Best Partner Your Business",
+    default: "PT KARYA SANG PRABU — Better Proses, Better Quality & Better Serve",
     template: "%s · PT KARYA SANG PRABU",
   },
   description:
-    "PT KARYA SANG PRABU — perusahaan nasional komoditas dan general trading. Mitra terpercaya penyediaan & distribusi komoditas unggulan untuk pasar domestik dan internasional.",
+    "PT KARYA SANG PRABU — Distributor resmi frozen food halal WIRIDAN 318 & perusahaan komoditas general trading terpercaya di Depok & Jabodetabek. Better Proses, Better Quality & Better Serve.",
   applicationName: "PT KARYA SANG PRABU",
   keywords: [
     "PT KARYA SANG PRABU",
-    "SANG PRABU",
-    "komoditas",
-    "general trading",
-    "export import",
-    "perdagangan",
-    "kemitraan bisnis",
+    "Distributor Bakso Halal Wiridan 318",
+    "Frozen Food Halal Depok",
+    "Pabrik Bakso Sapi Depok",
+    "Supplier Dimsum & Otak-Otak Halal",
+    "Distributor Frozen Food Jabodetabek",
+    "Supplier Bahan Baku Restoran & Horeka",
+    "Komoditas Ekspor Impor Indonesia",
+    "General Trading Indonesia",
     "PRIMA PRABU GROUP",
   ],
+  alternates: {
+    canonical: process.env.NEXT_PUBLIC_SITE_URL || "https://www.karyasangprabu.co.id",
+  },
   verification: { google: "6ZK-0mOdS5NeCCj4XhKkI4jwuHFQ9QZvaKKhsrYxiH8" },
   openGraph: {
     type: "website",
     siteName: "PT KARYA SANG PRABU",
-    title: "PT KARYA SANG PRABU — The Best Partner Your Business",
+    title: "PT KARYA SANG PRABU — Better Proses, Better Quality & Better Serve",
     description:
-      "Perusahaan pangan beku halal, perdagangan, dan kemitraan bisnis — bagian dari PRIMA PRABU GROUP.",
+      "Distributor resmi frozen food halal WIRIDAN 318 (Bakso Sapi Premium, Bakso Urat, Bakso Goreng, Otak-Otak Ikan, Dimsum) & komoditas perdagangan nasional — bagian dari PRIMA PRABU GROUP.",
     locale: "id_ID",
+    url: process.env.NEXT_PUBLIC_SITE_URL || "https://www.karyasangprabu.co.id",
+    images: [
+      {
+        url: "/images/hero/hero-wiridan-master.jpg",
+        width: 1376,
+        height: 768,
+        alt: "WIRIDAN 318 Food & PT KARYA SANG PRABU — Pilihan Terbaik Untuk Keluarga",
+      },
+    ],
   },
-  robots: { index: true, follow: true },
+  twitter: {
+    card: "summary_large_image",
+    title: "PT KARYA SANG PRABU — Better Proses, Better Quality & Better Serve",
+    description:
+      "Distributor resmi frozen food halal WIRIDAN 318 & komoditas perdagangan nasional.",
+    images: ["/images/hero/hero-wiridan-master.jpg"],
+  },
+  icons: {
+    icon: "/assets/logo/logo-sang-prabu-favicon.svg",
+    shortcut: "/assets/logo/logo-sang-prabu-favicon.svg",
+    apple: "/assets/logo/logo-sang-prabu-favicon.svg",
+  },
+  themeColor: "#0A3D2A",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
 };
 
 export default async function RootLayout({
@@ -92,10 +88,17 @@ export default async function RootLayout({
   ]);
 
   return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${fraunces.variable} ${jakarta.variable} ${cinzel.variable} h-full antialiased`}
-    >
+    <html lang="id" className="h-full antialiased font-sans">
+      <head>
+        <meta name="theme-color" content="#0A3D2A" />
+        <link rel="preload" href="/images/logo/logo-sang-prabu.webp" as="image" type="image/webp" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Fraunces:opsz,wght@9..144,400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        />
+      </head>
       <body className="min-h-full flex flex-col">
         <AuthProvider>
           <CompanyProvider companies={companies} activeCompany={activeCompany}>

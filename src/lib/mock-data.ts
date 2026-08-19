@@ -21,7 +21,7 @@ export const COMPANY_LOGO_URL = "/logos/logo-sang-prabu.png";
 
 export const MOCK_COMPANY: CompanyProfile = {
   name: "PT KARYA SANG PRABU",
-  address: "Jl. Pertanian Raya No. 64, Lebak Bulus, Cilandak, Jakarta Selatan 12440",
+  address: "Jl. Tole Iskandar No.77, Sukamaju, Kec. Cilodong, Kota Depok, Jawa Barat 16415",
   email: "ptkaryasangprabu@gmail.com",
   phone: "021 29862350",
   logoInitials: "KSP",

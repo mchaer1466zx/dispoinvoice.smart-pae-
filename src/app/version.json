@@ -1,0 +1,5 @@
+{
+  "updatedAt": "2026-08-15T13:00:00Z",
+  "version": "1.1.0",
+  "description": "Implement /admin portal: login, dashboard HPP, inventory raw & finished goods, and batch production execution"
+}

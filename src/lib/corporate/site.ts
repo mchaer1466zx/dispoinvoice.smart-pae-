@@ -93,22 +93,24 @@ export const SITE = {
   brand: "SANG PRABU",
   // Tagline utama yang dipakai di seluruh identitas visual perusahaan
   // (gaya tebal serif seragam untuk tampilan; versi polos untuk SEO/schema).
-  tagline: "𝐓𝐡𝐞 𝐁𝐞𝐬𝐭 𝐏𝐚𝐫𝐭𝐧𝐞𝐫 𝐘𝐨𝐮𝐫 𝐁𝐮𝐬𝐢𝐧𝐞𝐬𝐬",
-  taglinePlain: "The Best Partner Your Business",
+  tagline: "𝐁𝐞𝐭𝐭𝐞𝐫 𝐏𝐫𝐨𝐬𝐞𝐬, 𝐁𝐞𝐭𝐭𝐞𝐫 𝐐𝐮𝐚𝐥𝐢𝐭𝐲 & 𝐁𝐞𝐭𝐭𝐞𝐫 𝐒𝐞𝐫𝐯𝐞",
+  taglinePlain: "Better Proses, Better Quality & Better Serve",
   // Tagline pada company profile resmi.
-  taglineOfficial: "YOUR TRUSTED BUSINESS PARTNER",
+  taglineOfficial: "Better Proses, Better Quality & Better Serve",
   group: "PRIMA PRABU GROUP",
-  logo: "/logos/logo-sang-prabu.png",
+  logo: "/sang-prabu/sang-prabu-haki-logo.png",
+  logoDark: "/sang-prabu/sang-prabu-haki-logo.png",
   positioning:
     "PT KARYA SANG PRABU adalah perusahaan nasional yang bergerak di bidang komoditas dan general trading berbasis di Indonesia — mitra terpercaya dalam penyediaan dan distribusi berbagai komoditas unggulan untuk memenuhi kebutuhan pasar domestik dan internasional.",
   address: {
-    line: "Jl. Pertanian Raya No. 64, Lebak Bulus, Cilandak, Jakarta Selatan 12440",
-    maps: "https://maps.google.com/?q=Jl.+Pertanian+Raya+No.+64+Lebak+Bulus+Cilandak+Jakarta+Selatan+12440",
+    line: "Jl. Tole Iskandar No.77, Sukamaju, Kec. Cilodong, Kota Depok, Jawa Barat 16415",
+    maps: "https://maps.google.com/?q=Jl.+Tole+Iskandar+No.77+Sukamaju+Cilodong+Kota+Depok+Jawa+Barat+16415",
   },
   phone: "(021) 2784 1924",
   email: "ptkaryasangprabu@gmail.com",
   website: "www.sangprabugroup.com",
   whatsapp: {
+    number: "628893663031",
     display: "0889 3663 031",
     url: `https://wa.me/628893663031?text=${encodeURIComponent(
       "Halo PT KARYA SANG PRABU, saya ingin menjajaki kerja sama / kemitraan bisnis.",
@@ -153,18 +155,99 @@ export const LEGALITY: { label: string; value: string }[] = [
   { label: "NIB", value: "9120413121192" },
 ];
 
+export const TRACTION_STATS = [
+  {
+    value: "350+ Ton",
+    label: "Throughput Komoditas / Thn",
+    description: "Distribusi rempah, beras, karkas ayam, dan hasil bumi nasional.",
+  },
+  {
+    value: "25 Ton",
+    label: "Kapasitas Cold Storage / Bln",
+    description: "Fasilitas rantai dingin -18°C terintegrasi untuk olahan pangan beku.",
+  },
+  {
+    value: "120+",
+    label: "Jaringan Agen & Mitra B2B",
+    description: "Mitra reseller, distributor, Horeka, dan klien korporat tier-1.",
+  },
+  {
+    value: "100%",
+    label: "Halal BPJPH & Higienis",
+    description: "Sertifikasi halal resmi dan kepatuhan standar keamanan pangan BPOM.",
+  },
+] as const;
+
+export const LEADERSHIP_TEAM = [
+  {
+    name: "M. Chaerul",
+    role: "President Director & Group CEO",
+    focus: "Strategic Expansion & Commodity Trading",
+    bio: "Memimpin arah strategis Prima Prabu Group, pengembangan kemitraan institusi, dan tata kelola korporat terintegrasi.",
+  },
+  {
+    name: "Operational Director",
+    role: "Director of Food Manufacturing (PAE)",
+    focus: "Plant Operations & HACCP/BPOM Compliance",
+    bio: "Bertanggung jawab atas efisiensi lini manufaktur Site 2 & Site 1, standarisasi mutu pangan Wiridan 138, dan manajemen rantai pasok dingin.",
+  },
+  {
+    name: "Head of Quality & Supply Chain",
+    role: "Head of Procurement & QC",
+    focus: "Raw Material Sourcing & Cold-Chain Logistics",
+    bio: "Mengawasi seleksi bahan baku hulu komoditas dari petani/peternak binaan hingga distribusi logistik beku tepat waktu.",
+  },
+] as const;
+
+export const GROUP_SYNERGY = {
+  holding: "PRIMA PRABU GROUP",
+  upstream: {
+    entity: "PT KARYA SANG PRABU",
+    role: "Pemilik Brand Resmi WIRIDAN 138 & Trading Komoditas",
+    brand: "WIRIDAN 138",
+    capabilities: [
+      "Pemilik resmi brand pangan beku WIRIDAN 138 (Bakso, Dimsum, Otak-otak)",
+      "Pengadaan komoditas langsung dari petani & peternak binaan",
+      "Pasokan stabil daging sapi segar, karkas ayam, dan rempah bumbu",
+      "Perdagangan komoditas ekspor-impor & kontrak korporat B2B nasional",
+    ],
+  },
+  downstream: {
+    entity: "PT PRIMA ANDALAS ENERGI (PAE)",
+    role: "Fasilitas Pengolahan Pangan & Cold-Chain Manufaktur",
+    capabilities: [
+      "Pabrik pengolahan pangan beku higienis & modern",
+      "Sistem cold-chain terpadu -18°C & sertifikasi Halal BPJPH",
+      "Dukungan lini fasilitas Site 2 & Site 1 untuk pemenuhan kapasitas skala besar",
+    ],
+  },
+  roadmap: [
+    {
+      period: "Q3 2026",
+      milestone: "Site 2 Pilot Facility Soft Opening",
+      target: "Validasi kapasitas harian, kepatuhan BPOM/HACCP, & penetrasi 150+ agen Jabodetabek.",
+    },
+    {
+      period: "2027",
+      milestone: "Site 1 Industrial Scale Plant",
+      target: "Skalabilitas otomatisasi manufaktur 100+ ton/bulan & ekspansi distribusi nasional.",
+    },
+  ],
+} as const;
+
 export const NAV: NavItem[] = [
   { label: "Home", href: "/" },
-  { label: "About", href: "/about" },
-  { label: "Business", href: "/business" },
-  { label: "Products", href: "/products" },
-  { label: "Partners", href: "/partners" },
-  { label: "Articles", href: "/articles" },
-  { label: "Career", href: "/career" },
-  { label: "Contact", href: "/contact" },
+  { label: "Tentang Kami", href: "/about" },
+  { label: "Unit Bisnis", href: "/business" },
+  { label: "Produk Wiridan 318", href: "/products" },
+  { label: "Kemitraan", href: "/partners" },
+  { label: "Berita", href: "/articles" },
+  { label: "Karier", href: "/careers" },
+  { label: "Company Profile", href: "/company-profile" },
+  { label: "Kontak", href: "/contact" },
 ];
 
-export const CTA = { label: "Let's Work Together", href: "/contact" } as const;
+export const CTA = { label: "Minta Penawaran", href: "/contact" } as const;
 
 /** Nilai perusahaan. */
 export const VALUES: Value[] = [
@@ -294,71 +377,117 @@ export const BUSINESS_UNITS: BusinessUnit[] = [
   },
 ];
 
-/** Produk pangan (lini Food & Beverages — brand SANG PRABU). */
+/** Produk pangan beku unggulan — Lini Frozen Food Halal WIRIDAN 318 (Brand Resmi: PT KARYA SANG PRABU). */
 export const PRODUCTS: Product[] = [
   {
-    id: "bakso",
-    name: "Bakso Sang Prabu",
-    slug: "bakso",
-    category: "Frozen Food",
-    description: "Kenyal, padat daging, dengan kaldu yang kaya rasa.",
-    image: "/sang-prabu/bakso.jpg",
-    badges: ["Halal", "Frozen", "Higienis"],
+    id: "bakso-premium-wiridan",
+    name: "Bakso Sapi Premium WIRIDAN 318 (500g)",
+    slug: "bakso-premium-wiridan",
+    category: "Bakso & Frozen Food",
+    description: "Daging sapi pilihan bertekstur kenyal alami dengan bumbu rempah istimewa. 100% Halal BPJPH, higienis dan tanpa pengawet berbahaya.",
+    image: "/images/products/bakso-premium.webp",
+    badges: ["Halal ID00410000123456721", "Daging Sapi Pilihan", "500g"],
     featured: true,
   },
   {
-    id: "otak-otak",
-    name: "Otak-otak Sang Prabu",
-    slug: "otak-otak",
-    category: "Frozen Food",
-    description: "Ikan pilihan, gurih, siap digoreng renyah.",
-    image: "/sang-prabu/otak-otak.jpg",
-    badges: ["Halal", "Frozen", "Higienis"],
+    id: "bakso-urat-wiridan",
+    name: "Bakso Urat Sapi WIRIDAN 318 (500g)",
+    slug: "bakso-urat-wiridan",
+    category: "Bakso & Frozen Food",
+    description: "Paduan daging sapi segar dengan cacahan urat sapi pilihan yang memberikan sensasi 'kriuk' bertekstur mantap di setiap gigitan.",
+    image: "/images/products/bakso-urat.webp",
+    badges: ["Halal Indonesia", "Kenyal Berurat", "500g"],
     featured: true,
   },
   {
-    id: "dimsum",
-    name: "Dimsum Sang Prabu",
-    slug: "dimsum",
-    category: "Frozen Food",
-    description: "Siomay lembut dengan isian padat, matang kukus.",
-    image: "/sang-prabu/dimsum.jpg",
-    badges: ["Halal", "Frozen", "Higienis"],
+    id: "bakso-medium-wiridan",
+    name: "Bakso Sapi Medium WIRIDAN 318 (500g)",
+    slug: "bakso-medium-wiridan",
+    category: "Bakso & Frozen Food",
+    description: "Ukuran pas, rasa seimbang dengan formulasi daging gurih bernutrisi. Pilihan utama untuk pedagang mie ayam & katering.",
+    image: "/images/products/bakso-medium.webp",
+    badges: ["Halal Indonesia", "Ukuran Pas", "500g"],
     featured: true,
   },
   {
-    id: "daging-ayam",
-    name: "Daging Ayam",
-    slug: "daging-ayam",
-    category: "Daging Beku",
-    description: "Frozen · halal · higienis — sehat & bergizi.",
-    image: "/sang-prabu/daging-ayam.jpg",
-    badges: ["Halal", "Frozen", "Sehat"],
+    id: "bakso-goreng-wiridan",
+    name: "Bakso Goreng Renyah WIRIDAN 318 (500g)",
+    slug: "bakso-goreng-wiridan",
+    category: "Bakso & Frozen Food",
+    description: "Gurih, renyah di luar dan lembut di dalam. Siap goreng mekar sempurna untuk camilan keluarga dan menu cafe.",
+    image: "/images/products/bakso-goreng.webp",
+    badges: ["Halal Indonesia", "Renyah Mekar", "500g"],
+    featured: true,
+  },
+  {
+    id: "bakso-ayam-wiridan",
+    name: "Bakso Ayam Kenyal WIRIDAN 318 (500g)",
+    slug: "bakso-ayam-wiridan",
+    category: "Bakso & Frozen Food",
+    description: "Daging ayam segar pilihan dengan bumbu bawang putih gurih alami, tekstur kenyal empuk dan tinggi protein.",
+    image: "/images/products/bakso-ayam.webp",
+    badges: ["Halal Indonesia", "Kenyal & Gurih", "500g"],
     featured: false,
   },
   {
+    id: "dimsum-ayam-wiridan",
+    name: "Dimsum Siomay Ayam WIRIDAN 318 (500g)",
+    slug: "dimsum-ayam-wiridan",
+    category: "Dimsum & Kudapan",
+    description: "Siomay dimsum ayam lembut dengan isian padat juicy, dibungkus kulit pangsit tipis siap kukus 8-10 menit.",
+    image: "/images/products/dimsum-ayam.webp",
+    badges: ["Halal Indonesia", "Siap Kukus", "500g"],
+    featured: true,
+  },
+  {
+    id: "dimsum-mix-wiridan",
+    name: "Dimsum Mix Platter WIRIDAN 318 (500g)",
+    slug: "dimsum-mix-wiridan",
+    category: "Dimsum & Kudapan",
+    description: "Kombinasi siomay aneka topping (keju, jamur, nori, dan wortel) dalam satu pack praktis keluarga.",
+    image: "/images/products/dimsum-mix.webp",
+    badges: ["Halal Indonesia", "Aneka Topping", "500g"],
+    featured: false,
+  },
+  {
+    id: "otak-otak-wiridan",
+    name: "Otak-Otak Ikan WIRIDAN 318 (500g)",
+    slug: "otak-otak-wiridan",
+    category: "Olahan Ikan & Seafood",
+    description: "Dibuat dari ikan segar pilihan, gurih lezat bertekstur empuk kenyal, siap digoreng renyah atau dikukus hangat.",
+    image: "/images/products/otak-otak.webp",
+    badges: ["Halal Indonesia", "Ikan Pilihan", "500g"],
+    featured: true,
+  },
+  {
     id: "daging-sapi",
-    name: "Daging Sapi",
+    name: "Daging Sapi Segar & Beku",
     slug: "daging-sapi",
     category: "Daging Beku",
-    description: "Frozen · halal · higienis — sehat & bergizi.",
+    description: "Daging sapi pilihan potongan higienis rantai dingin terjaga (cold chain) untuk kebutuhan horeka & industri.",
     image: "/sang-prabu/daging-sapi.jpg",
-    badges: ["Halal", "Frozen", "Sehat"],
+    badges: ["Halal", "Frozen Cold Chain", "Higienis"],
     featured: false,
   },
   {
     id: "karkas",
-    name: "Daging Karkas Halal",
+    name: "Daging Ayam & Karkas Halal",
     slug: "karkas",
     category: "Daging Beku",
-    description: "Karkas ayam beku, potong higienis, siap distribusi.",
+    description: "Karkas ayam beku potong higienis standar rumah potong bersertifikat, siap distribusi rutin skala besar.",
     image: "/sang-prabu/karkas.jpg",
     badges: ["Halal", "Frozen", "Higienis"],
     featured: false,
   },
 ];
 
-export const PRODUCT_CATEGORIES = ["Semua", "Frozen Food", "Daging Beku"] as const;
+export const PRODUCT_CATEGORIES = [
+  "Semua",
+  "Bakso & Frozen Food",
+  "Olahan Ikan & Seafood",
+  "Dimsum & Kudapan",
+  "Daging Beku",
+] as const;
 
 export type Commodity = { name: string; en: string; category: string };
 
@@ -889,157 +1018,60 @@ export const ARTICLES: Article[] = ([
     ],
   },
   {
-    id: "art-lansia-dirampok",
-    title: "Lansia Dirampok Tetangga, Lapor Polisi Mulut Masih Terlakban",
-    slug: "lansia-dirampok-tetangga-lapor-polisi",
-    category: "Nasional",
+    id: "art-standar-cold-chain-halal",
+    title: "Standar Rantai Dingin & Higienitas Produk Frozen Food Wiridan 318",
+    slug: "standar-cold-chain-higienitas-frozen-food",
+    category: "Industri & Standar Mutu",
     excerpt:
-      "Kabar nasional: seorang lansia dirampok tetangganya dan melapor ke polisi dengan kondisi mulut masih terlakban.",
-    coverImage: "/articles/lansia-dirampok-terlakban.svg",
-    author: "CNN Indonesia",
-    source: "cnnindonesia.com",
-    publishedAt: "2026-08-02T21:47:49",
+      "Bagaimana sistem cold-chain -18°C menjaga kesegaran, tekstur, dan keamanan pangan olahan daging halal dari dapur produksi hingga ke tangan konsumen.",
+    coverImage: "/sang-prabu/dapur.jpg",
+    author: "SANG PRABU",
+    publishedAt: "2026-08-10T09:00:00",
     content:
-      "Ringkasan berita eksternal. Klik untuk membaca selengkapnya di sumber aslinya.",
-    featured: false,
-    externalUrl:
-      "https://www.cnnindonesia.com/nasional/20260802214749-12-1387798/lansia-dirampok-tetangga-lapor-polisi-mulut-masih-terlakban",
-  },
-  {
-    id: "art-ukraina-serang-rusia",
-    title: "Ukraina Serang Berbagai Wilayah Rusia, 8 Tewas",
-    slug: "ukraina-serang-berbagai-wilayah-rusia",
-    category: "Internasional",
-    excerpt:
-      "Kabar internasional terkini seputar eskalasi serangan lintas wilayah antara Ukraina dan Rusia.",
-    coverImage: "/articles/ukraina-rusia-serangan.svg",
-    author: "CNN Indonesia",
-    source: "cnnindonesia.com",
-    publishedAt: "2026-08-02T20:55:50",
-    content:
-      "Ringkasan berita eksternal. Klik untuk membaca selengkapnya di sumber aslinya.",
-    featured: false,
-    externalUrl:
-      "https://www.cnnindonesia.com/internasional/20260802205550-134-1387794/ukraina-serang-berbagai-wilayah-rusia-8-tewas",
-  },
-  {
-    id: "art-serangan-israel-gaza",
-    title:
-      "Serangan Israel ke Gaza Makin Menjadi Akhir Pekan Ini, 11 Orang Tewas",
-    slug: "serangan-israel-ke-gaza-akhir-pekan-ini",
-    category: "Internasional",
-    excerpt:
-      "Kabar internasional: eskalasi situasi di Gaza yang memanas pada akhir pekan ini.",
-    coverImage: "/articles/israel-gaza-akhir-pekan.svg",
-    author: "CNN Indonesia",
-    source: "cnnindonesia.com",
-    publishedAt: "2026-08-02T20:13:44",
-    content:
-      "Ringkasan berita eksternal. Klik untuk membaca selengkapnya di sumber aslinya.",
-    featured: false,
-    externalUrl:
-      "https://www.cnnindonesia.com/internasional/20260802201344-120-1387789/serangan-israel-ke-gaza-makin-menjadi-akhir-pekan-ini-11-orang-tewas",
-  },
-  {
-    id: "art-membaca-arah-rupiah",
-    title: "Membaca Arah Rupiah di Tengah Pencarian Maestro Baru di BI",
-    slug: "membaca-arah-rupiah-pencarian-maestro-baru-bi",
-    category: "Ekonomi",
-    excerpt:
-      "Analisis arah nilai tukar rupiah di tengah proses pencarian pemimpin (gubernur) baru Bank Indonesia.",
-    coverImage: "/articles/rupiah-maestro-bi.svg",
-    author: "CNN Indonesia",
-    source: "cnnindonesia.com",
-    publishedAt: "2026-07-30T06:16:35",
-    content:
-      "Ringkasan berita eksternal. Klik untuk membaca selengkapnya di sumber aslinya.",
-    featured: false,
-    externalUrl:
-      "https://www.cnnindonesia.com/ekonomi/20260730061635-78-1386395/membaca-arah-rupiah-di-tengah-pencarian-maestro-baru-bi",
-  },
-  {
-    id: "art-upacara-17-agustus-2026",
-    title:
-      "Cara Daftar Upacara 17 Agustus 2026 di Istana Negara, Cek Syarat dan Jadwalnya",
-    slug: "cara-daftar-upacara-17-agustus-2026-istana-negara",
-    category: "Nasional",
-    excerpt:
-      "Panduan pendaftaran, syarat, dan jadwal untuk mengikuti Upacara Peringatan HUT Kemerdekaan RI 2026 di Istana Negara.",
-    coverImage: "/articles/upacara-17-agustus-2026.svg",
-    author: "dlvr.it",
-    source: "dlvr.it",
-    publishedAt: "2026-07-30",
-    content:
-      "Ringkasan berita eksternal. Klik untuk membaca selengkapnya di sumber aslinya.",
-    featured: false,
-    externalUrl: "https://dlvr.it/TTq9dK",
-  },
-  {
-    id: "art-strategi-singapura-ai",
-    title: "Strategi Singapura Maksimalkan AI untuk Produktivitas Nasional",
-    slug: "strategi-singapura-maksimalkan-ai-produktivitas-nasional",
-    category: "Teknologi",
-    excerpt:
-      "Bagaimana Singapura memanfaatkan kecerdasan buatan (AI) untuk mendongkrak produktivitas nasional.",
-    coverImage: "/articles/singapura-ai-produktivitas.svg",
-    author: "CNN Indonesia",
-    source: "cnnindonesia.com",
-    publishedAt: "2026-07-29T18:19:09",
-    content:
-      "Ringkasan berita eksternal. Klik untuk menonton/membaca selengkapnya di sumber aslinya.",
-    featured: false,
-    externalUrl:
-      "https://www.cnnindonesia.com/tv/20260729181909-407-1386307/video-strategi-singapura-maksimalkan-ai-untuk-produktivitas-nasional",
-  },
-  {
-    id: "art-dharma-jaya-ternak-sapi",
-    title: "Dharma Jaya Investasi Rp1 Triliun untuk Ternak Sapi di Ciangir",
-    slug: "dharma-jaya-investasi-ternak-sapi-ciangir",
-    category: "Industri & Investasi",
-    excerpt:
-      "Kabar investasi jumbo di sektor peternakan sapi nasional — peluang besar bagi rantai pasok pangan dan mitra komoditas.",
-    coverImage: "/articles/dharma-jaya-ternak-sapi.svg",
-    author: "share.google",
-    source: "share.google",
-    publishedAt: "2026-07-28",
-    content:
-      "Ringkasan berita eksternal. Klik untuk membaca selengkapnya di sumber aslinya.",
+      "Komitmen PT KARYA SANG PRABU dalam penerapan rantai dingin terintegrasi dan sertifikasi halal untuk menjamin kualitas terbaik setiap produk Wiridan 318.",
     featured: true,
-    externalUrl: "https://share.google/nQNXQrG4FO1ah0UKj",
   },
   {
-    id: "art-ai-ide-bisnis",
-    title:
-      "25 Ide Bisnis AI yang Menjanjikan di Berbagai Bidang + Strategi Menjalankannya",
-    slug: "25-ide-bisnis-ai-menjanjikan-strategi",
-    category: "Bisnis & Teknologi",
+    id: "art-peluang-kemitraan-reseller",
+    title: "Peluang Usaha Reseller & Agen Frozen Food Halal: Panduan Memulai",
+    slug: "peluang-kemitraan-reseller-agen-frozen-food",
+    category: "Kemitraan & Bisnis",
     excerpt:
-      "25 ide bisnis berbasis AI di berbagai bidang lengkap dengan strategi menjalankannya — inspirasi peluang usaha di era kecerdasan buatan.",
-    coverImage: "/articles/ai-ide-bisnis.svg",
-    author: "Hostinger",
-    source: "hostinger.com",
-    // Tutorial tanpa tanggal terbit di URL — tanggal perkiraan.
-    publishedAt: "2026-07-25",
+      "Panduan lengkap menjadi mitra distributor dan reseller resmi Wiridan 318 — margin kompetitif, dukungan material promosi, dan pasokan stabil.",
+    coverImage: "/wiridan/bakso-premium.jpg",
+    author: "SANG PRABU",
+    publishedAt: "2026-08-08T14:30:00",
     content:
-      "Ringkasan artikel eksternal. Klik untuk membaca selengkapnya di sumber aslinya.",
-    featured: false,
-    externalUrl: "https://www.hostinger.com/id/tutorial/ide-bisnis-menggunakan-ai/",
+      "Buka peluang usaha mandiri dengan menjadi agen dan reseller produk frozen food halal berkualitas tinggi dari PT KARYA SANG PRABU.",
+    featured: true,
   },
   {
-    id: "art-elon-musk-triliuner-spacex",
-    title: "Elon Musk Resmi Jadi Triliuner Pertama di Dunia Usai IPO SpaceX",
-    slug: "elon-musk-triliuner-pertama-dunia-ipo-spacex",
-    category: "Bisnis Global",
+    id: "art-sertifikasi-halal-bpjph",
+    title: "Jaminan Halal BPJPH & Keamanan Pangan: Komitmen Mutu PT Karya Sang Prabu",
+    slug: "jaminan-halal-bpjph-keamanan-pangan-sang-prabu",
+    category: "Sertifikasi & Kepatuhan",
     excerpt:
-      "Elon Musk resmi menjadi triliuner pertama di dunia setelah saham SpaceX melonjak tajam dalam IPO terbesar sepanjang sejarah pada Jumat (12/6/2026).",
-    coverImage: "/articles/elon-musk-triliuner-spacex.svg",
-    author: "YouTube",
-    source: "youtube.com",
-    publishedAt: "2026-06-13",
+      "Setiap tahapan proses produksi, pemilihan bahan baku daging sapi & ayam, hingga pengemasan telah memenuhi standar halal resmi dan higienis BPOM.",
+    coverImage: "/sang-prabu/daging-sapi.jpg",
+    author: "SANG PRABU",
+    publishedAt: "2026-08-05T11:00:00",
     content:
-      "Ringkasan berita eksternal. Klik untuk menonton/membaca selengkapnya di sumber aslinya.",
+      "Kepatuhan regulasi dan komitmen sertifikasi halal menjadi pilar utama PT KARYA SANG PRABU dalam melayani konsumen dan mitra bisnis.",
     featured: false,
-    externalUrl: "https://youtube.com/shorts/yRXCqwuyXN8?si=7iosU3nZ83k_UkrE",
+  },
+  {
+    id: "art-efisiensi-horeka",
+    title: "Strategi Efisiensi Pasokan Bahan Baku Pangan untuk Sektor Horeka & Catering",
+    slug: "strategi-efisiensi-pasokan-pangan-horeka-catering",
+    category: "Wawasan B2B",
+    excerpt:
+      "Solusi pengadaan komoditas dan bahan pangan beku terintegrasi untuk restoran, hotel, dan katering dalam menjaga stabilitas harga dan kualitas menu.",
+    coverImage: "/sang-prabu/butcher.jpg",
+    author: "SANG PRABU",
+    publishedAt: "2026-08-01T08:00:00",
+    content:
+      "Bagaimana sinergi pasokan bahan baku dari PT KARYA SANG PRABU membantu bisnis kuliner meningkatkan profitabilitas dan kepuasan pelanggan.",
+    featured: false,
   },
 ] satisfies Article[]).sort(
   (a, b) => +new Date(b.publishedAt) - +new Date(a.publishedAt),
@@ -1092,39 +1124,51 @@ export const PARTNERS: Partner[] = [
 
 export const FAQS: Faq[] = [
   {
-    category: "Company",
-    question: "Apa itu PT KARYA SANG PRABU?",
+    category: "Products",
+    question: "Apakah PT KARYA SANG PRABU distributor resmi WIRIDAN 318?",
     answer:
-      "PT KARYA SANG PRABU adalah perusahaan nasional yang bergerak di bidang komoditas dan general trading berbasis di Indonesia, dengan enam lini bisnis inti — bagian dari PRIMA PRABU GROUP.",
-  },
-  {
-    category: "Company",
-    question: "Sejak kapan perusahaan berdiri?",
-    answer:
-      "PT KARYA SANG PRABU berdiri sejak 2019 (Akta Pendirian No. 28 Tahun 2019, SK Kemenkumham AHU-0059668.AH.01.01.Tahun 2019).",
+      "Ya, PT KARYA SANG PRABU adalah distributor resmi untuk produk olahan pangan beku WIRIDAN 318 (Bakso Sapi Premium, Bakso Reguler, Otak-Otak Ikan, dan Dimsum Siap Kukus 500g) yang higienis dan bersertifikat Halal Indonesia BPJPH.",
   },
   {
     category: "Products",
-    question: "Komoditas & produk apa saja yang ditangani?",
+    question: "Berapa lama masa simpan (shelf life) dan bagaimana suhu penyimpanannya?",
     answer:
-      "Kami menangani berbagai komoditas unggulan serta produk pada lini Property & Konstruksi, Export & Import, Alat Kesehatan, Komoditas, Food & Beverages, dan Jasa Konsultan.",
+      "Produk frozen food Wiridan 318 memiliki masa simpan hingga 6–12 bulan dalam kondisi beku stabil di suhu -18°C atau lebih rendah. Hindari membekukan kembali produk yang sudah dicairkan (thawed) demi menjaga tekstur dan higienitas.",
+  },
+  {
+    category: "Products",
+    question: "Komoditas dan produk apa saja yang ditangani PT KARYA SANG PRABU?",
+    answer:
+      "Kami menangani pasokan komoditas rempah ekspor (cengkeh, kapulaga, pala, kayu manis), hasil bumi, komoditas pangan, daging ayam karkas, serta olahan pangan beku halal dan layanan general trading.",
   },
   {
     category: "Partnership",
-    question: "Bagaimana cara menjadi mitra?",
+    question: "Bagaimana cara menjadi Reseller, Agen, atau Mitra B2B Horeka?",
     answer:
-      "Silakan isi formulir pada halaman Partners atau hubungi kami via WhatsApp/email. Tim kami akan menindaklanjuti pengajuan kerja sama Anda.",
+      "Anda dapat mendaftar melalui halaman Partnership atau langsung menghubungi WhatsApp Business kami (0889 3663 031). Kami menyediakan skema margin bertingkat, materi promosi, dan kepastian pasokan rutin.",
+  },
+  {
+    category: "Partnership",
+    question: "Berapa Minimum Order Quantity (MOQ) untuk pembelian grosir/agen?",
+    answer:
+      "Untuk area Jabodetabek, minimum pemesanan agen/reseller mulai dari 1 karton (isi 20–24 pack @ 500g) dengan opsi pengiriman berpendingin (cold-chain delivery) atau kurir instan/same-day.",
   },
   {
     category: "Order",
-    question: "Bagaimana cara mengajukan permintaan/penawaran?",
+    question: "Bagaimana cara meminta Price List / Katalog Resmi?",
     answer:
-      "Gunakan tombol Inquire/Contact atau hubungi kontak resmi kami. Sampaikan kebutuhan Anda dan tim kami akan merespons.",
+      "Klik tombol 'Minta Penawaran' atau chat WhatsApp kami dengan mencantumkan nama usaha, domisili, dan produk yang diminati. Tim sales B2B kami akan mengirimkan daftar harga grosir dan syarat kerja sama.",
+  },
+  {
+    category: "Company",
+    question: "Apa legalitas dan profil PT KARYA SANG PRABU?",
+    answer:
+      "PT KARYA SANG PRABU berdiri sejak 2019 (SK Kemenkumham AHU-0059668.AH.01.01.Tahun 2019, NIB terdaftar di OSS-RBA). Bagian dari PRIMA PRABU GROUP yang melayani klien tier-1 dan pasar domestik/internasional.",
   },
   {
     category: "General",
-    question: "Di mana kantor PT KARYA SANG PRABU?",
-    answer: `${SITE.address.line}. Jam operasional ${SITE.businessHours}.`,
+    question: "Di mana alamat kantor dan fasilitas operasional?",
+    answer: `Kantor kami berlokasi di ${SITE.address.line}. Jam operasional ${SITE.businessHours}.`,
   },
 ];
 
@@ -1136,7 +1180,68 @@ export const FAQ_CATEGORIES = [
   "General",
 ] as const;
 
-export const CAREERS: CareerPosition[] = [];
+export const CAREERS: CareerPosition[] = [
+  {
+    title: "Operator Mesin Produksi Pangan (Site 2 Pilot Facility)",
+    department: "Manufaktur & Produksi (PAE)",
+    location: "Fasilitas Produksi Site 2, Depok",
+    type: "Penuh Waktu",
+    description:
+      "Bertanggung jawab atas pengoperasian mesin meat grinder, silent cutter, mesin forming bakso, dan steamer dimsum dengan kepatuhan tinggi terhadap higienitas & SOP.",
+    requirements: [
+      "Pendidikan minimal SMA/SMK (Tata Boga/Teknik Mesin/Industri diutamakan)",
+      "Pengalaman minimal 1 tahun di industri pengolahan daging/frozen food atau fresh graduate terlatih",
+      "Memahami prinsip Good Manufacturing Practices (GMP) dan sanitasi pangan",
+      "Bersedia bekerja dalam sistem shift dan lingkungan suhu dingin terkontrol",
+      "Disiplin, teliti, dan memiliki fisik yang prima",
+    ],
+  },
+  {
+    title: "Quality Control Officer (HACCP & BPOM Compliance)",
+    department: "Quality Assurance & Regulatory",
+    location: "Fasilitas Pengolahan Pangan, Depok",
+    type: "Penuh Waktu",
+    description:
+      "Memastikan setiap batch bahan baku daging, bumbu rempah, hingga produk jadi Wiridan 318 memenuhi parameter organoleptik, mikrobiologi, dan standar sertifikasi Halal BPJPH & BPOM.",
+    requirements: [
+      "Pendidikan D3/S1 Teknologi Pangan, Kimia, Biologi, atau bidang terkait",
+      "Memiliki sertifikat atau pemahaman mendalam tentang HACCP, GMP, dan Sistem Jaminan Produk Halal (SJPH)",
+      "Pengalaman minimal 1–2 tahun di QC pabrik makanan/minuman beku",
+      "Mampu melakukan inspeksi bahan baku masuk, in-process control, dan pengujian shelf-life",
+      "Keahlian dokumentasi audit mutu dan pelaporan regulasi",
+    ],
+  },
+  {
+    title: "Staff Gudang & Cold Storage Management (-18°C)",
+    department: "Logistik & Rantai Pasok Dingin",
+    location: "Depo Cold Storage, Depok / Jakarta",
+    type: "Penuh Waktu",
+    description:
+      "Mengelola penerimaan, penataan stok FIFO, monitoring suhu ruangan beku -18°C secara berkala, dan persiapan pesanan karton agen/reseller secara akurat.",
+    requirements: [
+      "Pendidikan minimal SMA/SMK sederajat",
+      "Pengalaman kerja di cold storage / gudang logistik berpendingin minimal 1 tahun",
+      "Terbiasa dengan sistem pencatatan stock opname, labeling barcode, dan packing karton beku",
+      "Mampu bekerja di lingkungan suhu rendah dengan APD termal standar",
+      "Jujur, rapi, dan bertanggung jawab terhadap akurasi fisik barang",
+    ],
+  },
+  {
+    title: "B2B Sales Executive (Komoditas & Food Service Horeka)",
+    department: "Commercial & Business Development",
+    location: "Kantor Pusat Depok & Mobilitas Jabodetabek",
+    type: "Penuh Waktu",
+    description:
+      "Mengembangkan kemitraan baru dengan jaringan restoran, hotel, katering, distributor daerah, serta agen reseller untuk produk komoditas Sang Prabu dan frozen food Wiridan 318.",
+    requirements: [
+      "Pendidikan minimal D3/S1 semua jurusan (Pemasaran/Bisnis diutamakan)",
+      "Pengalaman minimal 2 tahun di B2B sales pangan/komoditas/FMCG",
+      "Memiliki jaringan relasi aktif di sektor Horeka dan distributor pangan",
+      "Kemampuan presentasi, negosiasi kontrak pasokan, dan pemenuhan target revenue",
+      "Memiliki kendaraan pribadi dan SIM aktif",
+    ],
+  },
+];
 
 export const CONTACT_SUBJECTS = [
   "Kemitraan / Distributor",

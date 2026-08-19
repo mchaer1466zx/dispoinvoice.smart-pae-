@@ -106,11 +106,13 @@ export default function DaftarPage() {
       toast.success("Akun berhasil dibuat", {
         description: `Selamat datang, ${loginResult.user.name}.`,
       });
-      router.push("/");
+      router.push("/dashboard");
       router.refresh();
-    } catch {
+    } catch (err: unknown) {
+      console.error("Client register error:", err);
+      const message = err instanceof Error ? err.message : "Tidak bisa membuat akun. Coba lagi sebentar.";
       toast.error("Terjadi kesalahan", {
-        description: "Tidak bisa membuat akun. Coba lagi sebentar.",
+        description: message,
       });
       setIsSubmitting(false);
     }
