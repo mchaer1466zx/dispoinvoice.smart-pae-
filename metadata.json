@@ -1,6 +1,6 @@
 {
   "name": "PT KARYA SANG PRABU",
-  "description": "Sistem Pengadaan, Perdagangan, dan Invoice PT Karya Sang Prabu",
+  "description": "SANG PRABU — Karya Sang Prabu 2026. Produsen Pangan Olahan Halal Berlabel SANG PRABU (Bakso, Otak-otak, Dimsum) dan Perdagangan Daging Karkas Halal Terdaftar 10 KBLI Resmi (Prima Prabu Group)",
   "requestFramePermissions": [],
   "majorCapabilities": [
     "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"

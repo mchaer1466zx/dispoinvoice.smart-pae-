@@ -8,7 +8,6 @@ import { SITE } from "@/lib/corporate/site";
 
 export function SiteFooter() {
   const [kspLogoSrc, setKspLogoSrc] = useState("/images/logo/logo-sang-prabu.webp");
-  const [wiridanLogoSrc, setWiridanLogoSrc] = useState("/images/logo/logo-wiridan-318-gold.webp");
   return (
     <footer className="relative isolate border-t border-amber-400/20 bg-gradient-to-b from-[#04150c] via-[#020b06] to-[#010603] text-white">
       {/* Subtle Glow */}
@@ -39,39 +38,19 @@ export function SiteFooter() {
                   referrerPolicy="no-referrer"
                 />
               </div>
-            </Link>
-
-            <span className="text-amber-400/50 font-serif text-sm">✕</span>
-
-            {/* Wiridan 318 Food */}
-            <Link href="/#products" aria-label="Wiridan 318 Food" className="group flex items-center gap-3">
-              <div className="relative h-12 w-14 shrink-0 rounded-xl border border-amber-400/30 bg-black/40 p-1 backdrop-blur-sm transition-transform duration-200 group-hover:scale-105">
-                <Image
-                  src={wiridanLogoSrc}
-                  alt="Logo Resmi Wiridan 318 Food"
-                  fill
-                  sizes="56px"
-                  loading="lazy"
-                  className="object-contain"
-                  onError={() => setWiridanLogoSrc("/images/logo/logo-wiridan-318-gold.png")}
-                  referrerPolicy="no-referrer"
-                />
-              </div>
               <div className="flex flex-col">
                 <span className="font-serif text-sm font-extrabold tracking-wider text-amber-300">
-                  WIRIDAN 318
+                  SANG PRABU
                 </span>
                 <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">
-                  PT KARYA SANG PRABU
+                  PT KARYA SANG PRABU · PRIMA PRABU GROUP
                 </span>
               </div>
             </Link>
           </div>
 
           <p className="mt-5 max-w-md text-xs leading-relaxed text-slate-300/85">
-            Produsen makanan beku higienis <strong>WIRIDAN 318</strong> dan perusahaan perdagangan
-            komoditas nasional terpercaya. Berkomitmen menghadirkan kualitas mutu pangan unggulan,
-            sertifikasi Halal resmi BPJPH, dan kepatuhan standar cold-chain terpadu.
+            Produsen makanan olahan halal berlabel <strong>SANG PRABU</strong> (Bakso Sang Prabu, Otak-otak Sang Prabu, Dimsum Sang Prabu) serta perdagangan komoditas <strong>Daging &amp; Karkas Halal</strong> higienis dengan sistem cold storage -18°C terdaftar 10 KBLI resmi.
           </p>
 
           {/* Legalitas Badges */}
@@ -84,10 +63,13 @@ export function SiteFooter() {
               <Sparkles className="size-3 text-amber-400" />
               <span>Halal: ID00410000123456721</span>
             </span>
+            <span className="flex items-center gap-1 rounded-full border border-emerald-400/30 bg-emerald-950/60 px-3 py-1 font-mono text-emerald-300">
+              <span>10 KBLI Registered</span>
+            </span>
           </div>
 
           <p className="mt-4 font-mono text-[10px] uppercase tracking-[0.2em] text-slate-500">
-            Holding: PRIMA PRABU GROUP
+            Holding: PRIMA PRABU GROUP · Tagline: Karya Sang Prabu 2026
           </p>
         </div>
 
@@ -104,17 +86,17 @@ export function SiteFooter() {
             </li>
             <li>
               <Link href="/#products" className="hover:text-amber-300 transition-colors">
-                Koleksi Produk Wiridan 318
+                Produk Berlabel SANG PRABU
               </Link>
             </li>
             <li>
-              <Link href="/#calculator" className="hover:text-amber-300 transition-colors">
-                Kalkulator Grosir &amp; Logistik
+              <Link href="/#kbli-matrix" className="hover:text-amber-300 transition-colors">
+                Matriks 10 KBLI Resmi
               </Link>
             </li>
             <li>
-              <Link href="/#lead-form" className="hover:text-amber-300 transition-colors">
-                Permohonan SPKPD &amp; Sampel
+              <Link href="/company-profile" className="hover:text-amber-300 transition-colors font-semibold text-amber-300">
+                Profil Perusahaan &amp; Legalitas
               </Link>
             </li>
             <li>
@@ -123,13 +105,8 @@ export function SiteFooter() {
               </Link>
             </li>
             <li>
-              <Link href="/company-profile" className="hover:text-amber-300 transition-colors">
-                Company Profile &amp; Legalitas
-              </Link>
-            </li>
-            <li>
-              <Link href="/admin/sop" className="hover:text-emerald-300 transition-colors font-medium">
-                SOP Pabrik &amp; Standar QC
+              <Link href="/contact" className="hover:text-amber-300 transition-colors">
+                Kontak &amp; Kemitraan B2B
               </Link>
             </li>
           </ul>
