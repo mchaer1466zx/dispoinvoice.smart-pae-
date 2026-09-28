@@ -35,7 +35,7 @@ export function AppHeader() {
   const name = activeCompany?.name ?? BRAND.name;
   // Logo utama aplikasi: Logo Original SANG PRABU (dipakai seragam di semua
   // halaman). Bila perusahaan aktif punya logo sendiri, pakai itu.
-  const logoUrl = activeCompany?.logoUrl || "/images/logo/logo-sang-prabu.png";
+  const logoUrl = activeCompany?.logoUrl || "/logos/logo-sang-prabu.png";
 
   // Halaman marketing memakai navbar korporatnya sendiri.
   if (isMarketing) return null;

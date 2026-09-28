@@ -7,7 +7,6 @@ import { requireSessionUser } from "@/app/actions/auth";
 import { createNotification } from "@/lib/notify";
 import { recordAudit } from "@/lib/audit";
 import { generateInvoiceNumberAction } from "@/app/actions/numbering";
-import { syncDocumentStockMovementsAction } from "@/app/actions/inventory";
 
 export type CreateInvoiceItemInput = {
   description: string;
@@ -81,18 +80,6 @@ export async function createInvoiceAction(
       action: "create",
       actorUserId: user.id,
     });
-
-    if (input.status === "terkirim" || input.status === "lunas") {
-      await syncDocumentStockMovementsAction({
-        docType: "invoice",
-        docNumber: input.invoiceNumber,
-        items: input.items.map((it) => ({
-          description: it.description,
-          quantity: it.quantity,
-        })),
-        userId: user.id,
-      });
-    }
 
     return { success: true, invoiceId };
   } catch {

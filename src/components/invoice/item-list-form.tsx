@@ -14,8 +14,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { formatCurrency } from "@/lib/format";
-import { ItemSelector } from "@/components/inventaris/item-selector";
-import type { InventoryItemRecord } from "@/app/actions/inventory";
 
 export type InvoiceItem = {
   id: string;
@@ -64,34 +62,15 @@ export function ItemListForm({
     );
   }
 
-  function handleSelectInventoryItem(inventoryItem: InventoryItemRecord) {
-    const id = `item-${nextId}`;
-    setNextId((n) => n + 1);
-    const newItem: InvoiceItem = {
-      id,
-      description: `${inventoryItem.name} (${inventoryItem.sku})`,
-      quantity: 1,
-      price: inventoryItem.sellingPrice || 0,
-    };
-    if (items.length === 1 && !items[0].description.trim()) {
-      onChange([newItem]);
-    } else {
-      onChange([...items, newItem]);
-    }
-  }
-
   const total = calculateItemsTotal(items);
 
   return (
     <Card>
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
-        <div>
-          <CardTitle>Item Produk/Jasa</CardTitle>
-          <CardDescription>
-            Tambahkan rincian produk atau layanan beserta jumlahnya.
-          </CardDescription>
-        </div>
-        <ItemSelector onSelectItem={handleSelectInventoryItem} />
+      <CardHeader>
+        <CardTitle>Item Produk/Jasa</CardTitle>
+        <CardDescription>
+          Tambahkan rincian produk atau layanan beserta jumlahnya.
+        </CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-4">
         {items.map((item, index) => (

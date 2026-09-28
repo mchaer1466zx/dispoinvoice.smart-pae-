@@ -1,8 +1,7 @@
 import type { MetadataRoute } from "next";
 import { ARTICLES } from "@/lib/corporate/site";
 
-const BASE =
-  process.env.NEXT_PUBLIC_SITE_URL || "https://www.karyasangprabu.co.id";
+const BASE = "https://primaprabu-group-raul-pae.vercel.app";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();

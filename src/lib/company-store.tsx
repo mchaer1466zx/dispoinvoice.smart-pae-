@@ -20,14 +20,15 @@ const CompanyContext = createContext<CompanyContextValue | null>(null);
  * memanggil server action lalu me-refresh route agar semua halaman ikut ter-update.
  */
 export function CompanyProvider({
-  companies,
-  activeCompany,
+  companies = [],
+  activeCompany = null,
   children,
 }: {
-  companies: CompanyRecord[];
-  activeCompany: CompanyRecord | null;
+  companies?: CompanyRecord[];
+  activeCompany?: CompanyRecord | null;
   children: React.ReactNode;
 }) {
+  const safeCompanies = companies ?? [];
   const router = useRouter();
   const [isSwitching, startTransition] = useTransition();
   const [optimisticActiveId, setOptimisticActiveId] = useState(activeCompany?.id ?? null);
@@ -51,12 +52,12 @@ export function CompanyProvider({
   }
 
   const resolvedActiveCompany =
-    companies.find((company) => company.id === optimisticActiveId) ?? activeCompany;
+    safeCompanies.find((company) => company.id === optimisticActiveId) ?? activeCompany;
 
   return (
     <CompanyContext.Provider
       value={{
-        companies,
+        companies: safeCompanies,
         activeCompany: resolvedActiveCompany,
         isSwitching,
         setActiveCompanyId,

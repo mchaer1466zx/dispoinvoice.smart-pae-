@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import {
-  ArrowLeftRight,
   BadgeDollarSign,
-  Boxes,
   ClipboardList,
   FileQuestion,
   FileSpreadsheet,
@@ -70,42 +68,6 @@ const GROUPS: { title: string; caption: string; items: ModuleLink[] }[] = [
         title: "Goods Receipt (GRN)",
         description: "Catat barang yang diterima dari pemasok.",
         icon: PackageCheck,
-      },
-    ],
-  },
-  {
-    title: "Stok & Inventaris Barang",
-    caption: "Pencatatan master stok, mutasi masuk (GRN), dan stok keluar (Invoice/PO).",
-    items: [
-      {
-        href: "/inventaris",
-        title: "Master Inventaris & Stok",
-        description: "Kelola daftar barang, batas stok minimum, dan HPP/Harga Jual.",
-        icon: Boxes,
-      },
-      {
-        href: "/inventaris/mutasi",
-        title: "Riwayat Mutasi Stok",
-        description: "Pelacakan stok masuk dari GRN, stok keluar dari Invoice/PO & opnam.",
-        icon: ArrowLeftRight,
-      },
-    ],
-  },
-  {
-    title: "Stok & Inventaris Barang",
-    caption: "Pencatatan master stok, mutasi masuk (GRN), dan stok keluar (Invoice/PO).",
-    items: [
-      {
-        href: "/inventaris",
-        title: "Master Inventaris & Stok",
-        description: "Kelola daftar barang, batas stok minimum, dan HPP/Harga Jual.",
-        icon: Boxes,
-      },
-      {
-        href: "/inventaris/mutasi",
-        title: "Riwayat Mutasi Stok",
-        description: "Pelacakan stok masuk dari GRN, stok keluar dari Invoice/PO & opnam.",
-        icon: ArrowLeftRight,
       },
     ],
   },

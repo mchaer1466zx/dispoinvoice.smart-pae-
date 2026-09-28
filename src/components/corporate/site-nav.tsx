@@ -1,15 +1,22 @@
 "use client";
 
+/* eslint-disable @next/next/no-img-element */
+
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
-import { ArrowRight, Menu, X, Building2, FileText } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { ArrowRight, Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { CTA, NAV, SITE } from "@/lib/corporate/site";
 
+/**
+ * Navbar korporat: sticky, transparan di atas hero lalu menjadi solid saat
+ * di-scroll, responsif dengan menu hamburger di mobile, dan CTA menonjol.
+ */
 export function SiteNav({ transparent = false }: { transparent?: boolean }) {
+  const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
-  const [kspLogoSrc, setKspLogoSrc] = useState("/images/logo/logo-sang-prabu.webp");
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -18,6 +25,7 @@ export function SiteNav({ transparent = false }: { transparent?: boolean }) {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Kunci scroll body saat menu mobile terbuka.
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
     return () => {
@@ -27,157 +35,134 @@ export function SiteNav({ transparent = false }: { transparent?: boolean }) {
 
   const solid = scrolled || !transparent || open;
 
-  const navLinks = [
-    { label: "Home", href: "/" },
-    { label: "Produk Sang Prabu", href: "/#products" },
-    { label: "10 KBLI Legalitas", href: "/#kbli-matrix" },
-    { label: "Profil Perusahaan", href: "/company-profile" },
-    { label: "Tentang Kami", href: "/about" },
-    { label: "Kontak", href: "/contact" },
-  ];
+  const isActive = (href: string) =>
+    href === "/" ? pathname === "/" : pathname.startsWith(href);
 
   return (
     <header
       className={cn(
-        "fixed inset-x-0 top-0 z-50 transition-all duration-300",
+        "fixed inset-x-0 top-0 z-50 transition-[background-color,box-shadow,border-color] duration-300",
         solid
-          ? "border-b border-amber-400/20 bg-[#03140a]/95 shadow-[0_10px_30px_rgba(0,0,0,0.6)] backdrop-blur-xl"
-          : "border-b border-white/10 bg-[#03140a]/70 backdrop-blur-md",
+          ? "border-b border-black/5 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/85"
+          : "border-b border-transparent bg-transparent",
       )}
     >
-      <nav className="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        {/* Header Logo (Brand SANG PRABU & PT Karya Sang Prabu) */}
-        <Link href="/" aria-label="PT Karya Sang Prabu - Sang Prabu" className="flex shrink-0 items-center gap-2.5 sm:gap-3 group">
-          {/* PT Karya Sang Prabu Crest */}
-          <div className="relative h-10 w-10 shrink-0 transition-transform duration-300 group-hover:scale-105">
-            <Image
-              src={kspLogoSrc}
-              alt="Logo Resmi PT Karya Sang Prabu"
-              fill
-              priority
-              sizes="40px"
-              className="object-contain drop-shadow-[0_2px_8px_rgba(212,175,55,0.4)]"
-              onError={() => setKspLogoSrc("/images/logo/logo-sang-prabu.png")}
-              referrerPolicy="no-referrer"
-            />
-          </div>
-          <div className="flex flex-col">
-            <div className="flex items-center gap-1.5">
-              <span className="font-serif text-base sm:text-lg font-extrabold tracking-wider text-amber-300 group-hover:text-amber-200 transition-colors">
-                SANG PRABU
-              </span>
-              <span className="rounded bg-amber-400/20 px-1.5 py-0.2 text-[8px] font-bold text-amber-300 border border-amber-400/30">
-                2026
-              </span>
-            </div>
-            <span className="text-[9px] font-medium tracking-wider text-slate-300/80 uppercase">
-              PT KARYA SANG PRABU · PRIMA PRABU GROUP
-            </span>
-          </div>
+      <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-6 sm:h-[72px] sm:px-8">
+        <Link href="/" className="flex min-w-0 items-center gap-2.5">
+          <img
+            src={SITE.logo}
+            alt={`Logo ${SITE.legalName}`}
+            width={44}
+            height={44}
+            loading="eager"
+            className="h-10 w-10 shrink-0 object-contain sm:h-11 sm:w-11"
+          />
+          <span
+            className={cn(
+              "whitespace-nowrap font-display text-[14px] font-semibold leading-none tracking-[-0.01em] transition-colors sm:text-[16px]",
+              solid ? "text-brand-green-dark" : "text-white",
+            )}
+          >
+            PT KARYA SANG PRABU
+          </span>
         </Link>
 
-        {/* Center Desktop Navigation Links */}
-        <div className="hidden items-center gap-1 xl:flex 2xl:gap-2">
-          {navLinks.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="whitespace-nowrap rounded-lg px-3 py-2 text-[13px] font-semibold text-slate-200 transition-all duration-200 hover:bg-white/10 hover:text-amber-300"
-            >
-              {item.label}
-            </Link>
-          ))}
-        </div>
-
-        {/* Action Buttons: Profil Perusahaan + Portal */}
-        <div className="flex items-center gap-2 sm:gap-3">
-          <Link
-            href="/company-profile"
-            className="hidden xs:inline-flex sm:inline-flex items-center gap-1.5 sm:gap-2 overflow-hidden rounded-xl bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 px-3.5 sm:px-4 py-2 sm:py-2.5 text-[11px] sm:text-[12px] font-extrabold uppercase tracking-wider text-slate-950 shadow-[0_0_20px_rgba(212,175,55,0.4)] transition-all duration-300 hover:scale-103 hover:shadow-[0_0_30px_rgba(212,175,55,0.7)] active:scale-95"
-          >
-            <Building2 className="size-3.5 text-slate-950 shrink-0" />
-            <span className="truncate">Profil Perusahaan</span>
-          </Link>
+        {/* Menu + aksi (dikelompokkan di kanan agar tidak bertabrakan dgn wordmark) */}
+        <div className="flex items-center gap-1.5">
+          {/* Menu desktop */}
+          <div className="hidden items-center gap-0.5 xl:flex">
+            {NAV.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={cn(
+                  "rounded-md px-2.5 py-2 text-[13px] font-medium tracking-[0.01em] transition-colors",
+                  solid
+                    ? isActive(item.href)
+                      ? "text-brand-green"
+                      : "text-brand-ink/80 hover:text-brand-green"
+                    : isActive(item.href)
+                      ? "text-white"
+                      : "text-white/85 hover:text-white",
+                )}
+              >
+                {item.label}
+              </Link>
+            ))}
+          </div>
 
           <Link
             href="/login"
-            className="rounded-xl border border-white/20 px-3.5 py-2 text-[12px] font-semibold uppercase tracking-wider text-white transition-all hover:bg-white/10 active:scale-95"
+            className={cn(
+              "ml-1 hidden rounded-md border px-3.5 py-2 text-[12px] font-semibold uppercase tracking-[0.06em] transition-colors xl:inline-flex xl:items-center",
+              solid
+                ? "border-brand-green/30 text-brand-green-dark hover:bg-brand-green hover:text-white"
+                : "border-white/40 text-white hover:bg-white/10",
+            )}
           >
-            Portal
+            Masuk
+          </Link>
+          <Link
+            href={CTA.href}
+            className="hidden items-center gap-2 rounded-md bg-brand-gold px-4 py-2.5 text-[12px] font-semibold uppercase tracking-[0.08em] text-[#3a2c05] transition-[filter] duration-200 hover:brightness-105 xl:inline-flex"
+          >
+            {CTA.label}
+            <ArrowRight className="size-4" />
           </Link>
 
-          {/* Mobile Hamburger Button */}
+          {/* Hamburger mobile/tablet */}
           <button
             type="button"
             onClick={() => setOpen((v) => !v)}
             aria-label={open ? "Tutup menu" : "Buka menu"}
             aria-expanded={open}
-            className="inline-flex size-10 items-center justify-center rounded-xl border border-white/20 text-white hover:bg-white/10 active:scale-95 xl:hidden"
+            className={cn(
+              "inline-flex size-10 items-center justify-center rounded-md transition-colors xl:hidden",
+              solid ? "text-brand-green-dark hover:bg-black/5" : "text-white hover:bg-white/10",
+            )}
           >
-            {open ? <X className="size-5" /> : <Menu className="size-5" />}
+            {open ? <X className="size-6" /> : <Menu className="size-6" />}
           </button>
         </div>
       </nav>
 
-      {/* Mobile Drawer Menu */}
+      {/* Panel menu mobile/tablet */}
       {open ? (
         <div className="xl:hidden">
-          <div className="max-h-[calc(100vh-5rem)] overflow-y-auto border-t border-amber-400/20 bg-[#041209]/98 px-5 sm:px-6 pb-8 pt-4 text-white shadow-2xl backdrop-blur-2xl">
-            <div className="flex flex-col gap-1.5">
-              {navLinks.map((item) => (
+          <div className="border-t border-black/5 bg-white px-6 pb-8 pt-2 shadow-lg">
+            <div className="flex flex-col">
+              {NAV.map((item) => (
                 <Link
                   key={item.href}
                   href={item.href}
                   onClick={() => setOpen(false)}
-                  className="flex items-center justify-between rounded-xl px-4 py-3 text-[14px] font-medium text-slate-200 hover:bg-amber-400/10 hover:text-amber-300 transition-colors"
+                  className={cn(
+                    "border-b border-black/5 py-3.5 text-[15px] font-medium",
+                    isActive(item.href) ? "text-brand-green" : "text-brand-ink/85",
+                  )}
                 >
-                  <span>{item.label}</span>
-                  <ArrowRight className="size-3.5 opacity-60" />
+                  {item.label}
                 </Link>
               ))}
-              <Link
-                href="/admin/sop"
-                onClick={() => setOpen(false)}
-                className="flex items-center justify-between rounded-xl border-t border-white/10 mt-2 px-4 py-3 text-[14px] font-semibold text-emerald-400 hover:bg-white/5"
-              >
-                <span>SOP Pabrik &amp; Kontrol Mutu</span>
-                <ArrowRight className="size-3.5 opacity-60" />
-              </Link>
             </div>
-
-            <div className="mt-6 flex flex-col gap-3">
-              <Link
-                href="/company-profile"
-                onClick={() => setOpen(false)}
-                className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-amber-400 to-yellow-500 px-5 py-3.5 text-[13px] font-extrabold uppercase tracking-wider text-slate-950 shadow-lg active:scale-98 transition-all"
-              >
-                <Building2 className="size-4" />
-                <span>Lihat Profil Perusahaan</span>
-              </Link>
-              <a
-                href={`https://wa.me/628893663031?text=${encodeURIComponent(
-                  "Halo Tim Sales PT KARYA SANG PRABU, saya ingin meminta katalog resmi dan penawaran harga grosir produk SANG PRABU."
-                )}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => setOpen(false)}
-                className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-amber-400/40 bg-black/40 px-5 py-3 text-[13px] font-bold uppercase tracking-wider text-amber-300 hover:bg-white/10 active:scale-98 transition-all"
-              >
-                <FileText className="size-4" />
-                <span>Katalog &amp; Penawaran WhatsApp</span>
-              </a>
-              <Link
-                href="/login"
-                onClick={() => setOpen(false)}
-                className="inline-flex w-full items-center justify-center rounded-xl border border-white/20 px-5 py-3 text-[13px] font-bold uppercase tracking-wider text-white hover:bg-white/10 active:scale-98 transition-all"
-              >
-                Masuk ke Portal Internal
-              </Link>
-            </div>
+            <Link
+              href={CTA.href}
+              onClick={() => setOpen(false)}
+              className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-md bg-brand-green px-5 py-3.5 text-[13px] font-semibold uppercase tracking-[0.08em] text-white"
+            >
+              {CTA.label}
+              <ArrowRight className="size-4" />
+            </Link>
+            <Link
+              href="/login"
+              onClick={() => setOpen(false)}
+              className="mt-2.5 inline-flex w-full items-center justify-center rounded-md border border-brand-green/30 px-5 py-3.5 text-[13px] font-semibold uppercase tracking-[0.08em] text-brand-green-dark"
+            >
+              Masuk ke Sistem
+            </Link>
           </div>
         </div>
       ) : null}
     </header>
   );
 }
-

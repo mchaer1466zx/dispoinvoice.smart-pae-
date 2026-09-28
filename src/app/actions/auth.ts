@@ -8,7 +8,6 @@ import { db } from "@/db";
 import { sessions, users } from "@/db/schema";
 import { hashPassword, verifyPassword } from "@/lib/password";
 import { isCompanyId, type CompanyId } from "@/config/company-themes";
-import { ensureDatabaseTables } from "@/lib/ensure-tables";
 
 const RESET_TOKEN_TTL_MS = 60 * 60 * 1000;
 const SESSION_TTL_MS = 60 * 60 * 24 * 30 * 1000;
@@ -101,13 +100,8 @@ export async function registerAction(input: RegisterInput): Promise<RegisterResu
       .returning(USER_COLUMNS);
 
     return { success: true, user: created };
-  } catch (err: unknown) {
-    console.error("registerAction error:", err);
-    const msg = err instanceof Error ? err.message : String(err);
-    if (msg.toLowerCase().includes("unique") || msg.toLowerCase().includes("already")) {
-      return { success: false, error: "Email sudah terdaftar." };
-    }
-    return { success: false, error: msg || "Gagal mendaftarkan akun baru." };
+  } catch {
+    return { success: false, error: "Email sudah terdaftar." };
   }
 }
 
@@ -128,43 +122,37 @@ export async function loginAction(input: LoginInput): Promise<LoginResult> {
     return { success: false, error: "Email dan kata sandi wajib diisi." };
   }
 
-  try {
-    const [user] = await db
-      .select({
-        id: users.id,
-        name: users.name,
-        email: users.email,
-        role: users.role,
-        defaultCompany: users.defaultCompany,
-        passwordHash: users.passwordHash,
-        createdAt: users.createdAt,
-      })
-      .from(users)
-      .where(eq(users.email, email))
-      .limit(1);
+  const [user] = await db
+    .select({
+      id: users.id,
+      name: users.name,
+      email: users.email,
+      role: users.role,
+      defaultCompany: users.defaultCompany,
+      passwordHash: users.passwordHash,
+      createdAt: users.createdAt,
+    })
+    .from(users)
+    .where(eq(users.email, email))
+    .limit(1);
 
-    if (!user || !(await verifyPassword(input.password, user.passwordHash))) {
-      return { success: false, error: "Email atau kata sandi salah." };
-    }
-
-    await createSession(user.id);
-
-    return {
-      success: true,
-      user: {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-        defaultCompany: user.defaultCompany,
-        createdAt: user.createdAt,
-      },
-    };
-  } catch (err: unknown) {
-    console.error("loginAction error:", err);
-    const msg = err instanceof Error ? err.message : String(err);
-    return { success: false, error: msg || "Gagal verifikasi kata sandi." };
+  if (!user || !(await verifyPassword(input.password, user.passwordHash))) {
+    return { success: false, error: "Email atau kata sandi salah." };
   }
+
+  await createSession(user.id);
+
+  return {
+    success: true,
+    user: {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      defaultCompany: user.defaultCompany,
+      createdAt: user.createdAt,
+    },
+  };
 }
 
 /**
@@ -177,31 +165,26 @@ export async function getSessionUserAction(): Promise<UserRecord | null> {
   const token = cookieStore.get(SESSION_COOKIE)?.value;
   if (!token) return null;
 
-  try {
-    await ensureDatabaseTables();
-    const [row] = await db
-      .select({
-        id: users.id,
-        name: users.name,
-        email: users.email,
-        role: users.role,
-        defaultCompany: users.defaultCompany,
-        createdAt: users.createdAt,
-      })
-      .from(sessions)
-      .innerJoin(users, eq(sessions.userId, users.id))
-      .where(
-        and(
-          eq(sessions.token, token),
-          gt(sessions.expiresAt, new Date().toISOString())
-        )
+  const [row] = await db
+    .select({
+      id: users.id,
+      name: users.name,
+      email: users.email,
+      role: users.role,
+      defaultCompany: users.defaultCompany,
+      createdAt: users.createdAt,
+    })
+    .from(sessions)
+    .innerJoin(users, eq(sessions.userId, users.id))
+    .where(
+      and(
+        eq(sessions.token, token),
+        gt(sessions.expiresAt, new Date().toISOString())
       )
-      .limit(1);
+    )
+    .limit(1);
 
-    return row ?? null;
-  } catch {
-    return null;
-  }
+  return row ?? null;
 }
 
 /** Server Action untuk logout; menghapus baris sesi di database dan cookie-nya. */
@@ -212,66 +195,6 @@ export async function logoutAction(): Promise<void> {
     await db.delete(sessions).where(eq(sessions.token, token));
   }
   cookieStore.delete(SESSION_COOKIE);
-}
-
-/**
- * Server Action login instan untuk Tim Gudang & Admin Operasional PT KARYA SANG PRABU
- */
-export async function adminQuickLoginAction(roleType: "admin" | "gudang" = "admin"): Promise<LoginResult> {
-  await ensureDatabaseTables();
-
-  const targetEmail = roleType === "gudang" ? "gudang@primaprabu.co.id" : "admin@primaprabu.co.id";
-  const targetName = roleType === "gudang" ? "Kepala Gudang & Produksi WIRIDAN" : "Administrator Operasional";
-
-  try {
-    let [user] = await db
-      .select({
-        id: users.id,
-        name: users.name,
-        email: users.email,
-        role: users.role,
-        defaultCompany: users.defaultCompany,
-        createdAt: users.createdAt,
-      })
-      .from(users)
-      .where(eq(users.email, targetEmail))
-      .limit(1);
-
-    if (!user) {
-      const passwordHash = await hashPassword("admin123");
-      const [created] = await db
-        .insert(users)
-        .values({
-          name: targetName,
-          email: targetEmail,
-          passwordHash,
-          role: "admin",
-          defaultCompany: "KSP",
-        })
-        .returning(USER_COLUMNS);
-      user = created;
-    }
-
-    if (user) {
-      await createSession(user.id);
-      return {
-        success: true,
-        user: {
-          id: user.id,
-          name: user.name,
-          email: user.email,
-          role: user.role as UserRole,
-          defaultCompany: user.defaultCompany as CompanyId,
-          createdAt: user.createdAt,
-        },
-      };
-    }
-
-    return { success: false, error: "Gagal membuat sesi login" };
-  } catch (err: unknown) {
-    const msg = err instanceof Error ? err.message : String(err);
-    return { success: false, error: msg || "Gagal masuk sebagai admin." };
-  }
 }
 
 /**

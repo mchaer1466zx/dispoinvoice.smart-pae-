@@ -1,3 +1,5 @@
+/* eslint-disable @next/next/no-img-element */
+
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -6,7 +8,6 @@ import { SiteChrome } from "@/components/corporate/site-chrome";
 import { Container, SiteButton } from "@/components/corporate/ui";
 import { ArticleBody } from "@/components/corporate/article-body";
 import { FaqAccordion } from "@/components/corporate/faq-accordion";
-import { ProductImage } from "@/components/corporate/product-image";
 import { ARTICLES, SITE, type Article } from "@/lib/corporate/site";
 
 const BASE = "https://primaprabu-group-raul-pae.vercel.app";
@@ -136,7 +137,7 @@ export default async function ArticleDetailPage({
             {article.title}
           </h1>
           <p className="mt-3 text-[13px] text-brand-ink/60">Oleh {article.author}</p>
-          <ProductImage
+          <img
             src={article.coverImage}
             alt={article.title}
             className="mt-8 aspect-[16/9] w-full rounded-lg object-cover"

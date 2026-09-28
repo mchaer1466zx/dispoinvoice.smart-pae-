@@ -14,8 +14,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { formatCurrency } from "@/lib/format";
-import { ItemSelector } from "@/components/inventaris/item-selector";
-import type { InventoryItemRecord } from "@/app/actions/inventory";
 
 export type GrnItem = {
   id: string;
@@ -70,38 +68,16 @@ export function GrnItemListForm({
     );
   }
 
-  function handleSelectInventoryItem(inventoryItem: InventoryItemRecord) {
-    const id = `grn-item-${nextId}`;
-    setNextId((n) => n + 1);
-    const newItem: GrnItem = {
-      id,
-      group: inventoryItem.category || "",
-      description: `${inventoryItem.name} (${inventoryItem.sku})`,
-      quantity: 1,
-      unit: inventoryItem.unit || "pcs",
-      price: inventoryItem.costPrice || 0,
-    };
-    // If first item is blank, replace it
-    if (items.length === 1 && !items[0].description.trim()) {
-      onChange([newItem]);
-    } else {
-      onChange([...items, newItem]);
-    }
-  }
-
   const total = calculateGrnItemsTotal(items);
   const hasValidItem = items.some((item) => item.description.trim());
 
   return (
     <Card>
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
-        <div>
-          <CardTitle>Item Barang Diterima</CardTitle>
-          <CardDescription>
-            Rincian barang yang benar-benar diterima beserta jumlah & nilainya.
-          </CardDescription>
-        </div>
-        <ItemSelector onSelectItem={handleSelectInventoryItem} />
+      <CardHeader>
+        <CardTitle>Item Barang Diterima</CardTitle>
+        <CardDescription>
+          Rincian barang yang benar-benar diterima beserta jumlah & nilainya.
+        </CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-4">
         {items.map((item, index) => (

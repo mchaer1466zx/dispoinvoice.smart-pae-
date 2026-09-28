@@ -1,50 +1,4 @@
-function isValidLibsqlUrl(rawUrl?: string): boolean {
-  if (!rawUrl || typeof rawUrl !== "string") return false;
-  const trimmed = rawUrl.trim();
-  if (
-    !trimmed ||
-    trimmed === "DATABASE_URL" ||
-    trimmed === "TURSO_DATABASE_URL" ||
-    trimmed === "DATABASE_DATABASE_URL" ||
-    trimmed === "undefined" ||
-    trimmed === "null" ||
-    trimmed.startsWith("<") ||
-    trimmed.startsWith("${")
-  ) {
-    return false;
-  }
-  return (
-    trimmed.startsWith("file:") ||
-    trimmed.startsWith("libsql://") ||
-    trimmed.startsWith("https://") ||
-    trimmed.startsWith("http://") ||
-    trimmed.startsWith("ws://") ||
-    trimmed.startsWith("wss://")
-  );
-}
-
-function isValidAuthToken(rawToken?: string): boolean {
-  if (!rawToken || typeof rawToken !== "string") return false;
-  const trimmed = rawToken.trim();
-  if (
-    !trimmed ||
-    trimmed.length < 15 ||
-    trimmed === "DATABASE_AUTH_TOKEN" ||
-    trimmed === "TURSO_AUTH_TOKEN" ||
-    trimmed === "DATABASE_TOKEN" ||
-    trimmed === "undefined" ||
-    trimmed === "null" ||
-    trimmed.startsWith("libsql://") ||
-    trimmed.startsWith("http://") ||
-    trimmed.startsWith("https://") ||
-    trimmed.startsWith("file:") ||
-    trimmed.startsWith("<") ||
-    trimmed.startsWith("${")
-  ) {
-    return false;
-  }
-  return true;
-}
+import path from "path";
 
 /**
  * Mencari kredensial database libSQL/Turso dari berbagai kemungkinan nama env.
@@ -57,75 +11,87 @@ function isValidAuthToken(rawToken?: string): boolean {
 export function resolveDbCredentials(): { url: string; authToken?: string } {
   const env = process.env;
 
-  // 1) URL — periksa kandidat umum yang valid
-  const candidates = [
-    env.DATABASE_URL_SANG_PRABU,
+  const isValidDatabaseUrl = (u: unknown): u is string => {
+    if (typeof u !== "string" || !u.trim()) return false;
+    const str = u.trim();
+    if (str === "DATABASE_URL" || str === "TURSO_DATABASE_URL") return false;
+    if (str.startsWith("libsql://") || str.startsWith("file:") || str.startsWith("sqlite:")) {
+      return true;
+    }
+    if ((str.startsWith("https://") || str.startsWith("http://")) && (str.includes(".turso.io") || str.includes("libsql"))) {
+      return true;
+    }
+    return false;
+  };
+
+  // 1) URL — utamakan nama umum, lalu cari env apa pun yang nilainya valid untuk database libSQL/Turso.
+  let url = "";
+  const candidateUrls = [
     env.DATABASE_URL,
     env.TURSO_DATABASE_URL,
     env.DATABASE_DATABASE_URL,
     env.TURSO_URL,
-    // Jika user tak sengaja memasukkan URL ke variabel token
-    env.DATABASE_AUTH_TOKEN,
+    env.LIBSQL_URL,
   ];
 
-  let url = candidates.find(isValidLibsqlUrl);
+  for (const candidate of candidateUrls) {
+    if (isValidDatabaseUrl(candidate)) {
+      url = candidate.trim();
+      break;
+    }
+  }
 
   if (!url) {
     for (const [key, value] of Object.entries(env)) {
       if (
-        typeof value === "string" &&
-        isValidLibsqlUrl(value) &&
-        (/database_url/i.test(key) || /turso/i.test(key) || value.startsWith("libsql://"))
+        /database|turso|libsql/i.test(key) &&
+        isValidDatabaseUrl(value)
       ) {
-        url = value;
+        url = value.trim();
         break;
       }
     }
   }
 
-  // 2) Auth token — cari token valid (bukan URL dan bukan placeholder)
-  const tokenCandidates = [
+  // 2) Auth token — abaikan placeholder nama variabel
+  const isValidAuthToken = (t: unknown): t is string => {
+    if (typeof t !== "string" || !t.trim()) return false;
+    const str = t.trim();
+    if (str === "DATABASE_AUTH_TOKEN" || str === "TURSO_AUTH_TOKEN" || str === "DATABASE_TOKEN") {
+      return false;
+    }
+    return str.length > 10;
+  };
+
+  let authToken: string | undefined;
+  const candidateTokens = [
     env.DATABASE_AUTH_TOKEN,
     env.TURSO_AUTH_TOKEN,
     env.DATABASE_TOKEN,
+    env.TURSO_TOKEN,
+    env.LIBSQL_AUTH_TOKEN,
   ];
 
-  let authToken = tokenCandidates.find(isValidAuthToken);
+  for (const candidate of candidateTokens) {
+    if (isValidAuthToken(candidate)) {
+      authToken = candidate.trim();
+      break;
+    }
+  }
 
   if (!authToken) {
     for (const [key, value] of Object.entries(env)) {
       if (
-        typeof value === "string" &&
-        isValidAuthToken(value) &&
         /token/i.test(key) &&
-        /(turso|database|storage|libsql)/i.test(key)
+        /(turso|database|storage|libsql)/i.test(key) &&
+        isValidAuthToken(value)
       ) {
-        authToken = value;
+        authToken = value.trim();
         break;
       }
     }
   }
 
-  const finalUrl = url?.trim();
-
-  // Jika URL remote Turso/libsql tapi authToken tidak ada/invalid,
-  // gunakan file SQLite lokal agar aplikasi tidak crash karena auth failure
-  const isRemote =
-    finalUrl &&
-    (finalUrl.startsWith("libsql://") ||
-      finalUrl.startsWith("https://") ||
-      finalUrl.includes(".turso.io"));
-
-  if (isRemote && !authToken) {
-    console.warn(
-      "[db-env] Remote database URL detected without a valid DATABASE_AUTH_TOKEN. Falling back to local database."
-    );
-    return { url: "file:./local.db" };
-  }
-
-  if (!finalUrl || finalUrl.startsWith("file:")) {
-    return { url: finalUrl || "file:./local.db" };
-  }
-
-  return { url: finalUrl, authToken: authToken?.trim() };
+  const defaultLocalDb = `file:${path.join(process.cwd(), "local.db")}`;
+  return { url: url || defaultLocalDb, authToken };
 }

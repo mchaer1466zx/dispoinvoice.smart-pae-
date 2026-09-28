@@ -19,7 +19,6 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Reveal } from "@/components/reveal";
-import { ProductImage } from "@/components/corporate/product-image";
 import { BRAND } from "@/lib/brand";
 
 /**
@@ -35,7 +34,7 @@ export const metadata: Metadata = {
 };
 
 const KONTAK = {
-  alamat: "Jl. Tole Iskandar No.77, Sukamaju, Kec. Cilodong, Kota Depok, Jawa Barat 16415",
+  alamat: "Jl. Pertanian Raya No. 64, Lebak Bulus, Cilandak, Jakarta Selatan 12440",
   telepon: "(021) 2784 1924",
   whatsapp: "0889 3663 031",
   email: "ptkaryasangprabu@gmail.com",
@@ -81,32 +80,32 @@ const MISI = [
 
 const PRODUK = [
   {
-    img: "/images/products/bakso-premium.webp",
+    img: "/sang-prabu/bakso.jpg",
     kat: "Bakso Premium",
     items: ["Bakso Sapi Premium", "Bakso Urat", "Bakso Ayam", "Bakso Super"],
   },
   {
-    img: "/images/products/dimsum-ayam.webp",
+    img: "/sang-prabu/dimsum.jpg",
     kat: "Dimsum",
     items: ["Siomay Ayam", "Hakau", "Lumpia Udang", "Dimsum Premium"],
   },
   {
-    img: "/images/products/otak-otak.webp",
+    img: "/sang-prabu/otak-otak.jpg",
     kat: "Otak-otak",
     items: ["Otak-otak Ikan", "Otak-otak Premium"],
   },
   {
-    img: "/images/facilities/ayam.jpg",
+    img: "/sang-prabu/daging-ayam.jpg",
     kat: "Daging Ayam",
     items: ["Frozen & halal", "Higienis, sehat & bergizi", "Karkas / potongan", "Retail & HORECA"],
   },
   {
-    img: "/images/facilities/daging-sapi.jpg",
+    img: "/sang-prabu/daging-sapi.jpg",
     kat: "Daging Sapi",
     items: ["Frozen & halal", "Higienis, sehat & bergizi", "Potongan pilihan", "Retail & HORECA"],
   },
   {
-    img: "/images/facilities/poultry.jpg",
+    img: "/sang-prabu/karkas.jpg",
     kat: "Inovasi & OEM",
     items: ["Ayam Marinasi", "Nugget Premium", "OEM / Private Label", "Daging Karkas Halal"],
   },
@@ -163,9 +162,9 @@ const ROADMAP = [
 ];
 
 const GALERI = [
-  { img: "/images/facilities/peternakan.jpg", cap: "Peternakan mitra" },
-  { img: "/images/facilities/poultry.jpg", cap: "Rumah potong halal" },
-  { img: "/images/facilities/butcher.jpg", cap: "Daging segar berkualitas" },
+  { img: "/sang-prabu/sapi-farm.jpg", cap: "Peternakan mitra" },
+  { img: "/sang-prabu/ayam-proses.jpg", cap: "Rumah potong halal" },
+  { img: "/sang-prabu/butcher.jpg", cap: "Daging segar berkualitas" },
 ];
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
@@ -190,7 +189,7 @@ export default function ProfilPerusahaanPage() {
           <Reveal>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="/images/logo/logo-sang-prabu.png"
+              src="/logos/logo-sang-prabu.png"
               alt="Logo PT Karya Sang Prabu"
               className="mx-auto h-28 w-auto object-contain drop-shadow-[0_6px_20px_rgba(201,162,76,0.3)] sm:h-36"
             />
@@ -376,7 +375,8 @@ export default function ProfilPerusahaanPage() {
               <Reveal key={p.kat} delayMs={i * 70}>
                 <article className="h-full overflow-hidden rounded-2xl border border-[#e6e0d2] bg-white shadow-sm">
                   <div className="aspect-[4/3] overflow-hidden">
-                    <ProductImage
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
                       src={p.img}
                       alt={p.kat}
                       loading="lazy"
@@ -428,7 +428,8 @@ export default function ProfilPerusahaanPage() {
               <Reveal key={g.cap} delayMs={i * 80}>
                 <figure className="overflow-hidden rounded-2xl border border-[#e6e0d2] bg-white shadow-sm">
                   <div className="aspect-[4/3] overflow-hidden">
-                    <ProductImage
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
                       src={g.img}
                       alt={g.cap}
                       loading="lazy"
@@ -469,8 +470,9 @@ export default function ProfilPerusahaanPage() {
           </Reveal>
           <Reveal delayMs={120}>
             <div className="overflow-hidden rounded-2xl ring-1 ring-white/15">
-              <ProductImage
-                src="/images/facilities/dapur.jpg"
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/sang-prabu/dapur.jpg"
                 alt="Fasilitas produksi Sang Prabu"
                 loading="lazy"
                 className="aspect-[4/3] h-full w-full object-cover"

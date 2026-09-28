@@ -1,166 +1,111 @@
-"use client";
+/* eslint-disable @next/next/no-img-element */
 
-import { useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
-import { AtSign, MapPin, Phone, Mail, ShieldCheck, Sparkles } from "lucide-react";
-import { SITE } from "@/lib/corporate/site";
+import { AtSign, MapPin, Phone, Mail } from "lucide-react";
+import { NAV, SITE } from "@/lib/corporate/site";
 
+/** Footer korporat: identitas, kontak, menu, copyright. */
 export function SiteFooter() {
-  const [kspLogoSrc, setKspLogoSrc] = useState("/images/logo/logo-sang-prabu.webp");
   return (
-    <footer className="relative isolate border-t border-amber-400/20 bg-gradient-to-b from-[#04150c] via-[#020b06] to-[#010603] text-white">
-      {/* Subtle Glow */}
-      <div
-        className="pointer-events-none absolute inset-0 opacity-20"
-        style={{
-          background:
-            "radial-gradient(circle 800px at 50% 100%, #07381e 0%, transparent 80%)",
-        }}
-        aria-hidden
-      />
-
-      <div className="relative mx-auto grid max-w-7xl gap-10 px-6 py-16 sm:px-8 lg:grid-cols-12">
-        {/* Footer Dual Logos */}
-        <div className="lg:col-span-5">
-          <div className="flex items-center gap-4">
-            {/* PT Karya Sang Prabu */}
-            <Link href="/" aria-label="PT Karya Sang Prabu" className="group flex items-center gap-3">
-              <div className="relative h-12 w-12 shrink-0 rounded-xl border border-amber-400/30 bg-black/40 p-1 backdrop-blur-sm transition-transform duration-200 group-hover:scale-105">
-                <Image
-                  src={kspLogoSrc}
-                  alt="Logo Resmi PT Karya Sang Prabu"
-                  fill
-                  sizes="48px"
-                  loading="lazy"
-                  className="object-contain p-0.5"
-                  onError={() => setKspLogoSrc("/images/logo/logo-sang-prabu.png")}
-                  referrerPolicy="no-referrer"
-                />
-              </div>
-              <div className="flex flex-col">
-                <span className="font-serif text-sm font-extrabold tracking-wider text-amber-300">
-                  SANG PRABU
-                </span>
-                <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">
-                  PT KARYA SANG PRABU · PRIMA PRABU GROUP
-                </span>
-              </div>
-            </Link>
+    <footer className="bg-brand-green-dark text-white">
+      <div className="mx-auto grid max-w-6xl gap-10 px-6 py-14 sm:px-8 md:grid-cols-[1.4fr_1fr_1.1fr]">
+        {/* Identitas */}
+        <div>
+          <div className="flex items-center gap-3">
+            <img
+              src={SITE.logo}
+              alt={`Logo ${SITE.legalName}`}
+              width={56}
+              height={56}
+              loading="lazy"
+              className="h-14 w-14 object-contain"
+            />
+            <div>
+              <p className="font-display text-lg font-semibold leading-tight">
+                {SITE.legalName}
+              </p>
+              <p className="text-[13px] tracking-[0.02em] text-brand-gold">
+                {SITE.tagline}
+              </p>
+            </div>
           </div>
-
-          <p className="mt-5 max-w-md text-xs leading-relaxed text-slate-300/85">
-            Produsen makanan olahan halal berlabel <strong>SANG PRABU</strong> (Bakso Sang Prabu, Otak-otak Sang Prabu, Dimsum Sang Prabu) serta perdagangan komoditas <strong>Daging &amp; Karkas Halal</strong> higienis dengan sistem cold storage -18°C terdaftar 10 KBLI resmi.
+          <p className="mt-5 max-w-sm text-[13px] leading-[1.7] text-white/70">
+            {SITE.positioning}
           </p>
-
-          {/* Legalitas Badges */}
-          <div className="mt-5 flex flex-wrap items-center gap-2 text-[11px] text-emerald-300">
-            <span className="flex items-center gap-1 rounded-full border border-emerald-500/30 bg-emerald-950/60 px-3 py-1 font-mono">
-              <ShieldCheck className="size-3 text-emerald-400" />
-              <span>NIB: 9120413121192</span>
-            </span>
-            <span className="flex items-center gap-1 rounded-full border border-amber-400/30 bg-amber-950/60 px-3 py-1 font-mono text-amber-300">
-              <Sparkles className="size-3 text-amber-400" />
-              <span>Halal: ID00410000123456721</span>
-            </span>
-            <span className="flex items-center gap-1 rounded-full border border-emerald-400/30 bg-emerald-950/60 px-3 py-1 font-mono text-emerald-300">
-              <span>10 KBLI Registered</span>
-            </span>
-          </div>
-
-          <p className="mt-4 font-mono text-[10px] uppercase tracking-[0.2em] text-slate-500">
-            Holding: PRIMA PRABU GROUP · Tagline: Karya Sang Prabu 2026
+          <p className="mt-4 font-mono text-[10px] uppercase tracking-[0.2em] text-white/45">
+            Bagian dari {SITE.group}
           </p>
         </div>
 
-        {/* Menu Navigasi */}
-        <div className="lg:col-span-3">
-          <p className="font-mono text-xs font-bold uppercase tracking-[0.25em] text-amber-400">
-            Navigasi &amp; Akses
+        {/* Menu */}
+        <div>
+          <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.24em] text-brand-gold">
+            Navigasi
           </p>
-          <ul className="mt-4 space-y-2.5 text-xs text-slate-300">
-            <li>
-              <Link href="/" className="hover:text-amber-300 transition-colors">
-                Halaman Utama
-              </Link>
-            </li>
-            <li>
-              <Link href="/#products" className="hover:text-amber-300 transition-colors">
-                Produk Berlabel SANG PRABU
-              </Link>
-            </li>
-            <li>
-              <Link href="/#kbli-matrix" className="hover:text-amber-300 transition-colors">
-                Matriks 10 KBLI Resmi
-              </Link>
-            </li>
-            <li>
-              <Link href="/company-profile" className="hover:text-amber-300 transition-colors font-semibold text-amber-300">
-                Profil Perusahaan &amp; Legalitas
-              </Link>
-            </li>
-            <li>
-              <Link href="/about" className="hover:text-amber-300 transition-colors">
-                Tentang PT Karya Sang Prabu
-              </Link>
-            </li>
-            <li>
-              <Link href="/contact" className="hover:text-amber-300 transition-colors">
-                Kontak &amp; Kemitraan B2B
-              </Link>
-            </li>
+          <ul className="mt-4 grid grid-cols-2 gap-x-6 gap-y-2.5">
+            {NAV.map((item) => (
+              <li key={item.href}>
+                <Link
+                  href={item.href}
+                  className="text-[13px] text-white/75 transition-colors hover:text-white"
+                >
+                  {item.label}
+                </Link>
+              </li>
+            ))}
           </ul>
         </div>
 
-        {/* Kontak Resmi */}
-        <div className="lg:col-span-4">
-          <p className="font-mono text-xs font-bold uppercase tracking-[0.25em] text-amber-400">
-            Kantor &amp; Manajemen
+        {/* Kontak */}
+        <div>
+          <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.24em] text-brand-gold">
+            Kontak
           </p>
-          <ul className="mt-4 space-y-3 text-xs text-slate-300">
-            <li className="flex items-start gap-2.5">
-              <MapPin className="mt-0.5 size-4 shrink-0 text-amber-400" />
+          <ul className="mt-4 space-y-3 text-[13px] text-white/75">
+            <li className="flex gap-2.5">
+              <MapPin className="mt-0.5 size-4 shrink-0 text-brand-gold" />
               <span>{SITE.address.line}</span>
             </li>
             <li className="flex items-center gap-2.5">
-              <Phone className="size-4 shrink-0 text-amber-400" />
-              <a href={`tel:${SITE.phone.replace(/\s/g, "")}`} className="hover:text-amber-300 font-mono">
-                {SITE.phone} · (0889 3663 031)
+              <Phone className="size-4 shrink-0 text-brand-gold" />
+              <a href={`tel:${SITE.phone.replace(/\s/g, "")}`} className="hover:text-white">
+                {SITE.phone}
               </a>
             </li>
             <li className="flex items-center gap-2.5">
-              <Mail className="size-4 shrink-0 text-amber-400" />
-              <a href={`mailto:${SITE.email}`} className="hover:text-amber-300 font-mono">
+              <Mail className="size-4 shrink-0 text-brand-gold" />
+              <a href={`mailto:${SITE.email}`} className="hover:text-white">
                 {SITE.email}
               </a>
             </li>
-            <li className="flex items-center gap-2.5">
-              <AtSign className="size-4 shrink-0 text-amber-400" />
-              <a
-                href="https://www.instagram.com/karyasangprabu.group"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-amber-300 font-mono"
-              >
-                @karyasangprabu.group
-              </a>
-            </li>
+            {SITE.socials.map((s) => (
+              <li key={s.href} className="flex items-center gap-2.5">
+                <AtSign className="size-4 shrink-0 text-brand-gold" />
+                <a
+                  href={s.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-white"
+                >
+                  {s.handle}{" "}
+                  <span className="text-white/45">· {s.label}</span>
+                </a>
+              </li>
+            ))}
           </ul>
         </div>
       </div>
 
-      {/* Copyright Bar */}
-      <div className="border-t border-white/10 bg-black/50 py-5 text-center text-xs text-slate-500">
-        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-6 sm:flex-row">
+      <div className="border-t border-white/10">
+        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-2 px-6 py-5 text-center text-[12px] text-white/55 sm:flex-row sm:px-8 sm:text-left">
           <span>
-            © {new Date().getFullYear()} PT KARYA SANG PRABU. All Rights Reserved.
+            © {new Date().getFullYear()} {SITE.legalName}. All Rights Reserved.
           </span>
-          <span className="font-serif text-amber-400/80">
-            Better Proses, Better Quality &amp; Better Serve
+          <span className="tracking-[0.02em]">
+            {SITE.tagline}
           </span>
         </div>
       </div>
     </footer>
   );
 }
-

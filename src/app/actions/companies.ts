@@ -2,12 +2,9 @@
 
 import { asc, eq, sql } from "drizzle-orm";
 import { cookies } from "next/headers";
-import { db } from "@/db";
+import { db, ensureDbReady } from "@/db";
 import { companies } from "@/db/schema";
 import { requireAdmin, requireSessionUser } from "@/app/actions/auth";
-import { MOCK_COMPANY } from "@/lib/mock-data";
-
-import { ensureDatabaseTables } from "@/lib/ensure-tables";
 
 const ACTIVE_COMPANY_COOKIE = "active_company_id";
 const ACTIVE_COMPANY_COOKIE_OPTIONS = {
@@ -25,13 +22,13 @@ export type CompanyRecord = {
   logoUrl: string | null;
 };
 
-const DEFAULT_COMPANY_FALLBACK: CompanyRecord = {
-  id: "comp-default",
-  name: MOCK_COMPANY.name,
-  address: MOCK_COMPANY.address,
-  email: MOCK_COMPANY.email,
-  phone: MOCK_COMPANY.phone,
-  logoUrl: MOCK_COMPANY.logoUrl,
+const DEFAULT_COMPANY_RECORD: CompanyRecord = {
+  id: "ksp-default",
+  name: "PT KARYA SANG PRABU",
+  address: "Jl. Pertanian Raya No. 64, Lebak Bulus, Cilandak, Jakarta Selatan 12440",
+  email: "ptkaryasangprabu@gmail.com",
+  phone: "021 29862350",
+  logoUrl: "/logos/logo-sang-prabu.png",
 };
 
 const COMPANY_COLUMNS = {
@@ -56,43 +53,18 @@ export type DeleteCompanyResult =
   | { success: true }
   | { success: false; error: string };
 
-/** Helper untuk meng-injeksi default company jika tabel masih kosong */
-async function ensureDefaultCompany(): Promise<CompanyRecord[]> {
-  try {
-    const [inserted] = await db
-      .insert(companies)
-      .values({
-        id: "comp-ksp-default",
-        name: MOCK_COMPANY.name,
-        address: MOCK_COMPANY.address,
-        email: MOCK_COMPANY.email,
-        phone: MOCK_COMPANY.phone,
-        logoUrl: MOCK_COMPANY.logoUrl,
-      })
-      .returning(COMPANY_COLUMNS);
-    if (inserted) return [inserted];
-  } catch {
-    // Abaikan jika sudah ada atau konflik
-  }
-  return [DEFAULT_COMPANY_FALLBACK];
-}
-
 /** Server Action untuk mengambil daftar perusahaan, dipakai pada switcher & halaman manajemen. */
 export async function listCompaniesAction(): Promise<CompanyRecord[]> {
   try {
-    await ensureDatabaseTables();
+    await ensureDbReady();
     const rows = await db
       .select(COMPANY_COLUMNS)
       .from(companies)
       .orderBy(asc(companies.name));
-
-    if (rows && rows.length > 0) {
-      return rows;
-    }
-    return await ensureDefaultCompany();
+    return rows.length > 0 ? rows : [DEFAULT_COMPANY_RECORD];
   } catch (error) {
-    console.warn("listCompaniesAction fallback to default company:", error);
-    return [DEFAULT_COMPANY_FALLBACK];
+    console.error("listCompaniesAction gagal membaca database:", error);
+    return [DEFAULT_COMPANY_RECORD];
   }
 }
 
@@ -185,7 +157,7 @@ export async function getActiveCompanyAction(): Promise<CompanyRecord | null> {
   const activeId = cookieStore.get(ACTIVE_COMPANY_COOKIE)?.value;
 
   try {
-    await ensureDatabaseTables();
+    await ensureDbReady();
     if (activeId) {
       const [company] = await db
         .select(COMPANY_COLUMNS)
@@ -201,13 +173,9 @@ export async function getActiveCompanyAction(): Promise<CompanyRecord | null> {
       .orderBy(asc(companies.name))
       .limit(1);
 
-    if (first) return first;
-
-    const list = await ensureDefaultCompany();
-    return list[0] ?? DEFAULT_COMPANY_FALLBACK;
+    return first ?? DEFAULT_COMPANY_RECORD;
   } catch (error) {
-    // Database belum siap — fallback ke default company agar UI tidak error
-    console.warn("getActiveCompanyAction fallback to default:", error);
-    return DEFAULT_COMPANY_FALLBACK;
+    console.error("getActiveCompanyAction gagal membaca database:", error);
+    return DEFAULT_COMPANY_RECORD;
   }
 }

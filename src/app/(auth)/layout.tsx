@@ -5,15 +5,15 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
         <div className="mb-6 flex flex-col items-center text-center">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/images/logo/logo-sang-prabu-haki.png"
-            alt="Logo Resmi Terdaftar HAKI PT Karya Sang Prabu"
-            className="h-20 w-auto object-contain drop-shadow-sm"
+            src="/logos/logo-sang-prabu.png"
+            alt="Logo PT Karya Sang Prabu"
+            className="h-20 w-auto object-contain"
           />
           <p className="mt-2 font-display text-lg font-semibold tracking-tight text-foreground">
             PT KARYA SANG PRABU
           </p>
-          <p className="text-[12px] font-medium tracking-wide text-brand-gold">
-            Better Proses, Better Quality &amp; Better Serve
+          <p className="text-[13px] tracking-[0.04em] text-gold">
+            𝐓𝐡𝐞 𝐁𝐞𝐬𝐭 𝐏𝐚𝐫𝐭𝐧𝐞𝐫 𝐘𝐨𝐮𝐫 𝐁𝐮𝐬𝐢𝐧𝐞𝐬𝐬
           </p>
         </div>
         {children}

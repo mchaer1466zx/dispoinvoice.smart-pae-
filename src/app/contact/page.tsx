@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 };
 
 const mapSrc = `https://www.google.com/maps?q=${encodeURIComponent(
-  "Jl. Tole Iskandar No.77, Sukamaju, Kec. Cilodong, Kota Depok, Jawa Barat 16415",
+  "Jl. Pertanian Raya No. 64, Lebak Bulus, Cilandak, Jakarta Selatan 12440",
 )}&output=embed`;
 
 export default function ContactPage() {

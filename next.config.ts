@@ -10,31 +10,6 @@ const nextConfig: NextConfig = {
       bodySizeLimit: "4mb",
     },
   },
-  async headers() {
-    return [
-      {
-        source: "/(.*)",
-        headers: [
-          {
-            key: "X-Content-Type-Options",
-            value: "nosniff",
-          },
-          {
-            key: "Referrer-Policy",
-            value: "strict-origin-when-cross-origin",
-          },
-          {
-            key: "Permissions-Policy",
-            value: "camera=(), microphone=(), geolocation=()",
-          },
-          {
-            key: "X-Robots-Tag",
-            value: "all",
-          },
-        ],
-      },
-    ];
-  },
   turbopack: {
     resolveAlias: {
       // Tailwind v4 emits color-mix()/oklch() rules that upstream html2canvas
